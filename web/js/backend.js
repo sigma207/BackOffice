@@ -19,9 +19,9 @@ backendApp.factory('SymbolTradableDailyService', ['$resource', function ($resour
     return $resource('api/symbolTradableDaily/exchange/:exchange_id/mainSymbol/:main_symbol_id');
 }]);
 
-backendApp.constant("HostUrl", "http://localhost:8080/Backend/api");
+backendApp.constant("HostUrl", "http://localhost:8080/BackOffice/api");
 backendApp.config(function (RestangularProvider) {
-    RestangularProvider.setBaseUrl("/Backend/api");
+    RestangularProvider.setBaseUrl("/BackOffice/api");
     RestangularProvider.setDefaultHeaders({'Content-Type': 'application/json'});
     RestangularProvider.setErrorInterceptor(function(resp) {
         //$log.info(resp);
