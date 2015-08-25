@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app="backendApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" href="css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery.contextMenu.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/main2.css">
+    <link rel="stylesheet" href="css/jt8.css">
+    <!--<script type="text/javascript" src="js/angular.js"></script>-->
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <!--<script type="text/javascript" src="js/angular-route.js"></script>-->
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/angular-resource.js"></script>
+    <script type="text/javascript" src="js/lodash.min.js"></script>
+    <script type="text/javascript" src="js/restangular.js"></script>
+    <script type="text/javascript" src="js/angular-translate.min.js"></script>
+    <script type="text/javascript" src="js/angular-translate-loader-partial.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls.js"></script>
+    <!--<script type="text/javascript" src="js/ui-bootstrap-tpls-0.13.2.min.js"></script>-->
+    <script type="text/javascript" src="js/smart-table-fix.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <!--<script type="text/javascript" src="js/angular-locale_zh-tw.js"></script>-->
+    <!--<script type="text/javascript" src="js/angular-locale_zh-cn.js"></script>-->
+    <script type="text/javascript" src="js/zTree/jquery.ztree.all-3.5.js"></script>
+    <script type="text/javascript" src="js/jquery.contextMenu.js"></script>
+    <script type="text/javascript" src="js/utility.js"></script>
+
+</head>
+<body ng-controller="BackendController">
+<div class="space"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 headerBackgroundImg">
+            <img src="images/logo.png" class="logoImg"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><ul id="menuTree" class="ztree"></ul></div>
+        <div class="col-md-10" ng-view></div>
+    </div>
+</div>
+<!--<div class="space"></div>-->
+<!--<div class="main">-->
+    <!--<button type="button" class="btn-xs btn-primary" ng-click="changeLanguage('zh-TW')">繁</button>-->
+    <!--<button type="button" class="btn-xs btn-primary" ng-click="changeLanguage('zh-CN')">簡</button>-->
+    <!--<button type="button" class="btn-xs btn-primary" ng-click="changeLanguage('en-US')">英</button>-->
+    <!--<div class="header">-->
+        <!--<div class="headerContainer">-->
+            <!--<img src="images/header_bg.png" class="headerBackgroundImg"/>-->
+            <!--<img src="images/logo.png" class="logoImg"/>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="middle">-->
+        <!--<div class="mainMenu">-->
+            <!--<ul id="menuTree" class="ztree"></ul>-->
+        <!--</div><div class="content" ng-view></div>-->
+    <!--</div>-->
+    <!--<div class="footer"></div>-->
+<!--</div>-->
+<!--<div class="space"></div>-->
+<script type="text/javascript" src="js/directives/directive.js"></script>
+<script type="text/javascript" src="js/backend.js"></script>
+<script type="text/javascript" src="js/filters/customFilter.js"></script>
+<script type="text/javascript" src="js/backendModule.js"></script>
+<script type="text/javascript" src="js/controller/permissionController.js"></script>
+<script type="text/javascript" src="js/controller/roleController.js"></script>
+<script type="text/javascript" src="js/controller/userController.js"></script>
+<script type="text/javascript" src="js/controller/holidayController.js"></script>
+<script type="text/javascript" src="js/controller/dailyTempController.js"></script>
+<script type="text/javascript" src="js/controller/dailyController.js"></script>
+<script type="text/javascript" src="js/controller/organizationController.js"></script>
+<script type="text/javascript" src="js/controller/loginController.js"></script>
+</body>
+</html>

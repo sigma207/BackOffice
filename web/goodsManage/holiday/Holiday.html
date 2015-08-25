@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Holiday</title>
+    <script type="text/javascript" src="goodsManage/holiday/holiday.js"></script>
+</head>
+<body>
+<div ng-controller="HolidayController">
+    <select ng-model="selectedExchange" ng-change="exchangeChange();"
+            ng-options="exchange.exchange_id for exchange in exchangeList">
+    </select>
+    <select ng-model="selectedMainSymbol" ng-change="mainSymbolChange();"
+            ng-options="main_symbol.main_symbol_id for main_symbol in selectedExchange.mainSymbolList">
+    </select>
+    <button type="button" class="btn-xs btn-primary" translate="addHoliday" ng-click="batchAddHolidayClick()"></button>
+    <button type="button" class="btn-xs btn-primary" translate="addException" ng-click="batchAddExceptionClick()"></button>
+    <table st-table="holidayCollection" class="table table-striped table-condensed">
+        <thead>
+        <tr>
+            <th>{{'exchange_id'|translate}}</th>
+            <th>{{'main_symbol_id'|translate}}</th>
+            <th>{{'beginDate'|translate}}</th>
+            <th>{{'endDate'|translate}}</th>
+            <th>{{'memo'|translate}}</th>
+            <th>{{'holidayManage'|translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in holidayCollection">
+            <td>{{row.exchange_id}}</td>
+            <td>{{row.main_symbol_id}}</td>
+            <td>{{row.beginDate | date:dateDisplayFormat}}</td>
+            <td>{{row.endDate | date:dateDisplayFormat}}</td>
+            <td>{{row.memo}}</td>
+            <td>
+                <button type="button" class="btn-xs btn-primary" translate="removeHoliday" ng-click="removeHolidayClick(row)" ></button>
+                <button type="button" class="btn-xs btn-primary" translate="editHoliday" ng-click="editHolidayClick(row)" ></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table st-table="exceptionCollection" class="table table-striped table-condensed">
+        <thead>
+        <tr>
+            <th>{{'exchange_id'|translate}}</th>
+            <th>{{'main_symbol_id'|translate}}</th>
+            <th>{{'calendar'|translate}}</th>
+            <th>{{'memo'|translate}}</th>
+            <th>{{'exceptionManage'|translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in exceptionCollection">
+            <td>{{row.exchange_id}}</td>
+            <td>{{row.main_symbol_id}}</td>
+            <td>{{row.calendarDate | date:dateDisplayFormat}}</td>
+            <td>{{row.memo}}</td>
+            <td>
+                <button type="button" class="btn-xs btn-primary" translate="removeException" ng-click="removeExceptionClick(row)" ></button>
+                <button type="button" class="btn-xs btn-primary" translate="editException" ng-click="editExceptionClick(row)" ></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/ng-template" id="batchHoliday.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body" ng-init="init()">
+        <table st-table="rowCollection" class="table table-striped table-condensed">
+            <thead>
+            <tr>
+                <th>{{'beginDate'|translate}}</th>
+                <th>{{'endDate'|translate}}</th>
+                <th>{{'memo'|translate}}</th>
+                <th>{{'operate'|translate}}</th>
+            </tr>
+            </thead>
+            <tbody ng-form="holidayForm">
+            <tr ng-repeat="row in rowCollection" >
+                <td>
+                    <input type="text" ng-model="row.beginDate" max-date="row.endDate" datepicker-popup="{{dateInputFormat}}" is-open="row.beginDateOpened" size="10" date-lower-than="{{row.end_date}}" required/>
+                    <button type="button" class="btn-xs btn-default" date-picker-open open-status="row.beginDateOpened"><i class="glyphicon glyphicon-calendar"></i></button>
+                </td>
+                <td>
+                    <input type="text" ng-model="row.endDate" min-date="row.beginDate" datepicker-popup="{{dateInputFormat}}" is-open="row.endDateOpened" size="10" date-greater-than="{{row.begin_date}}"  required/>
+                    <button type="button" class="btn-xs btn-default" date-picker-open open-status="row.endDateOpened"><i class="glyphicon glyphicon-calendar"></i></button>
+                </td>
+                <td><input type="text" ng-model="row.memo"/></td>
+                <td>
+                    <button type="button" class="btn-xs btn-primary" translate="add" ng-click="addClick($index,row)"></button>
+                    <button type="button" class="btn-xs btn-primary" translate="delete" ng-click="deleteClick($index,row)"></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-primary" ng-disabled="holidayForm.$invalid" ng-click="save()" translate="save"></button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="batchException.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body" ng-init="init()">
+        <table st-table="rowCollection" class="table table-striped table-condensed">
+            <thead>
+            <tr>
+                <th>{{'calendar'|translate}}</th>
+                <th>{{'memo'|translate}}</th>
+                <th>{{'operate'|translate}}</th>
+            </tr>
+            </thead>
+            <tbody ng-form="exceptionForm">
+            <tr ng-repeat="row in rowCollection" >
+                <td>
+                    <input type="text" ng-model="row.calendarDate" datepicker-popup="{{dateInputFormat}}" is-open="row.opened" size="10" required/>
+                    <button type="button" class="btn-xs btn-default" date-picker-open open-status="row.opened"><i class="glyphicon glyphicon-calendar"></i></button>
+                </td>
+                <td><input type="text" ng-model="row.memo"/></td>
+                <td>
+                    <button type="button" class="btn-xs btn-primary" translate="add" ng-click="addClick($index,row)"></button>
+                    <button type="button" class="btn-xs btn-primary" translate="delete" ng-click="deleteClick($index,row)"></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-primary" ng-disabled="exceptionForm.$invalid" ng-click="save()" translate="save"></button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="holidayEdit.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="editForm" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="begin_date" class="col-md-2 control-label" translate="beginDate"></label>
+
+                <div class="col-md-10">
+                    <input id="begin_date" type="text" ng-model="editObj.beginDate" max-date="editObj.endDate" datepicker-popup="{{dateInputFormat}}" is-open="editObj.beginDateOpened" size="10" date-lower-than="{{editObj.end_date}}" required/>
+                    <button type="button" class="btn-xs btn-default" date-picker-open open-status="editObj.beginDateOpened"><i class="glyphicon glyphicon-calendar"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="end_date" class="col-md-2 control-label" translate="endDate"></label>
+                <div class="col-md-10">
+                    <input id="end_date" type="text" ng-model="editObj.endDate" min-date="editObj.beginDate" datepicker-popup="{{dateInputFormat}}" is-open="editObj.endDateOpened" size="10" date-greater-than="{{editObj.begin_date}}"  required/>
+                    <button type="button" class="btn-xs btn-default" date-picker-open open-status="editObj.endDateOpened"><i class="glyphicon glyphicon-calendar"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="memo" class="col-md-2 control-label" translate="memo"></label>
+                <div class="col-md-10">
+                    <input id="memo" type="text" ng-model="editObj.memo"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+    </div>
+</script>
+</body>
+</html>
+
+<script type="text/ng-template" id="exceptionEdit.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="editForm" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="calendar" class="col-md-2 control-label" translate="calendar"></label>
+                <div class="col-md-10">
+                    <input id="calendar" type="text" ng-model="editObj.calendarDate"  datepicker-popup="{{dateInputFormat}}" is-open="editObj.opened" size="10" required/>
+                    <button type="button" class="btn-xs btn-default" date-picker-open open-status="editObj.opened"><i class="glyphicon glyphicon-calendar"></i></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="memo" class="col-md-2 control-label" translate="memo"></label>
+                <div class="col-md-10">
+                    <input id="memo" type="text" ng-model="editObj.memo"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+    </div>
+</script>
+</body>
+</html>

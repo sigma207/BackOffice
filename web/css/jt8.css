@@ -1,0 +1,50 @@
+@charset "utf-8";
+
+/* 如果驗證未通過，呈現紅框 */
+
+input.ng-invalid {
+    border:1px solid red;
+}
+
+/* 如果驗證通過，呈現綠框 */
+
+input.ng-valid {
+    /*border:1px solid green;*/
+}
+
+/* 如果已經被輸入過且驗證失敗，加入粉紅色背景 */
+
+input.ng-dirty.ng-invalid {
+    background: #ffecec;
+}
+
+/*.input-sm,*/
+/*.form-group-sm .form-control {*/
+    /*height: 25px;*/
+    /*padding: 5px 10px;*/
+    /*font-size: 12px;*/
+    /*line-height: 1.5;*/
+    /*border-radius: 3px;*/
+/*}*/
+
+.input-xs,
+.form-group-xs .form-control {
+    height: 25px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+.cc{
+    width:90%
+}
+
+.table-jt8 > thead > tr > th,
+.table-jt8 > tbody > tr > th,
+.table-jt8 > tfoot > tr > th,
+.table-jt8 > thead > tr > td,
+.table-jt8 > tbody > tr > td,
+.table-jt8 > tfoot > tr > td {
+    padding: 0px;
+}
