@@ -7,6 +7,10 @@
       "date": "yyyy-MM-dd"
     }
   },
+  "exchangeId":"交易所",
+  "mainSymbolId":"XX代號",
+  "symbolId":"商品代號",
+  "stockName":"股票名稱",
   "query": "查詢",
   "save": "存檔",
   "cancel": "取消",
@@ -14,10 +18,10 @@
   "add": "新增",
   "delete": "刪除",
   "edit": "編輯",
-  "move_top":"移到最上",
-  "move_up":"往上移",
-  "move_down":"往下移",
-  "move_bottom":"移到最下",
+  "moveTop":"移到最上",
+  "moveUp":"往上移",
+  "moveDown":"往下移",
+  "moveBottom":"移到最下",
   "org": {
     "code":"組織代碼",
     "name":"組織名稱",

@@ -76,7 +76,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                     }
                 };
                 menu[Action.MoveFirst] = {
-                    name: $translate.instant("move_top"),
+                    name: $translate.instant("moveTop"),
                     callback: function () {
                         nodeMoveSetting.targetNode = moveNodes[0];
                         nodeMoveSetting.moveType = "prev";
@@ -85,7 +85,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                     }
                 };
                 menu[Action.MoveUp] = {
-                    name: $translate.instant("move_up"),
+                    name: $translate.instant("moveUp"),
                     disabled: !currentNode.getPreNode(),
                     callback: function () {
                         nodeMoveSetting.targetNode = currentNode.getPreNode();
@@ -95,7 +95,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                     }
                 };
                 menu[Action.MoveDown] = {
-                    name: $translate.instant("move_down"),
+                    name: $translate.instant("moveDown"),
                     disabled: !currentNode.getNextNode(),
                     callback: function () {
                         nodeMoveSetting.targetNode = currentNode.getNextNode();
@@ -105,7 +105,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                     }
                 };
                 menu[Action.MoveLast] = {
-                    name: $translate.instant("move_bottom"),
+                    name: $translate.instant("moveBottom"),
                     callback: function () {
                         nodeMoveSetting.targetNode = moveNodes[moveNodes.length - 1];
                         nodeMoveSetting.moveType = "next";
