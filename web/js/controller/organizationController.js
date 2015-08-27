@@ -2,7 +2,7 @@
  * Created by user on 2015/8/22.
  */
 backendApp.controller("OrganizationController", OrganizationController);
-function OrganizationController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, OrganizationService, OrganizationMoveService, locale) {
+function OrganizationController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, OrganizationService, OrganizationMoveService) {
     $translatePartialLoader.addPart("organization");
     $translate.refresh();
 
@@ -239,7 +239,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
 
 }
 
-backendApp.controller('organizationEditCtrl', function ($scope, $modalInstance, $log, OrganizationService, locale, title, editNode, currentAction) {
+backendApp.controller('organizationEditCtrl', function ($scope, $modalInstance, $log, OrganizationService, title, editNode, currentAction) {
     $scope.title = title;
     $scope.editNode = editNode;
     $scope.ok = function () {

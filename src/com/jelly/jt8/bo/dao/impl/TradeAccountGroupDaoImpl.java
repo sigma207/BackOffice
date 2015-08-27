@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Repository("TradeAccountGroupDao")
 public class TradeAccountGroupDaoImpl extends BaseDao implements TradeAccountGroupDao {
-    private final static String QUERY = "[group_id]\n" +
+    private final static String QUERY = "SELECT [group_id]\n" +
             "      ,[scale]\n" +
             "      ,[initial_margin]\n" +
             "      ,[maintain_margin]\n" +

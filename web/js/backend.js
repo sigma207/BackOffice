@@ -55,13 +55,20 @@ backendApp.factory('OrganizationMoveService', function (Restangular) {
     return Restangular.service('organization/move');
 });
 
-
 backendApp.factory('PermissionService', function (Restangular) {
     return Restangular.service('permission');
 });
 
 backendApp.factory('PermissionMoveService', function (Restangular) {
     return Restangular.service('permission/move');
+});
+
+backendApp.factory('TradeHouseRuleService', function (Restangular) {
+    return Restangular.service('tradeHouseRule');
+});
+
+backendApp.factory('TradeAccountGroupService', function (Restangular) {
+    return Restangular.service('tradeAccountGroup');
 });
 
 backendApp.config(["$routeProvider", function ($routeProvider) {
@@ -76,19 +83,22 @@ backendApp.config(["$routeProvider", function ($routeProvider) {
             templateUrl: "permissionManage/role/Role.html"
         }).
         when("/B2", {
-            templateUrl: "goodsManage/holiday/Holiday.html"
+            templateUrl: "symbolManage/holiday/Holiday.html"
         }).
         when("/B4", {
-            templateUrl: "goodsManage/stock/DailyTemp.html"
+            templateUrl: "symbolManage/stock/DailyTemp.html"
         }).
         when("/B5", {
-            templateUrl: "goodsManage/stock/Daily.html"
+            templateUrl: "symbolManage/stock/Daily.html"
         }).
         when("/C1", {
             templateUrl: "userManage/user/User.html"
         }).
         when("/C2", {
             templateUrl: "userManage/organization/Organization.html"
+        }).
+        when("/D2", {
+            templateUrl: "systemManage/accountGroup/AccountGroup.html"
         }).
         otherwise({redirectTo: '/'})
 }]);
@@ -158,6 +168,9 @@ backendApp.directive("textStartWith", TextStartWith);
 // Common directive for Focus
 backendApp.directive('focus', Focus);
 backendApp.directive('parseInt', ParseInt);
+backendApp.directive('numbersOnly', NumbersOnly);
+backendApp.directive('textInput', TextInput);
+backendApp.directive('numberInput', NumberInput);
 backendApp.directive('datePickerOpen', DatePickerOpen);
 //backendApp.directive('dateLowerThan',DateLowerThan);
 //backendApp.directive('dateGreaterThan', DateGreaterThan);

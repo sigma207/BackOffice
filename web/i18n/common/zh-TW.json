@@ -8,8 +8,8 @@
     }
   },
   "exchangeId":"交易所",
-  "mainSymbolId":"XX代號",
-  "symbolId":"商品代號",
+  "mainSymbolId":"主商品",
+  "symbolId":"商品",
   "stockName":"股票名稱",
   "query": "查詢",
   "save": "存檔",
