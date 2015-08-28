@@ -119,7 +119,7 @@ function TextInput(){
     return {
         restrict:"E",
         replace:true,
-        template:'<input type="text" class="input-sm form-control"/>'
+        template:'<input type="text" class="form-control"/>'
     }
 }
 
@@ -127,7 +127,7 @@ function NumberInput(){
     return {
         restrict:"E",
         replace:true,
-        template:'<input type="text" class="input-sm form-control" numbers-only/>'
+        template:'<input type="text" class="form-control" numbers-only/>'
     }
 }
 

@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/5.
  */
-var backendApp = angular.module("backendApp", ["pascalprecht.translate", "ui.bootstrap", "smart-table", "ngRoute", "ngResource", "restangular", "requestFactory", "localeFactory"]);
+var backendApp = angular.module("backendApp", ["pascalprecht.translate", "ui.bootstrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
 //backendApp.factory('PermissionService', ['$resource', function ($resource) {
 //    return $resource('api/permission/:permissionId',
 //        {},

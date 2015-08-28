@@ -30,4 +30,9 @@ public class TradeAccountGroupServiceImpl implements TradeAccountGroupService {
     public List<TradeAccountGroup> select() throws Exception {
         return tradeAccountGroupDao.select();
     }
+
+    @Override
+    public void insert(TradeAccountGroup tradeAccountGroup) throws Exception {
+
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,5 +63,10 @@ public class TradeAccountGroupDaoImpl extends BaseDao implements TradeAccountGro
         List<TradeAccountGroup> list =  new LinkedList<TradeAccountGroup>();
         execute(jt8Ds.getConnection(),QUERY,list,TradeAccountGroup.class);
         return list;
+    }
+
+    @Override
+    public void insert(Connection conn, TradeAccountGroup tradeAccountGroup) throws Exception {
+
     }
 }

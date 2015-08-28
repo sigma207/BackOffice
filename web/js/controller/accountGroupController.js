@@ -28,11 +28,14 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
     $scope.addClick = function () {
         $scope.currentAction = Action.Add;
         $scope.editObj = angular.copy($scope.selectedTradeHouseRule);
-        $scope.editObj.groupName = "abc";
+        //$scope.editObj.uplimit = 0.05;
+        $scope.editObj.specialStockRule = 0;
+        $scope.modalTitle = $translate.instant("tradeAccountGroup");
         $scope.open();
     };
 
     $scope.open = function () {
+        $scope.editSize = "xg";
         var modalInstance = $modal.open({
             animation: true,
             templateUrl: 'accountGroupEdit.html',

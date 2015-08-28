@@ -7,6 +7,8 @@
       "date": "yyyy-MM-dd"
     }
   },
+  "yes":"是",
+  "no":"否",
   "exchangeId":"交易所",
   "mainSymbolId":"主商品",
   "symbolId":"商品",

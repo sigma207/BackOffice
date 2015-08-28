@@ -18,6 +18,35 @@ input.ng-dirty.ng-invalid {
     background: #ffecec;
 }
 
+@media (min-width: 992px) {
+    .modal-xg {
+        width: 1200px;
+    }
+}
+
+.the-legend {
+    border-style: none;
+    border-width: 0;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 0;
+}
+.the-fieldset {
+    border: 2px groove threedface #444;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
+}
+
+.well {
+    /*padding: 19px;*/
+    margin-bottom: 10px;
+}
+
+.well-xs {
+    padding: 2px;
+    border-radius: 3px;
+}
+
 /*.input-sm,*/
 /*.form-group-sm .form-control {*/
     /*height: 25px;*/
@@ -26,6 +55,9 @@ input.ng-dirty.ng-invalid {
     /*line-height: 1.5;*/
     /*border-radius: 3px;*/
 /*}*/
+.form-group {
+    margin-bottom: 8px;
+}
 
 .input-xs,
 .form-group-xs .form-control {
@@ -35,6 +67,43 @@ input.ng-dirty.ng-invalid {
     line-height: 1.5;
     border-radius: 3px;
 }
+
+.form-group-xs .input-group-addon{
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+/*.input-group-addon.input-xs {*/
+    /*padding: 5px 10px;*/
+    /*font-size: 12px;*/
+    /*border-radius: 3px;*/
+/*}*/
+
+/*.input-group-xs > .form-control,*/
+/*.input-group-xs > .input-group-addon,*/
+/*.input-group-xs > .input-group-btn > .btn {*/
+    /*height: 25px;*/
+    /*padding: 5px 10px;*/
+    /*font-size: 12px;*/
+    /*line-height: 1.5;*/
+    /*border-radius: 3px;*/
+/*}*/
+/*select.input-group-xs > .form-control,*/
+/*select.input-group-xs > .input-group-addon,*/
+/*select.input-group-xs > .input-group-btn > .btn {*/
+    /*height: 25px;*/
+    /*line-height: 25px;*/
+/*}*/
+
+/*textarea.input-group-xs > .form-control,*/
+/*textarea.input-group-xs > .input-group-addon,*/
+/*textarea.input-group-xs > .input-group-btn > .btn,*/
+/*select[multiple].input-group-xs > .form-control,*/
+/*select[multiple].input-group-xs > .input-group-addon,*/
+/*select[multiple].input-group-xs > .input-group-btn > .btn {*/
+    /*height: auto;*/
+/*}*/
 
 .cc{
     width:90%

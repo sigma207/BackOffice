@@ -46,4 +46,9 @@ public class BaseDao {
             throw new Exception(message);
         }
     }
+
+    protected String generateInsertSql(Class tableClass) throws Exception {
+
+        return null;
+    }
 }

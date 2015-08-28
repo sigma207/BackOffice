@@ -18,5 +18,7 @@ function LoginController($scope, $translatePartialLoader, $translate, $log, Logi
                 $scope.onLogin(user);
             }
         });
-    }
+    };
+    //login auto for test
+    $scope.login();
 }

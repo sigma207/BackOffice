@@ -2,6 +2,7 @@ package com.jelly.jt8.bo.dao;
 
 import com.jelly.jt8.bo.model.TradeAccountGroup;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface TradeAccountGroupDao {
     List<TradeAccountGroup> select() throws Exception;
+    void insert(Connection conn, TradeAccountGroup tradeAccountGroup) throws Exception;
 }
