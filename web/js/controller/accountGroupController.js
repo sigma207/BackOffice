@@ -5,6 +5,7 @@ backendApp.controller("AccountGroupController", AccountGroupController);//交易
 function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, TradeHouseRuleService, TradeAccountGroupService) {
     $translatePartialLoader.addPart("accountGroup");
     $translate.refresh();
+    $log.info($scope.loginUser);
 
     $scope.getTradeHouseRuleList = function () {
         TradeHouseRuleService.getList().then(function (data) {
@@ -29,7 +30,15 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
         $scope.currentAction = Action.Add;
         $scope.editObj = angular.copy($scope.selectedTradeHouseRule);
         //$scope.editObj.uplimit = 0.05;
+        $scope.editObj.groupName = "ABC";
         $scope.editObj.specialStockRule = 0;
+        $scope.editObj.initialMargin = 100;
+        $scope.editObj.maintainMargin = 200;
+        $scope.editObj.buyCommission = 10;
+        $scope.editObj.sellCommission = 20;
+        $scope.editObj.marginRate = 5;
+        $scope.editObj.maxLots = 3;
+        $scope.editObj.ownerId = $scope.loginUser.user_id;
         $scope.modalTitle = $translate.instant("tradeAccountGroup");
         $scope.open();
     };

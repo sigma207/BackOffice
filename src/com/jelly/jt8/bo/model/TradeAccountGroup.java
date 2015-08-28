@@ -14,7 +14,7 @@ public class TradeAccountGroup {
     private int groupId;
 
     @Id
-    @javax.persistence.Column(name = "group_id")
+    @javax.persistence.Column(name = "group_id", insertable = false)
     public int getGroupId() {
         return groupId;
     }

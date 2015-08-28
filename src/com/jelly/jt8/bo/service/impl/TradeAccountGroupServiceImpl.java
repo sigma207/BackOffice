@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -33,6 +35,26 @@ public class TradeAccountGroupServiceImpl implements TradeAccountGroupService {
 
     @Override
     public void insert(TradeAccountGroup tradeAccountGroup) throws Exception {
+        Connection conn = null;
 
+        try {
+            conn = jt8Ds.getConnection();
+            conn.setAutoCommit(false);
+            tradeAccountGroupDao.insert(conn, tradeAccountGroup);
+            conn.commit();
+        }catch (Exception e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        }finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }catch (SQLException se){
+                    se.printStackTrace();
+                }
+            }
+        }
     }
 }

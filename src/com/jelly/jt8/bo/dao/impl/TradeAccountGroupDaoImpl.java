@@ -2,13 +2,12 @@ package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.dao.TradeAccountGroupDao;
 import com.jelly.jt8.bo.model.TradeAccountGroup;
-import com.jelly.jt8.bo.model.TradeHouseRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,6 +66,27 @@ public class TradeAccountGroupDaoImpl extends BaseDao implements TradeAccountGro
 
     @Override
     public void insert(Connection conn, TradeAccountGroup tradeAccountGroup) throws Exception {
+        PreparedStatement stmt = null;
+        int lastKey = -1;
+        try {
+            stmt = insertStatement(conn, tradeAccountGroup);
+            stmt.executeUpdate();
+            ResultSet keys = stmt.getGeneratedKeys();
 
+            if (keys.next()) {
+                lastKey = keys.getInt(1);
+            }
+            tradeAccountGroup.setGroupId(lastKey);
+        } catch (Exception e){
+            throw e;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
