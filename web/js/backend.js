@@ -71,6 +71,10 @@ backendApp.factory('TradeAccountGroupService', function (Restangular) {
     return Restangular.service('tradeAccountGroup');
 });
 
+backendApp.factory('SymbolHolidayService', function (Restangular) {
+    return Restangular.service('symbolHoliday');
+});
+
 backendApp.config(["$routeProvider", function ($routeProvider) {
     $routeProvider.
         when("/Login", {

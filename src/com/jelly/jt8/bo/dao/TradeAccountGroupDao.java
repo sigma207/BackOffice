@@ -11,4 +11,6 @@ import java.util.List;
 public interface TradeAccountGroupDao {
     List<TradeAccountGroup> select() throws Exception;
     void insert(Connection conn, TradeAccountGroup tradeAccountGroup) throws Exception;
+    void update(Connection conn, TradeAccountGroup tradeAccountGroup) throws Exception;
+    void delete(Connection conn, TradeAccountGroup tradeAccountGroup) throws Exception;
 }

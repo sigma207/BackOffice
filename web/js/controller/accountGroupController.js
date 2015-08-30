@@ -43,6 +43,19 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
         $scope.open();
     };
 
+    $scope.editClick = function (row) {
+        $scope.currentAction = Action.Edit;
+        $scope.editObj = Restangular.copy(row);
+        $scope.modalTitle = $translate.instant("tradeAccountGroup");
+        $scope.open();
+    };
+
+    $scope.deleteClick = function (row) {
+        row.remove().then(function () {
+            $scope.getTradeAccountGroupList();
+        });
+    };
+
     $scope.open = function () {
         $scope.editSize = "xg";
         var modalInstance = $modal.open({
@@ -61,6 +74,13 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
                     return $scope.currentAction;
                 }
             }
+        });
+
+        modalInstance.result.then(function (editNode) {
+
+            $scope.getTradeAccountGroupList();
+        }, function () {
+            //$log.info('Modal dismissed at: ' + new Date());
         });
     };
 

@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @javax.persistence.Table(name = "trade_account_group", schema = "dbo", catalog = "jt8")
-public class TradeAccountGroup {
+public class TradeAccountGroup extends BaseModel{
     private int groupId;
 
     @Id

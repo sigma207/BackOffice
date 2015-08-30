@@ -10,4 +10,6 @@ import java.util.List;
 public interface TradeAccountGroupService {
     List<TradeAccountGroup> select() throws Exception;
     void insert(TradeAccountGroup tradeAccountGroup) throws Exception;
+    void update(TradeAccountGroup tradeAccountGroup) throws Exception;
+    void delete(TradeAccountGroup tradeAccountGroup) throws Exception;
 }

@@ -16,19 +16,21 @@
         <thead>
         <tr>
             <th>{{'groupId'|translate}}</th>
+            <th>{{'groupName'|translate}}</th>
             <th>{{'scale'|translate}}</th>
             <th>{{'initialMargin'|translate}}</th>
+            <th>{{'groupManage'|translate}}</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="row in rowCollection">
             <td>{{row.groupId}}</td>
+            <td>{{row.groupName}}</td>
             <td>{{row.scale}}</td>
             <td>{{row.initialMargin}}</td>
             <td>
-                <button type="button" class="btn-xs btn-primary" translate="removeRole" ng-click="removeRoleClick(row)" ></button>
-                <button type="button" class="btn-xs btn-primary" translate="editRole" ng-click="editRoleClick(row)" ></button>
-                <button type="button" class="btn-xs btn-primary" translate="allocatePermission" ng-click="allocatePermissionClick(row)" ></button>
+                <button type="button" class="btn-xs btn-primary" translate="delete" ng-click="deleteClick(row)" ></button>
+                <button type="button" class="btn-xs btn-primary" translate="edit" ng-click="editClick(row)" ></button>
             </td>
         </tr>
         </tbody>

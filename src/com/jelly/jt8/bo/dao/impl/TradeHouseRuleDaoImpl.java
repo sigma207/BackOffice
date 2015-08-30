@@ -16,7 +16,11 @@ import java.util.List;
  */
 @Repository("TradeHouseRuleDao")
 public class TradeHouseRuleDaoImpl extends BaseDao implements TradeHouseRuleDao {
-    private final static String QUERY = "SELECT [house_id]\n" +
+        public TradeHouseRuleDaoImpl() {
+                super(TradeHouseRule.class);
+        }
+
+        private final static String QUERY = "SELECT [house_id]\n" +
             "      ,[exchange_id]\n" +
             "      ,[house_name]\n" +
             "      ,[scale]\n" +

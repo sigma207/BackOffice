@@ -2,7 +2,7 @@
  * Created by user on 2015/8/9.
  */
 backendApp.controller("HolidayController", HolidayController);
-function HolidayController($scope, $translatePartialLoader, $translate, $log, $modal, ExchangeService, request) {
+function HolidayController($scope, $translatePartialLoader, $translate, $log, $modal, ExchangeService, Restangular, SymbolHolidayService, request) {
     $translatePartialLoader.addPart("holiday");
     $translate.refresh();
 
@@ -25,16 +25,17 @@ function HolidayController($scope, $translatePartialLoader, $translate, $log, $m
     };
 
     $scope.getHoliday = function () {
-        request.json("/holiday/select", $scope.selectedMainSymbol).
-            success(function (data, status, headers, config) {
-                for(var i= 0,count=data.length;i<count;i++){
-                    DateTool.yyyyMMddToDate(data[i],"begin_date","beginDate");
-                    DateTool.yyyyMMddToDate(data[i],"end_date","endDate");
-                }
-                $scope.holidayCollection = data;
-                $log.info($scope.holidayCollection);
+        var params = {
+            exchangeId:$scope.selectedMainSymbol.exchange_id,
+            mainSymbolId:$scope.selectedMainSymbol.main_symbol_id
+        };
+        SymbolHolidayService.getList(params).then(function (data) {
+            for(var i= 0,count=data.length;i<count;i++){
+                DateTool.yyyyMMddToDate(data[i],"beginDate","begin_date");
+                DateTool.yyyyMMddToDate(data[i],"endDate","end_date");
             }
-        );
+            $scope.holidayCollection = data;
+        });
     };
 
     $scope.getException = function () {
@@ -50,11 +51,9 @@ function HolidayController($scope, $translatePartialLoader, $translate, $log, $m
     };
 
     $scope.removeHolidayClick = function (row) {
-        request.json("/holiday/delete", row).
-            success(function (data, status, headers, config) {
-                $scope.getHoliday();
-            }
-        );
+        row.remove().then(function (data) {
+            $scope.getHoliday();
+        });
     };
 
     $scope.removeExceptionClick = function (row) {
@@ -77,7 +76,7 @@ function HolidayController($scope, $translatePartialLoader, $translate, $log, $m
                     return $scope.modalTitle;
                 },
                 editObj: function () {
-                    return angular.copy(row);
+                    return row;
                 }
             }
         });
@@ -182,14 +181,13 @@ backendApp.controller("holidayEditCtrl", function ($scope, $modalInstance, $log,
     $scope.editObj = editObj;
     $log.info(editObj);
     $scope.save = function () {
-        DateTool.dateToYyyyMMdd($scope.editObj,"beginDate","begin_date");
-        DateTool.dateToYyyyMMdd($scope.editObj,"endDate","end_date");
+        DateTool.dateToYyyyMMdd($scope.editObj,"begin_date","beginDate");
+        DateTool.dateToYyyyMMdd($scope.editObj,"end_date","endDate");
         $log.info(editObj);
-        request.json("/holiday/update", $scope.editObj).
-            success(function (data, status, headers, config) {
-                $modalInstance.close(data);
-            }
-        );
+
+        editObj.put().then(function (data) {
+            $modalInstance.close(data);
+        });
     };
 
     $scope.cancel = function () {
@@ -215,7 +213,7 @@ backendApp.controller("exceptionEditCtrl", function ($scope, $modalInstance, $lo
     };
 });
 
-backendApp.controller('batchHolidayCtrl', function ($scope, $modalInstance, $log, request, title, mainSymbol) {
+backendApp.controller('batchHolidayCtrl', function ($scope, $modalInstance, $log, request, title, mainSymbol, SymbolHolidayService) {
     $scope.title = title;
 
     $scope.init = function () {
@@ -225,8 +223,8 @@ backendApp.controller('batchHolidayCtrl', function ($scope, $modalInstance, $log
 
     $scope.getNewRow = function () {
         return {
-            exchange_id:mainSymbol.exchange_id,
-            main_symbol_id:mainSymbol.main_symbol_id
+            exchangeId:mainSymbol.exchange_id,
+            mainSymbolId:mainSymbol.main_symbol_id
         };
     };
 
@@ -247,16 +245,19 @@ backendApp.controller('batchHolidayCtrl', function ($scope, $modalInstance, $log
 
     $scope.save = function () {
         for(var i= 0,count = $scope.rowCollection.length;i<count;i++){
-            DateTool.dateToYyyyMMdd($scope.rowCollection[i],"beginDate","begin_date");
-            DateTool.dateToYyyyMMdd($scope.rowCollection[i],"endDate","end_date");
+            DateTool.dateToYyyyMMdd($scope.rowCollection[i],"begin_date","beginDate");
+            DateTool.dateToYyyyMMdd($scope.rowCollection[i],"end_date","endDate");
         }
         $log.info("save");
         $log.info($scope.rowCollection);
-        request.json("/holiday/insert", $scope.rowCollection).
-            success(function (data, status, headers, config) {
-                $modalInstance.close(data);
-            }
-        );
+        SymbolHolidayService.post($scope.rowCollection).then(function (data) {
+            $modalInstance.close(data);
+        });
+        //request.json("/holiday/insert", $scope.rowCollection).
+        //    success(function (data, status, headers, config) {
+        //        $modalInstance.close(data);
+        //    }
+        //);
     };
 
     $scope.cancel = function () {

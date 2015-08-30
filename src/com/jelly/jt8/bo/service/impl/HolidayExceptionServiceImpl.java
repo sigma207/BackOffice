@@ -2,10 +2,12 @@ package com.jelly.jt8.bo.service.impl;
 
 import com.jelly.jt8.bo.dao.HolidayDao;
 import com.jelly.jt8.bo.dao.HolidayExceptionDao;
+import com.jelly.jt8.bo.dao.SymbolHolidayDao;
 import com.jelly.jt8.bo.dao.TransDateDao;
 import com.jelly.jt8.bo.model.Holiday;
 import com.jelly.jt8.bo.model.HolidayException;
 import com.jelly.jt8.bo.model.MainSymbol;
+import com.jelly.jt8.bo.model.SymbolHoliday;
 import com.jelly.jt8.bo.service.HolidayExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,8 +27,8 @@ import java.util.Set;
 @Service("holidayExceptionService")
 public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     @Autowired
-    @Qualifier("HolidayDao")
-    private HolidayDao holidayDao;
+    @Qualifier("SymbolHolidayDao")
+    private SymbolHolidayDao holidayDao;
 
     @Autowired
     @Qualifier("HolidayExceptionDao")
@@ -41,26 +43,26 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     private DataSource jt8Ds;
 
     @Override
-    public List<Holiday> selectHoliday(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolHoliday> selectHoliday(MainSymbol mainSymbol) throws Exception {
         return holidayDao.select(mainSymbol);
     }
 
     @Override
-    public void insertHoliday(List<Holiday> holidayList) throws Exception {
+    public void insertHoliday(List<SymbolHoliday> holidayList) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            Map<String,Holiday> map = new HashMap<String,Holiday>();
+            Map<String,SymbolHoliday> map = new HashMap<String,SymbolHoliday>();
             holidayDao.insert(conn, holidayList);
-            for (Holiday holiday : holidayList) {
-                if(!map.containsKey(holiday.getExchange_id()+ holiday.getMain_symbol_id())){
-                    map.put(holiday.getExchange_id()+ holiday.getMain_symbol_id(),holiday);
+            for (SymbolHoliday holiday : holidayList) {
+                if(!map.containsKey(holiday.getExchangeId()+ holiday.getMainSymbolId())){
+                    map.put(holiday.getExchangeId()+ holiday.getMainSymbolId(),holiday);
                 }
             }
             Set<String> keys =map.keySet();
             for (String key : keys) {
-                transDateDao.generate(conn,  map.get(key).getExchange_id(),  map.get(key).getMain_symbol_id());
+                transDateDao.generate(conn,  map.get(key).getExchangeId(),  map.get(key).getMainSymbolId());
             }
             conn.commit();
         }catch (Exception e) {
@@ -80,13 +82,13 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     }
 
     @Override
-    public void updateHoliday(Holiday holiday) throws Exception {
+    public void updateHoliday(SymbolHoliday holiday) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayDao.update(conn, holiday);
-            transDateDao.generate(conn, holiday.getExchange_id(), holiday.getMain_symbol_id());
+            transDateDao.generate(conn, holiday.getExchangeId(), holiday.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -105,13 +107,13 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     }
 
     @Override
-    public void deleteHoliday(Holiday holiday) throws Exception {
+    public void deleteHoliday(SymbolHoliday holiday) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayDao.delete(conn, holiday);
-            transDateDao.generate(conn, holiday.getExchange_id(), holiday.getMain_symbol_id());
+            transDateDao.generate(conn, holiday.getExchangeId(), holiday.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {

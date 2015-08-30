@@ -57,4 +57,54 @@ public class TradeAccountGroupServiceImpl implements TradeAccountGroupService {
             }
         }
     }
+
+    @Override
+    public void update(TradeAccountGroup tradeAccountGroup) throws Exception {
+        Connection conn = null;
+
+        try {
+            conn = jt8Ds.getConnection();
+            conn.setAutoCommit(false);
+            tradeAccountGroupDao.update(conn, tradeAccountGroup);
+            conn.commit();
+        }catch (Exception e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        }finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }catch (SQLException se){
+                    se.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void delete(TradeAccountGroup tradeAccountGroup) throws Exception {
+        Connection conn = null;
+
+        try {
+            conn = jt8Ds.getConnection();
+            conn.setAutoCommit(false);
+            tradeAccountGroupDao.delete(conn, tradeAccountGroup);
+            conn.commit();
+        }catch (Exception e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        }finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }catch (SQLException se){
+                    se.printStackTrace();
+                }
+            }
+        }
+    }
 }

@@ -10,7 +10,8 @@
       <mapping resource="com/jelly/jt8/bo/model/TradeHouseRule.hbm.xml"/>
       <mapping class="com.jelly.jt8.bo.model.TradeAccountGroup"/>
       <mapping resource="com/jelly/jt8/bo/model/TradeAccountGroup.hbm.xml"/>
-      <!-- DB schema will be updated if needed -->
+    <mapping class="com.jelly.jt8.bo.model.SymbolHoliday"/>
+    <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
 </hibernate-configuration>

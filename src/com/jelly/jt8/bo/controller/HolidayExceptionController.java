@@ -27,75 +27,69 @@ public class HolidayExceptionController extends BaseController {
     @Qualifier("holidayExceptionService")
     private HolidayExceptionService service;
 
-    @RequestMapping(value = "holiday/select", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    ResponseEntity<String> getHolidayList(@RequestBody MainSymbol mainSymbol) {
-        System.out.println("getHolidayList");
-        Gson gson = new Gson();
-        List<Holiday> list = null;
-        String payload = "";
-        try {
-            list = service.selectHoliday(mainSymbol);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-
-        payload = gson.toJson(list);
-        return getResponseEntity(payload);
-    }
-
-    @RequestMapping(value = "holiday/insert", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    ResponseEntity<String> addHolidayList(@RequestBody List<Holiday> list) {
-        System.out.println("addHolidayList");
-        Gson gson = new Gson();
-        String payload = "";
-        try {
-            for(Holiday holiday:list){
-//                holiday.setBegin_date(JsParse.jsDateToDate(holiday.getBegin_date()));
-//                holiday.setEnd_date(JsParse.jsDateToDate(holiday.getEnd_date()));
-            }
-            service.insertHoliday(list);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-        payload = gson.toJson(list);
-        return getResponseEntity(payload);
-    }
-
-    @RequestMapping(value = "holiday/update", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    ResponseEntity<String> updateHoliday(@RequestBody Holiday holiday) {
-        Gson gson = new Gson();
-        String payload = "";
-        try {
-//            holiday.setBegin_date(JsParse.jsDateToDate(holiday.getBegin_date()));
-//            holiday.setEnd_date(JsParse.jsDateToDate(holiday.getEnd_date()));
-            service.updateHoliday(holiday);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-        payload = gson.toJson(holiday);
-        return getResponseEntity(payload);
-    }
-
-    @RequestMapping(value = "holiday/delete", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    ResponseEntity<String> deleteHoliday(@RequestBody Holiday holiday) {
-        Gson gson = new Gson();
-        String payload = "";
-        try {
-            service.deleteHoliday(holiday);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-        payload = gson.toJson(holiday);
-        return getResponseEntity(payload);
-    }
+//    @RequestMapping(value = "holiday/select", method = RequestMethod.POST)
+//    public
+//    @ResponseBody
+//    ResponseEntity<String> getHolidayList(@RequestBody MainSymbol mainSymbol) {
+//        System.out.println("getHolidayList");
+//        Gson gson = new Gson();
+//        List<Holiday> list = null;
+//        String payload = "";
+//        try {
+//            list = service.selectHoliday(mainSymbol);
+//        } catch (Exception e) {
+//            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+//        }
+//
+//        payload = gson.toJson(list);
+//        return getResponseEntity(payload);
+//    }
+//
+//    @RequestMapping(value = "holiday/insert", method = RequestMethod.POST)
+//    public
+//    @ResponseBody
+//    ResponseEntity<String> addHolidayList(@RequestBody List<Holiday> list) {
+//        System.out.println("addHolidayList");
+//        Gson gson = new Gson();
+//        String payload = "";
+//        try {
+//            service.insertHoliday(list);
+//        } catch (Exception e) {
+//            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+//        }
+//        payload = gson.toJson(list);
+//        return getResponseEntity(payload);
+//    }
+//
+//    @RequestMapping(value = "holiday/update", method = RequestMethod.POST)
+//    public
+//    @ResponseBody
+//    ResponseEntity<String> updateHoliday(@RequestBody Holiday holiday) {
+//        Gson gson = new Gson();
+//        String payload = "";
+//        try {
+//            service.updateHoliday(holiday);
+//        } catch (Exception e) {
+//            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+//        }
+//        payload = gson.toJson(holiday);
+//        return getResponseEntity(payload);
+//    }
+//
+//    @RequestMapping(value = "holiday/delete", method = RequestMethod.POST)
+//    public
+//    @ResponseBody
+//    ResponseEntity<String> deleteHoliday(@RequestBody Holiday holiday) {
+//        Gson gson = new Gson();
+//        String payload = "";
+//        try {
+//            service.deleteHoliday(holiday);
+//        } catch (Exception e) {
+//            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+//        }
+//        payload = gson.toJson(holiday);
+//        return getResponseEntity(payload);
+//    }
 
     @RequestMapping(value = "holidayException/select", method = RequestMethod.POST)
     public
