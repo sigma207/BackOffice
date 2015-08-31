@@ -1,7 +1,6 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.Holiday;
 import com.jelly.jt8.bo.model.MainSymbol;
 import com.jelly.jt8.bo.model.SymbolHoliday;
 import com.jelly.jt8.bo.model.TradeAccountGroup;
@@ -25,7 +24,7 @@ public class SymbolHolidayController extends BaseController {
     @Qualifier("holidayExceptionService")
     private HolidayExceptionService service;
 
-    @RequestMapping( method = RequestMethod.GET)
+    @RequestMapping( params = {"exchangeId","mainSymbolId"}, method = RequestMethod.GET)
     public
     @ResponseBody
     ResponseEntity<String> getList(@RequestParam(value="exchangeId") String exchangeId,@RequestParam(value="mainSymbolId") String mainSymbolId) {

@@ -1,7 +1,9 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
+import com.jelly.jt8.bo.model.BoUser;
 import com.jelly.jt8.bo.model.User;
+import com.jelly.jt8.bo.service.BoUserService;
 import com.jelly.jt8.bo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,15 +23,16 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/login")
 public class LoginController extends BaseController{
+
     @Autowired
-    @Qualifier("userService")
-    private UserService userService;
+    @Qualifier("boUserService")
+    private BoUserService userService;
 
     @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody
     ResponseEntity<String> login( @RequestBody User user,HttpServletRequest request){
         String payload = "";
-        User loginUser = null;
+        BoUser loginUser = null;
         System.out.println(request.getSession().getId());
         Gson gson = new Gson();
         try {

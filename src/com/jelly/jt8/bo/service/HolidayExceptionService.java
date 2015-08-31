@@ -1,9 +1,6 @@
 package com.jelly.jt8.bo.service;
 
-import com.jelly.jt8.bo.model.Holiday;
-import com.jelly.jt8.bo.model.HolidayException;
-import com.jelly.jt8.bo.model.MainSymbol;
-import com.jelly.jt8.bo.model.SymbolHoliday;
+import com.jelly.jt8.bo.model.*;
 
 import java.util.List;
 
@@ -16,8 +13,8 @@ public interface HolidayExceptionService {
     public void insertHoliday(List<SymbolHoliday> holidayList) throws Exception;
     public void updateHoliday(SymbolHoliday holiday) throws Exception;
     public void deleteHoliday(SymbolHoliday holiday) throws Exception;
-    public List<HolidayException> selectHolidayException(MainSymbol mainSymbol) throws Exception;
-    public void insertHolidayException(List<HolidayException> holidayExceptionList) throws Exception;
-    public void updateHolidayException(HolidayException holidayException) throws Exception;
-    public void deleteHolidayException(HolidayException holidayException) throws Exception;
+    public List<SymbolHolidayException> selectHolidayException(MainSymbol mainSymbol) throws Exception;
+    public void insertHolidayException(List<SymbolHolidayException> holidayExceptionList) throws Exception;
+    public void updateHolidayException(SymbolHolidayException holidayException) throws Exception;
+    public void deleteHolidayException(SymbolHolidayException holidayException) throws Exception;
 }

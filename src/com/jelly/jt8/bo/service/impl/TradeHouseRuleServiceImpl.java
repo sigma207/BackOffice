@@ -23,8 +23,14 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
     @Autowired
     @Qualifier("TradeHouseRuleDao")
     private TradeHouseRuleDao tradeHouseRuleDao;
+
     @Override
     public List<TradeHouseRule> select() throws Exception {
         return tradeHouseRuleDao.select();
+    }
+
+    @Override
+    public List<TradeHouseRule> select(String houseId) throws Exception {
+        return tradeHouseRuleDao.select(houseId);
     }
 }

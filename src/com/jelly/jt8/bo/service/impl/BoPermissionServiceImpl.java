@@ -1,11 +1,9 @@
 package com.jelly.jt8.bo.service.impl;
 
-import com.jelly.jt8.bo.dao.PermissionDao;
-import com.jelly.jt8.bo.dao.PermissionNameDao;
-import com.jelly.jt8.bo.model.Permission;
-import com.jelly.jt8.bo.model.PermissionMoveSetting;
-import com.jelly.jt8.bo.model.PermissionName;
-import com.jelly.jt8.bo.service.PermissionService;
+import com.jelly.jt8.bo.dao.BoPermissionDao;
+import com.jelly.jt8.bo.dao.BoPermissionNameDao;
+import com.jelly.jt8.bo.model.*;
+import com.jelly.jt8.bo.service.BoPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,79 +14,83 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Created by user on 2015/7/24.
+ * Created by user on 2015/8/31.
  */
-@Service("permissionService")
-public class PermissionServiceImpl implements PermissionService {
+@Service("boPermissionService")
+public class BoPermissionServiceImpl implements BoPermissionService {
     @Autowired
-    @Qualifier("PermissionDao")
-    private PermissionDao permissionDao;
+    @Qualifier("BoPermissionDao")
+    private BoPermissionDao boPermissionDao;
 
     @Autowired
-    @Qualifier("PermissionNameDao")
-    private PermissionNameDao permissionNameDao;
+    @Qualifier("BoPermissionNameDao")
+    private BoPermissionNameDao boPermissionNameDao;
 
     @Autowired
     @Qualifier("jt8Ds")
     private DataSource jt8Ds;
 
     @Override
-    public List<Permission> getPermissionList() throws Exception {
-        List<Permission> treeList = new ArrayList<Permission>();
-        Map<String, Permission> treePermissionMap = new HashMap<String, Permission>();
-        List<Permission> permissionList = permissionDao.selectPermission();
-        List<PermissionName> permissionNameList = permissionNameDao.selectPermissionName();
-        Map<String, List<PermissionName>> nameMap = new HashMap<String, List<PermissionName>>();
+    public List<BoPermission> select() throws Exception {
+        List<BoPermission> treeList = new ArrayList<BoPermission>();
+        Map<String, BoPermission> treePermissionMap = new HashMap<String, BoPermission>();
+        List<BoPermission> permissionList = boPermissionDao.select();
+        List<BoPermissionName> permissionNameList = boPermissionNameDao.select();
+        Map<String, List<BoPermissionName>> nameMap = new HashMap<String, List<BoPermissionName>>();
         String key = null;
-        List<PermissionName> temp = null;
-        for (PermissionName permissionName : permissionNameList) {
-            key = String.valueOf(permissionName.getPermission_id());
+        List<BoPermissionName> temp = null;
+        for (BoPermissionName permissionName : permissionNameList) {
+            key = String.valueOf(permissionName.getPermissionId());
             temp = nameMap.get(key);
             if (temp == null) {
-                temp = new ArrayList<PermissionName>();
+                temp = new ArrayList<BoPermissionName>();
                 nameMap.put(key, temp);
             }
             temp.add(permissionName);
         }
 
         Map<String, String> permissionNameMap = null;
-        for (Permission permission : permissionList) {
-            key = String.valueOf(permission.getPermission_id());
+        for (BoPermission permission : permissionList) {
+            key = String.valueOf(permission.getPermissionId());
             permissionNameMap = new HashMap<String, String>();
             temp = nameMap.get(key);
-            for (PermissionName permissionName : temp) {
+            for (BoPermissionName permissionName : temp) {
                 permissionNameMap.put(permissionName.getLanguage(), permissionName.getName());
             }
             permission.setPermissionNameMap(permissionNameMap);
-            if (permission.getParent_permission_id() == 0) {
+            if (permission.getParentPermissionId() == null) {
                 treeList.add(permission);
-                treePermissionMap.put(String.valueOf(permission.getPermission_id()), permission);
+                treePermissionMap.put(String.valueOf(permission.getPermissionId()), permission);
             } else {
-                Permission parentPermission = treePermissionMap.get(String.valueOf(permission.getParent_permission_id()));
-                List<Permission> children = parentPermission.getChildren();
+                BoPermission parentPermission = treePermissionMap.get(String.valueOf(permission.getParentPermissionId()));
+                List<BoPermission> children = parentPermission.getChildren();
                 if (children == null) {
-                    children = new ArrayList<Permission>();
+                    children = new ArrayList<BoPermission>();
                     parentPermission.setChildren(children);
                 }
                 children.add(permission);
-                treePermissionMap.put(String.valueOf(permission.getPermission_id()), permission);
+                treePermissionMap.put(String.valueOf(permission.getPermissionId()), permission);
             }
         }
         return treeList;
     }
 
     @Override
-    public Permission addPermission(Permission permission) throws Exception {
+    public void insert(BoPermission object) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            int id = permissionDao.insertPermission(conn, permission);
-            permission.setPermission_id(id);
-            Map<String, String> permissionNameMap = permission.getPermissionNameMap();
+            boPermissionDao.insert(conn, object);
+            Map<String, String> permissionNameMap = object.getPermissionNameMap();
             Set<String> keys = permissionNameMap.keySet();
+            BoPermissionName boPermissionName = null;
             for (String key : keys) {
-                permissionNameDao.insertPermissionName(conn, new PermissionName(permission.getPermission_id(), key, permissionNameMap.get(key)));
+                boPermissionName = new BoPermissionName();
+                boPermissionName.setPermissionId(object.getPermissionId());
+                boPermissionName.setLanguage(key);
+                boPermissionName.setName(permissionNameMap.get(key));
+                boPermissionNameDao.insert(conn, boPermissionName);
             }
             conn.commit();
         }catch (Exception e) {
@@ -105,22 +107,25 @@ public class PermissionServiceImpl implements PermissionService {
                 }
             }
         }
-
-        return permission;
     }
 
     @Override
-    public Permission updatePermission(int id,Permission permission) throws Exception {
+    public void update(BoPermission object) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            permissionDao.updatePermission(conn, id,permission);
+            boPermissionDao.update(conn, object);
 
-            Map<String, String> permissionNameMap = permission.getPermissionNameMap();
+            Map<String, String> permissionNameMap = object.getPermissionNameMap();
             Set<String> keys = permissionNameMap.keySet();
+            BoPermissionName boPermissionName = null;
             for (String key : keys) {
-                permissionNameDao.updatePermissionNameByPermissionId(conn, new PermissionName(permission.getPermission_id(), key, permissionNameMap.get(key)));
+                boPermissionName = new BoPermissionName();
+                boPermissionName.setPermissionId(object.getPermissionId());
+                boPermissionName.setLanguage(key);
+                boPermissionName.setName(permissionNameMap.get(key));
+                boPermissionNameDao.update(conn, boPermissionName);
             }
             conn.commit();
         }catch (Exception e) {
@@ -137,18 +142,16 @@ public class PermissionServiceImpl implements PermissionService {
                 }
             }
         }
-
-        return permission;
     }
 
     @Override
-    public void deletePermission(Permission permission) throws Exception {
+    public void delete(BoPermission object) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
 
-            recursiveRemovePermission(conn, permission);
+            recursiveRemovePermission(conn, object);
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -166,36 +169,36 @@ public class PermissionServiceImpl implements PermissionService {
         }
     }
 
-    private void recursiveRemovePermission(Connection conn, Permission permission) throws Exception {
-        List<Permission> children = permission.getChildren();
+    private void recursiveRemovePermission(Connection conn, BoPermission permission) throws Exception {
+        List<BoPermission> children = permission.getChildren();
         if (children != null) {
-            for (Permission child : children) {
+            for (BoPermission child : children) {
                 recursiveRemovePermission(conn, child);
             }
         }
-        permissionNameDao.deletePermissionNameByPermissionId(conn, permission.getPermission_id());
-        permissionDao.deletePermission(conn, permission.getPermission_id());
+        boPermissionNameDao.delete(conn, permission.getPermissionId());
+        boPermissionDao.delete(conn, permission);
     }
 
     @Override
-    public void movePermission(PermissionMoveSetting permissionMoveSetting) throws Exception {
-        List<Permission> moveNodes = permissionMoveSetting.getMoveNodes();
+    public void move(PermissionMoveSetting permissionMoveSetting) throws Exception {
+        List<BoPermission> moveNodes = permissionMoveSetting.getMoveNodes();
         String moveType = permissionMoveSetting.getMoveType();
         String moveAction = permissionMoveSetting.getMoveAction();
 
-        Permission targetNode = permissionMoveSetting.getTargetNode();
-        Permission treeNode = permissionMoveSetting.getTreeNode();
+        BoPermission targetNode = permissionMoveSetting.getTargetNode();
+        BoPermission treeNode = permissionMoveSetting.getTreeNode();
         int sequence = 0;
         int treeIndex = 0;
 
-        for(Permission permission:moveNodes){
-            if(permission.getPermission_id()==treeNode.getPermission_id()){
+        for(BoPermission permission:moveNodes){
+            if(permission.getPermissionId()==treeNode.getPermissionId()){
                 break;
             }
             treeIndex++;
         }
 
-        Permission p = moveNodes.remove(treeIndex);
+        BoPermission p = moveNodes.remove(treeIndex);
 
         if(moveAction.equals("moveFirst")){
             moveNodes.add(0,p);
@@ -212,10 +215,9 @@ public class PermissionServiceImpl implements PermissionService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
 
-            for(Permission permission:moveNodes){
-//                System.out.println(permission.getPermission_code()+":"+sequence);
+            for(BoPermission permission:moveNodes){
                 permission.setSequence( sequence++);
-                permissionDao.updatePermission(conn, permission.getPermission_id(),permission);
+                boPermissionDao.update(conn, permission);
             }
             conn.commit();
         }catch (Exception e) {

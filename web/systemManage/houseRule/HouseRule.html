@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>HouseRule</title>
+</head>
+<body>
+<div ng-controller="HouseRuleController">
+    <button type="button" class="btn-xs btn-primary" translate="add" ng-click="addClick()"></button>
+    <button type="button" class="btn-xs btn-primary" translate="query" ng-click="queryClick()"></button>
+
+    <table st-table="rowCollection" class="table table-striped table-condensed table-jt8">
+        <thead>
+        <tr>
+            <th>{{'houseName'|translate}}</th>
+            <th>{{'scale'|translate}}</th>
+            <th>{{'initialMargin'|translate}}</th>
+            <th>{{'groupManage'|translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in rowCollection">
+            <td>{{row.houseName}}</td>
+            <td>{{row.scale}}</td>
+            <td>{{row.initialMargin}}</td>
+            <td>
+                <button type="button" class="btn-xs btn-primary" translate="delete" ng-click="deleteClick(row)" ></button>
+                <button type="button" class="btn-xs btn-primary" translate="edit" ng-click="editClick(row)" ></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

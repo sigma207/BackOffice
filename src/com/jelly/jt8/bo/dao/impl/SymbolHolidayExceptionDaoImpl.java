@@ -1,10 +1,9 @@
 package com.jelly.jt8.bo.dao.impl;
 
-import com.jelly.jt8.bo.dao.SymbolHolidayDao;
+import com.jelly.jt8.bo.dao.SymbolHolidayExceptionDao;
 import com.jelly.jt8.bo.model.MainSymbol;
 import com.jelly.jt8.bo.model.SymbolHoliday;
-import com.jelly.jt8.bo.model.TradeAccountGroup;
-import com.jelly.jt8.common.Utils;
+import com.jelly.jt8.bo.model.SymbolHolidayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -18,12 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by user on 2015/8/30.
+ * Created by user on 2015/8/31.
  */
-@Repository("SymbolHolidayDao")
-public class SymbolHolidayDaoImpl extends BaseDao implements SymbolHolidayDao {
-    public SymbolHolidayDaoImpl() {
-        super(SymbolHoliday.class);
+@Repository("SymbolHolidayExceptionDao")
+public class SymbolHolidayExceptionDaoImpl extends BaseDao implements SymbolHolidayExceptionDao {
+    public SymbolHolidayExceptionDaoImpl() {
+        super(SymbolHolidayException.class);
     }
     private final static String WHERE_MAIN_SYMBOL = " WHERE exchange_id = ? AND main_symbol_id = ? ";
 
@@ -32,8 +31,8 @@ public class SymbolHolidayDaoImpl extends BaseDao implements SymbolHolidayDao {
     private DataSource jt8Ds;
 
     @Override
-    public List<SymbolHoliday> select(MainSymbol mainSymbol) throws Exception {
-        List<SymbolHoliday> list =  new LinkedList<SymbolHoliday>();
+    public List<SymbolHolidayException> select(MainSymbol mainSymbol) throws Exception {
+        List<SymbolHolidayException> list =  new LinkedList<SymbolHolidayException>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
@@ -65,23 +64,17 @@ public class SymbolHolidayDaoImpl extends BaseDao implements SymbolHolidayDao {
     }
 
     @Override
-    public void insert(Connection conn, SymbolHoliday symbolHoliday) throws Exception {
-        int lastKey = insertByObject(conn,symbolHoliday);
-        symbolHoliday.setHolidayId(lastKey);
+    public void insert(Connection conn, List<SymbolHolidayException> list) throws Exception {
+        insertByObject(conn, list);
     }
 
     @Override
-    public void insert(Connection conn, List<SymbolHoliday> list) throws Exception {
-        insertByObject(conn,list);
+    public void update(Connection conn, SymbolHolidayException symbolHolidayException) throws Exception {
+        updateByObject(conn, symbolHolidayException);
     }
 
     @Override
-    public void update(Connection conn, SymbolHoliday symbolHoliday) throws Exception {
-        updateByObject(conn, symbolHoliday);
-    }
-
-    @Override
-    public void delete(Connection conn, SymbolHoliday symbolHoliday) throws Exception {
-        deleteByObject(conn, symbolHoliday);
+    public void delete(Connection conn, SymbolHolidayException symbolHolidayException) throws Exception {
+        deleteByObject(conn, symbolHolidayException);
     }
 }

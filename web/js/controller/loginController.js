@@ -10,11 +10,12 @@ function LoginController($scope, $translatePartialLoader, $translate, $log, Logi
     };
     $scope.login = function () {
         LoginService.post($scope.loginUser).then(function (user) {
-            if(user.organization_id!=0){
-                OrganizationService.one(user.organization_id).get().then(function (organization) {
+            if(user.organizationId){
+                OrganizationService.one(user.organizationId).get().then(function (organization) {
                     user.organization = organization;
                 });
             }else{
+                $log.info("onLogin!!");
                 $scope.onLogin(user);
             }
         });

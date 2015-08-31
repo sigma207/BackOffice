@@ -1,10 +1,10 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.Organization;
-import com.jelly.jt8.bo.model.TradeAccountGroup;
-import com.jelly.jt8.bo.service.OrganizationService;
-import com.jelly.jt8.bo.service.TradeAccountGroupService;
+import com.jelly.jt8.bo.model.MainSymbol;
+import com.jelly.jt8.bo.model.SymbolHoliday;
+import com.jelly.jt8.bo.model.SymbolHolidayException;
+import com.jelly.jt8.bo.service.HolidayExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -15,24 +15,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by user on 2015/8/26.
+ * Created by user on 2015/8/31.
  */
 @Controller
-@RequestMapping("/tradeAccountGroup")
-public class TradeAccountGroupController extends BaseController{
+@RequestMapping("/symbolHolidayException")
+public class SymbolHolidayExceptionController extends BaseController{
     @Autowired
-    @Qualifier("tradeAccountGroupService")
-    private TradeAccountGroupService service;
+    @Qualifier("holidayExceptionService")
+    private HolidayExceptionService service;
 
-    @RequestMapping( method = RequestMethod.GET)
+    @RequestMapping( params = {"exchangeId","mainSymbolId"}, method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> getList() {
+    ResponseEntity<String> getList(@RequestParam(value="exchangeId") String exchangeId,@RequestParam(value="mainSymbolId") String mainSymbolId) {
         Gson gson = new Gson();
-        List<TradeAccountGroup> list = null;
+        List<SymbolHolidayException> list = null;
         String payload = "";
+        MainSymbol mainSymbol = new MainSymbol();
+        mainSymbol.setExchange_id(exchangeId);
+        mainSymbol.setMain_symbol_id(mainSymbolId);
         try {
-            list = service.select();
+            list = service.selectHolidayException(mainSymbol);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
@@ -44,48 +47,48 @@ public class TradeAccountGroupController extends BaseController{
     @RequestMapping(method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<String> add(@RequestBody TradeAccountGroup tradeAccountGroup) {
+    ResponseEntity<String> add(@RequestBody List<SymbolHolidayException> list) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.insert(tradeAccountGroup);
+            service.insertHolidayException(list);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(tradeAccountGroup);
+        payload = gson.toJson(list);
         return getResponseEntity(payload);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public
     @ResponseBody
-    ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody TradeAccountGroup tradeAccountGroup) {
+    ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody SymbolHolidayException symbolHolidayException) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.update(tradeAccountGroup);
+            service.updateHolidayException(symbolHolidayException);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(tradeAccountGroup);
+        payload = gson.toJson(symbolHolidayException);
         return getResponseEntity(payload);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public
     @ResponseBody
-    ResponseEntity<String> delete(@PathVariable("id") int id, @RequestBody TradeAccountGroup tradeAccountGroup) {
+    ResponseEntity<String> delete(@PathVariable("id") int id, @RequestBody SymbolHolidayException symbolHolidayException) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.delete(tradeAccountGroup);
+            service.deleteHolidayException(symbolHolidayException);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(tradeAccountGroup);
+        payload = gson.toJson(symbolHolidayException);
         return getResponseEntity(payload);
     }
 }

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @javax.persistence.Table(name = "trade_house_rule", schema = "dbo", catalog = "jt8")
-public class TradeHouseRule {
+public class TradeHouseRule extends BaseModel{
     private String houseId;
     private String exchangeId;
     private String houseName;

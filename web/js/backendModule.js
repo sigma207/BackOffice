@@ -82,7 +82,7 @@ angular.module("localeFactory", []).
             },
             node: function (node, permission) {
                 locale.copyLocalesAttribute(node, permission.permissionNameMap);
-                node["name"] = node[locale.lang] + "(" + permission.permission_code + ")";
+                node["name"] = node[locale.lang] + "(" + permission.permissionCode + ")";
             },
             copyLocalesAttribute: function (obj, localesObj) {
                 for (var i = 0; i < locale.list.length; i++) {

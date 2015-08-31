@@ -6,33 +6,33 @@ import java.util.List;
  * Created by user on 2015/7/27.
  */
 public class PermissionMoveSetting {
-    List<Permission> moveNodes;
-    Permission targetNode;
-    Permission treeNode;
+    List<BoPermission> moveNodes;
+    BoPermission targetNode;
+    BoPermission treeNode;
     String moveType;
     String moveAction;
 
-    public List<Permission> getMoveNodes() {
+    public List<BoPermission> getMoveNodes() {
         return moveNodes;
     }
 
-    public void setMoveNodes(List<Permission> moveNodes) {
+    public void setMoveNodes(List<BoPermission> moveNodes) {
         this.moveNodes = moveNodes;
     }
 
-    public Permission getTargetNode() {
+    public BoPermission getTargetNode() {
         return targetNode;
     }
 
-    public void setTargetNode(Permission targetNode) {
+    public void setTargetNode(BoPermission targetNode) {
         this.targetNode = targetNode;
     }
 
-    public Permission getTreeNode() {
+    public BoPermission getTreeNode() {
         return treeNode;
     }
 
-    public void setTreeNode(Permission treeNode) {
+    public void setTreeNode(BoPermission treeNode) {
         this.treeNode = treeNode;
     }
 
