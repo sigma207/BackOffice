@@ -113,7 +113,7 @@ public class DBUtils {
         Column column = null;
         int index = 1;
         Set<String> keys = columnKeyMap.keySet();
-        Set<String> updateKeys = new LinkedHashSet<>();
+        Set<String> updateKeys = new LinkedHashSet<String>();
         for(String key:keys){
             column = columnMap.get(key);
             if(!idColumnMap.containsKey(key) && column.updatable()){
@@ -153,7 +153,7 @@ public class DBUtils {
         Column column = null;
         int index = 1;
         Set<String> keys = columnKeyMap.keySet();
-        Set<String> updateKeys = new LinkedHashSet<>();
+        Set<String> updateKeys = new LinkedHashSet<String>();
         for(String key:keys){
             if(idColumnMap.containsKey(key)){
                 updateKeys.add(key);

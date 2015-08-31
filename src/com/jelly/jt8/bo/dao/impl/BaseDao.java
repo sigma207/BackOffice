@@ -21,9 +21,9 @@ import java.util.*;
 public class BaseDao {
     protected Class tableClass;
     protected String tableName;
-    protected Map<String,PropertyDescriptor> columnKeyMap = new LinkedHashMap<>();
-    protected Map<String,Column> columnMap = new HashMap<>();
-    protected Map<String,Column> idColumnMap = new HashMap<>();
+    protected Map<String,PropertyDescriptor> columnKeyMap = new LinkedHashMap<String,PropertyDescriptor>();
+    protected Map<String,Column> columnMap = new HashMap<String,Column>();
+    protected Map<String,Column> idColumnMap = new HashMap<String,Column>();
     static {
         System.out.println("BaseDao static");
     }
