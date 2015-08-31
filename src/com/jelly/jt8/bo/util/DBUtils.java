@@ -1,5 +1,7 @@
 package com.jelly.jt8.bo.util;
 
+import com.jelly.jt8.bo.model.BaseModel;
+import com.jelly.jt8.common.Utils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.Column;
@@ -18,6 +20,9 @@ import java.util.*;
  * Created by user on 2015/8/30.
  */
 public class DBUtils {
+    public static String ROW_VERSION="rv";
+    public static String CREATE_TIME="create_time";
+    public static String UPDATE_TIME="update_time";
     public static Map<String,IndexedPropertyDescriptor> stmtMap = new HashMap<String,IndexedPropertyDescriptor>();
     static {
         try {
@@ -59,7 +64,7 @@ public class DBUtils {
                             BeanUtils.setProperty(bean, pd.getName(), columnValue);
                         }
                         column = idColumnMap.get(columnName);
-                        if(column!=null){
+                        if(column!=null && bean instanceof BaseModel){
 //                            idValue += columnValue;
                             BeanUtils.setProperty(bean, "id", columnValue);
                         }
@@ -83,6 +88,7 @@ public class DBUtils {
         int index = 1;
         Set<String> keys = columnKeyMap.keySet();
         for(String key:keys){
+            if(key.equalsIgnoreCase(ROW_VERSION))continue;
             column = columnMap.get(key);
             if(column.insertable()){
                 pd = columnKeyMap.get(key);
@@ -93,6 +99,9 @@ public class DBUtils {
                 }
                 ipd = stmtMap.get(propertyTypeName);
                 indexedWriteMethod = ipd.getIndexedWriteMethod();
+                if(key.equalsIgnoreCase(UPDATE_TIME)||key.equalsIgnoreCase(CREATE_TIME)){
+                    value = Utils.updateTime();
+                }
                 System.out.println("set.."+key+"("+index+")="+value+"["+propertyTypeName+"]");
                 if(value==null){
                     stmt.setNull(index, Types.NULL);
@@ -113,15 +122,17 @@ public class DBUtils {
         Column column = null;
         int index = 1;
         Set<String> keys = columnKeyMap.keySet();
-        Set<String> updateKeys = new LinkedHashSet<>();
+        Set<String> updateKeys = new LinkedHashSet<String>();
         for(String key:keys){
+            if(key.equalsIgnoreCase(ROW_VERSION))continue;
+            if(key.equalsIgnoreCase(CREATE_TIME))continue;
             column = columnMap.get(key);
             if(!idColumnMap.containsKey(key) && column.updatable()){
                 updateKeys.add(key);
             }
         }
         for(String key:keys){
-            if(idColumnMap.containsKey(key)){
+            if(idColumnMap.containsKey(key) || key.equalsIgnoreCase(ROW_VERSION)){
                 updateKeys.add(key);
             }
         }
@@ -134,6 +145,9 @@ public class DBUtils {
             }
             ipd = stmtMap.get(propertyTypeName);
             indexedWriteMethod = ipd.getIndexedWriteMethod();
+            if(key.equalsIgnoreCase(UPDATE_TIME)){
+                value = Utils.updateTime();
+            }
             System.out.println("set.."+key+"("+index+")="+value+"["+propertyTypeName+"]");
             if(value==null){
                 stmt.setNull(index, Types.NULL);
@@ -153,7 +167,7 @@ public class DBUtils {
         Column column = null;
         int index = 1;
         Set<String> keys = columnKeyMap.keySet();
-        Set<String> updateKeys = new LinkedHashSet<>();
+        Set<String> updateKeys = new LinkedHashSet<String>();
         for(String key:keys){
             if(idColumnMap.containsKey(key)){
                 updateKeys.add(key);

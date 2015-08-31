@@ -1,12 +1,13 @@
 package com.jelly.jt8.bo.dao.impl;
 
-import com.jelly.jt8.bo.model.Holiday;
 import com.jelly.jt8.bo.util.DBUtils;
+import com.jelly.jt8.bo.util.ErrorMsg;
 import com.jelly.jt8.bo.util.RsMapper;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -21,12 +22,9 @@ import java.util.*;
 public class BaseDao {
     protected Class tableClass;
     protected String tableName;
-    protected Map<String,PropertyDescriptor> columnKeyMap = new LinkedHashMap<>();
-    protected Map<String,Column> columnMap = new HashMap<>();
-    protected Map<String,Column> idColumnMap = new HashMap<>();
-    static {
-        System.out.println("BaseDao static");
-    }
+    protected Map<String,PropertyDescriptor> columnKeyMap = new LinkedHashMap<String,PropertyDescriptor>();
+    protected Map<String,Column> columnMap = new HashMap<String,Column>();
+    protected Map<String,Column> idColumnMap = new HashMap<String,Column>();
 
     public BaseDao() {
     }
@@ -35,7 +33,7 @@ public class BaseDao {
         tableClass = c;
         if(tableClass!=null){
             try {
-                System.out.println("BaseDao "+tableClass.getName());
+//                System.out.println("BaseDao "+tableClass.getName());
                 Table table = (Table)tableClass.getAnnotation(javax.persistence.Table.class);
                 tableName = table.name();
 
@@ -44,7 +42,7 @@ public class BaseDao {
                 BeanInfo info = Introspector.getBeanInfo(tableClass);
                 PropertyDescriptor[] props = info.getPropertyDescriptors(); //Gets all the properties for the class.
                 for (PropertyDescriptor pd : props){
-                    System.out.println(pd.getName()+":"+pd.getPropertyType().getName());
+//                    System.out.println(pd.getName()+":"+pd.getPropertyType().getName());
                     if(pd.getReadMethod()!=null){
 //                        System.out.println(pd.getReadMethod().getName());
                         readMap.put(pd.getReadMethod().getName(), pd);
@@ -56,6 +54,10 @@ public class BaseDao {
                 }
 
                 for(Method method:tableClass.getDeclaredMethods()){
+                    Transient t = method.getAnnotation(javax.persistence.Transient.class);
+                    if(t!=null){
+                        continue;
+                    }
                     Column column = method.getAnnotation(javax.persistence.Column.class);
                     if(column!=null && readMap.containsKey(method.getName())){
                         PropertyDescriptor pd = readMap.get(method.getName());
@@ -65,11 +67,11 @@ public class BaseDao {
                     }
                     Id id =  method.getAnnotation(javax.persistence.Id.class);
                     if(id!=null){
-                        System.out.println("id="+column.name());
+//                        System.out.println("id="+column.name());
                         idColumnMap.put(column.name(),column);
                     }
                 }
-                System.out.println("BaseDao");
+//                System.out.println("BaseDao");
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -104,11 +106,62 @@ public class BaseDao {
         }
     }
 
+    protected PreparedStatement getStatement(Connection conn,String sql) throws Exception{
+        PreparedStatement stmt = null;
+        try{
+            stmt = conn.prepareStatement(sql);
+        }catch (Exception e){
+            throw e;
+        }finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return stmt;
+    }
+
+    protected void query(PreparedStatement stmt, List list) throws Exception{
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = stmt.getConnection();
+            rs = stmt.executeQuery();
+            selectToObject(rs, list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     protected void selectByObject(Connection conn, List list) throws Exception{
+        selectByObject(conn,list,selectSQL());
+    }
+
+    protected void selectByObject(Connection conn, List list, String sql) throws Exception{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = conn.prepareStatement(selectSQL());
+            stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
             selectToObject(rs, list);
         } catch (Exception e) {
@@ -188,7 +241,9 @@ public class BaseDao {
             stmt = conn.prepareStatement(updateSQL());
             updateStatement(stmt, object);
 
-            stmt.executeUpdate();
+            if(stmt.executeUpdate()==0){
+                throw new Exception(ErrorMsg.DIRTY_DATA);
+            }
         } catch (Exception e){
             throw e;
         } finally {
@@ -208,7 +263,9 @@ public class BaseDao {
             stmt = conn.prepareStatement(deleteSQL());
             deleteStatement(stmt, object);
 
-            stmt.executeUpdate();
+            if(stmt.executeUpdate()==0){
+                throw new Exception(ErrorMsg.DIRTY_DATA);
+            }
         } catch (Exception e){
             throw e;
         } finally {
@@ -236,6 +293,7 @@ public class BaseDao {
         Set<String> keys = columnKeyMap.keySet();
         for(String key:keys){
             column = columnMap.get(key);
+            if(key.equalsIgnoreCase(DBUtils.ROW_VERSION))continue;
             if(column.insertable()){
                 columnNames.append(key+",");
                 values.append("?,");
@@ -253,16 +311,19 @@ public class BaseDao {
 
         Set<String> keys = columnKeyMap.keySet();
         for(String key:keys){
+            if(key.equalsIgnoreCase(DBUtils.ROW_VERSION))continue;
+            if(key.equalsIgnoreCase(DBUtils.CREATE_TIME))continue;
             column = columnMap.get(key);
-            if(idColumnMap.containsKey(key)){
+            if(!idColumnMap.containsKey(key) && column.updatable()){
+                updateValues.append(key + " = ?,");
+            }
+        }
+        for(String key:keys){
+            if(idColumnMap.containsKey(key) || key.equalsIgnoreCase(DBUtils.ROW_VERSION)){
                 if(whereValues.length()==0){
                     whereValues.append(key + " = ?");
                 }else{
                     whereValues.append(" AND "+key + " = ?");
-                }
-            }else{
-                if(column.updatable()){
-                    updateValues.append(key + " = ?,");
                 }
             }
         }
@@ -283,6 +344,10 @@ public class BaseDao {
             }
         }
         return "DELETE "+tableName+" WHERE "+whereValues.toString();
+    }
+
+    protected String deleteTable() throws Exception{
+        return "DELETE "+tableName;
     }
 
     protected String selectSQL() throws Exception{

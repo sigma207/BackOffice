@@ -1,13 +1,7 @@
 package com.jelly.jt8.bo.service.impl;
 
-import com.jelly.jt8.bo.dao.HolidayDao;
-import com.jelly.jt8.bo.dao.HolidayExceptionDao;
-import com.jelly.jt8.bo.dao.SymbolHolidayDao;
-import com.jelly.jt8.bo.dao.TransDateDao;
-import com.jelly.jt8.bo.model.Holiday;
-import com.jelly.jt8.bo.model.HolidayException;
-import com.jelly.jt8.bo.model.MainSymbol;
-import com.jelly.jt8.bo.model.SymbolHoliday;
+import com.jelly.jt8.bo.dao.*;
+import com.jelly.jt8.bo.model.*;
 import com.jelly.jt8.bo.service.HolidayExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,8 +25,8 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     private SymbolHolidayDao holidayDao;
 
     @Autowired
-    @Qualifier("HolidayExceptionDao")
-    private HolidayExceptionDao holidayExceptionDao;
+    @Qualifier("SymbolHolidayExceptionDao")
+    private SymbolHolidayExceptionDao holidayExceptionDao;
 
     @Autowired
     @Qualifier("TransDateDao")
@@ -132,26 +126,26 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     }
 
     @Override
-    public List<HolidayException> selectHolidayException(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolHolidayException> selectHolidayException(MainSymbol mainSymbol) throws Exception {
         return holidayExceptionDao.select(mainSymbol);
     }
 
     @Override
-    public void insertHolidayException(List<HolidayException> holidayExceptionList) throws Exception {
+    public void insertHolidayException(List<SymbolHolidayException> holidayExceptionList) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            Map<String,HolidayException> map = new HashMap<String,HolidayException>();
+            Map<String,SymbolHolidayException> map = new HashMap<String,SymbolHolidayException>();
             holidayExceptionDao.insert(conn, holidayExceptionList);
-            for (HolidayException holidayException : holidayExceptionList) {
-                if(!map.containsKey(holidayException.getExchange_id()+ holidayException.getMain_symbol_id())){
-                    map.put(holidayException.getExchange_id()+ holidayException.getMain_symbol_id(),holidayException);
+            for (SymbolHolidayException holidayException : holidayExceptionList) {
+                if(!map.containsKey(holidayException.getExchangeId()+ holidayException.getMainSymbolId())){
+                    map.put(holidayException.getExchangeId()+ holidayException.getMainSymbolId(),holidayException);
                 }
             }
             Set<String> keys =map.keySet();
             for (String key : keys) {
-                transDateDao.generate(conn,  map.get(key).getExchange_id(),  map.get(key).getMain_symbol_id());
+                transDateDao.generate(conn,  map.get(key).getExchangeId(),  map.get(key).getMainSymbolId());
             }
             conn.commit();
         }catch (Exception e) {
@@ -171,13 +165,13 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     }
 
     @Override
-    public void updateHolidayException(HolidayException holidayException) throws Exception {
+    public void updateHolidayException(SymbolHolidayException holidayException) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayExceptionDao.update(conn, holidayException);
-            transDateDao.generate(conn, holidayException.getExchange_id(), holidayException.getMain_symbol_id());
+            transDateDao.generate(conn, holidayException.getExchangeId(), holidayException.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -196,13 +190,13 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     }
 
     @Override
-    public void deleteHolidayException(HolidayException holidayException) throws Exception {
+    public void deleteHolidayException(SymbolHolidayException holidayException) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayExceptionDao.delete(conn, holidayException);
-            transDateDao.generate(conn, holidayException.getExchange_id(), holidayException.getMain_symbol_id());
+            transDateDao.generate(conn, holidayException.getExchangeId(), holidayException.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {

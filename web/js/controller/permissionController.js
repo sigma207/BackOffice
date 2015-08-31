@@ -2,7 +2,7 @@
  * Created by user on 2015/8/6.
  */
 backendApp.controller("PermissionController", PermissionController);
-function PermissionController($scope, $modal, $log, Restangular, PermissionService, PermissionMoveService, locale) {
+function PermissionController($scope, $modal, $log, Restangular, PermissionService, locale) {
     $log.info("PermissionController!!");
     var tree = $("#permissionTree");
     var zTreeObj;
@@ -80,7 +80,7 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                         nodeMoveSetting.targetNode = moveNodes[0];
                         nodeMoveSetting.moveType = "prev";
                         nodeMoveSetting.moveAction = Action.MoveFirst;
-                        PermissionMoveService.post(nodeMoveSetting).then($scope.onNodeMove);
+                        PermissionService.post(nodeMoveSetting,{move:"true"}).then($scope.onNodeMove);
                     }
                 };
                 menu[Action.MoveUp] = {
@@ -90,7 +90,7 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                         nodeMoveSetting.targetNode = currentNode.getPreNode();
                         nodeMoveSetting.moveType = "prev";
                         nodeMoveSetting.moveAction = Action.MoveUp;
-                        PermissionMoveService.post(nodeMoveSetting).then($scope.onNodeMove);
+                        PermissionService.post(nodeMoveSetting,{move:"true"}).then($scope.onNodeMove);
                     }
                 };
                 menu[Action.MoveDown] = {
@@ -100,7 +100,7 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                         nodeMoveSetting.targetNode = currentNode.getNextNode();
                         nodeMoveSetting.moveType = "next";
                         nodeMoveSetting.moveAction = Action.MoveDown;
-                        PermissionMoveService.post(nodeMoveSetting).then($scope.onNodeMove);
+                        PermissionService.post(nodeMoveSetting,{move:"true"}).then($scope.onNodeMove);
                     }
                 };
                 menu[Action.MoveLast] = {
@@ -109,7 +109,7 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                         nodeMoveSetting.targetNode = moveNodes[moveNodes.length - 1];
                         nodeMoveSetting.moveType = "next";
                         nodeMoveSetting.moveAction = Action.MoveLast;
-                        PermissionMoveService.post(nodeMoveSetting).then($scope.onNodeMove);
+                        PermissionService.post(nodeMoveSetting,{move:"true"}).then($scope.onNodeMove);
                     }
                 };
                 menu['sep2'] = '';
@@ -148,7 +148,7 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
             } else {
                 $scope.editNode.sequence = 0;
             }
-            $scope.editNode.parent_permission_id = parentNode.permission_id;
+            $scope.editNode.parentPermissionId = parentNode.permissionId;
         } else {
             var rootNodes = zTreeObj.getNodes();
             if (rootNodes) {
@@ -156,13 +156,13 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
             } else {
                 $scope.editNode.sequence = 0;
             }
-            $scope.editNode.parent_permission_id = undefined;
+            $scope.editNode.parentPermissionId = undefined;
         }
     };
 
     $scope.onNodeMove = function (data) {
         for (var i = 0; i < data.length; i++) {
-            var node = zTreeObj.getNodeByParam("permission_id", data[i].permission_id);
+            var node = zTreeObj.getNodeByParam("permissionId", data[i].permissionId);
             node.sequence = data[i].sequence;
         }
         zTreeObj.moveNode(nodeMoveSetting.targetNode, nodeMoveSetting.treeNode, nodeMoveSetting.moveType, true);
@@ -213,8 +213,8 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
             locale.node($scope.editNode, $scope.editNode);
             switch ($scope.currentAction) {
                 case Action.NewNode:
-                    if ($scope.editNode.parent_permission_id) {
-                        var parent_node = zTreeObj.getNodeByParam("permission_id", $scope.editNode.parent_permission_id);
+                    if ($scope.editNode.parentPermissionId) {
+                        var parent_node = zTreeObj.getNodeByParam("permissionId", $scope.editNode.parentPermissionId);
                         zTreeObj.addNodes(parent_node, $scope.editNode, true);
                     } else {
                         zTreeObj.addNodes(null, $scope.editNode, true);

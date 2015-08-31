@@ -41,7 +41,7 @@ function UserController($scope, $translatePartialLoader, $translate, $log, $moda
         $scope.editUser = row;
         row.getList("userRoles").then(function (data) {
             $scope.userRoleList = data;
-            $scope.modalTitle = $scope.editUser.login_id+":"+$translate.instant("allocateRole");
+            $scope.modalTitle = $scope.editUser.loginId+":"+$translate.instant("allocateRole");
             $scope.openAllocateRole();
         });
     };
@@ -50,7 +50,7 @@ function UserController($scope, $translatePartialLoader, $translate, $log, $moda
         $scope.currentAction = Action.Add;
         $scope.editUser = {};
         $log.info($scope.loginUser);
-        $scope.editUser.parent_user = $scope.loginUser;
+        $scope.editUser.parentBoUser = $scope.loginUser;
         $scope.modalTitle = $translate.instant("addUser");
         $scope.openEditUser();
     };
@@ -246,7 +246,7 @@ backendApp.controller('allocateRoleCtrl', function ($scope, $modalInstance, $log
         var list = $scope.selectedRoleList;
         $scope.editObj.userRoleList = [];
         for(var i= 0,count=list.length;i<count;i++){
-            $scope.editObj.userRoleList.push({user_id: $scope.editObj.user_id, role_id: list[i].role_id});
+            $scope.editObj.userRoleList.push({userId: $scope.editObj.userId, roleId: list[i].role_id});
         }
         $scope.editObj.post("userRoles").then(function (data) {
             $modalInstance.close(data);

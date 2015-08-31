@@ -37,7 +37,7 @@ backendApp.factory('ExchangeService', function (Restangular) {
 });
 
 backendApp.factory('UserService', function (Restangular) {
-    return Restangular.service('users');
+    return Restangular.service('boUsers');
 });
 
 backendApp.factory('LoginService', function (Restangular) {
@@ -56,11 +56,7 @@ backendApp.factory('OrganizationMoveService', function (Restangular) {
 });
 
 backendApp.factory('PermissionService', function (Restangular) {
-    return Restangular.service('permission');
-});
-
-backendApp.factory('PermissionMoveService', function (Restangular) {
-    return Restangular.service('permission/move');
+    return Restangular.service('boPermission');
 });
 
 backendApp.factory('TradeHouseRuleService', function (Restangular) {
@@ -73,6 +69,10 @@ backendApp.factory('TradeAccountGroupService', function (Restangular) {
 
 backendApp.factory('SymbolHolidayService', function (Restangular) {
     return Restangular.service('symbolHoliday');
+});
+
+backendApp.factory('SymbolHolidayExceptionService', function (Restangular) {
+    return Restangular.service('symbolHolidayException');
 });
 
 backendApp.config(["$routeProvider", function ($routeProvider) {
@@ -100,6 +100,9 @@ backendApp.config(["$routeProvider", function ($routeProvider) {
         }).
         when("/C2", {
             templateUrl: "userManage/organization/Organization.html"
+        }).
+        when("/D1", {
+            templateUrl: "systemManage/houseRule/HouseRule.html"
         }).
         when("/D2", {
             templateUrl: "systemManage/accountGroup/AccountGroup.html"
@@ -184,9 +187,6 @@ function BackendController($scope, $translate, $location, $log, $modal, Permissi
     $log.info("BackendController!!");
     request.changeHostUrl(HostUrl);
     locale.changeLang(locale.zh_TW);
-    //$scope.dateFormat = $translate.instant("format.date");
-    //$scope.dateFormat = "yyyy-MM-dd";
-    //$log.info("dateFormat=%s",$scope.dateFormat);
     var tree = $("#menuTree");
     var zTreeObj;
     var treeSetting = {
@@ -198,7 +198,7 @@ function BackendController($scope, $translate, $location, $log, $modal, Permissi
         callback: {
             onClick: function (event, treeId, treeNode) {
                 $scope.$apply(function () {
-                    $location.path("/" + treeNode.permission_code);
+                    $location.path("/" + treeNode.permissionCode);
                 });
             }
         }

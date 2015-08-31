@@ -7,10 +7,15 @@
     <property name="connection.url">jdbc:sqlserver://122.116.99.96:1433;databaseName=jt8</property>
     <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
     <mapping class="com.jelly.jt8.bo.model.TradeHouseRule"/>
-      <mapping resource="com/jelly/jt8/bo/model/TradeHouseRule.hbm.xml"/>
       <mapping class="com.jelly.jt8.bo.model.TradeAccountGroup"/>
       <mapping resource="com/jelly/jt8/bo/model/TradeAccountGroup.hbm.xml"/>
     <mapping class="com.jelly.jt8.bo.model.SymbolHoliday"/>
+    <mapping class="com.jelly.jt8.bo.model.SymbolHolidayException"/>
+    <mapping class="com.jelly.jt8.bo.model.BoPermission"/>
+    <mapping class="com.jelly.jt8.bo.model.BoPermissionName"/>
+    <mapping class="com.jelly.jt8.bo.model.BoUser"/>
+    <mapping class="com.jelly.jt8.bo.model.BoUserRole"/>
+    <mapping class="com.jelly.jt8.bo.model.BoOrganization"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

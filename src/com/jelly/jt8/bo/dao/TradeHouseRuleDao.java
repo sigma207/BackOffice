@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface TradeHouseRuleDao {
     List<TradeHouseRule> select() throws Exception;
+    List<TradeHouseRule> select(String houseId) throws Exception;
 
 }

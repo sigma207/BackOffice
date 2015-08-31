@@ -13,7 +13,7 @@ import java.util.List;
 public interface SymbolHolidayDao {
     List<SymbolHoliday> select(MainSymbol mainSymbol) throws Exception;
     void insert(Connection conn, SymbolHoliday symbolHoliday) throws Exception;
-    void insert(Connection conn, List<SymbolHoliday> symbolHolidayList) throws Exception;
+    void insert(Connection conn, List<SymbolHoliday> list) throws Exception;
     void update(Connection conn, SymbolHoliday symbolHoliday) throws Exception;
     void delete(Connection conn, SymbolHoliday symbolHoliday) throws Exception;
 }
