@@ -1,8 +1,8 @@
 package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.dao.SymbolTradableDailyDao;
-import com.jelly.jt8.bo.model.MainSymbol;
 import com.jelly.jt8.bo.model.SymbolTradableDaily;
+import com.jelly.jt8.bo.model.SystemMainSymbol;
 import com.jelly.jt8.bo.util.RsMapper;
 import com.jelly.jt8.common.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class SymbolTradableDailyDaoImpl extends BaseDao implements SymbolTradabl
     }
 
     @Override
-    public List<SymbolTradableDaily> selectTemp(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolTradableDaily> selectTemp(SystemMainSymbol mainSymbol) throws Exception {
         List<SymbolTradableDaily> list =  new LinkedList<SymbolTradableDaily>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -49,7 +49,7 @@ public class SymbolTradableDailyDaoImpl extends BaseDao implements SymbolTradabl
         try {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(QUERY_TEMP + WHERE_MAIN_SYMBOL);
-            stmt.setString(1,mainSymbol.getExchange_id());
+            stmt.setString(1,mainSymbol.getExchangeId());
 
             rs = stmt.executeQuery();
             RsMapper.map(rs, list, SymbolTradableDaily.class);
@@ -103,12 +103,12 @@ public class SymbolTradableDailyDaoImpl extends BaseDao implements SymbolTradabl
     }
 
     @Override
-    public void deleteTemp(Connection conn, MainSymbol mainSymbol) throws Exception {
+    public void deleteTemp(Connection conn, SystemMainSymbol mainSymbol) throws Exception {
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement(DELETE);
 
-            stmt.setString(1, mainSymbol.getExchange_id());
+            stmt.setString(1, mainSymbol.getExchangeId());
             stmt.executeUpdate();
         } catch (Exception e){
             throw e;
@@ -124,7 +124,7 @@ public class SymbolTradableDailyDaoImpl extends BaseDao implements SymbolTradabl
     }
 
     @Override
-    public List<SymbolTradableDaily> select(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolTradableDaily> select(SystemMainSymbol mainSymbol) throws Exception {
         List<SymbolTradableDaily> list =  new LinkedList<SymbolTradableDaily>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -133,7 +133,7 @@ public class SymbolTradableDailyDaoImpl extends BaseDao implements SymbolTradabl
         try {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(QUERY + WHERE_MAIN_SYMBOL);
-            stmt.setString(1,mainSymbol.getExchange_id());
+            stmt.setString(1,mainSymbol.getExchangeId());
 
             rs = stmt.executeQuery();
             RsMapper.map(rs, list, SymbolTradableDaily.class);

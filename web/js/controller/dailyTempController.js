@@ -7,7 +7,7 @@ function DailyTempController($scope, $translatePartialLoader, $translate, $log, 
     $translate.refresh();
 
     $scope.exchangeChange = function () {
-        $scope.selectedMainSymbol = $scope.selectedExchange.mainSymbolList[0];
+        $scope.selectedMainSymbol = $scope.selectedExchange.systemMainSymbolList[0];
         $scope.mainSymbolChange();
     };
 
@@ -17,8 +17,8 @@ function DailyTempController($scope, $translatePartialLoader, $translate, $log, 
 
     $scope.getList = function () {
         var params = {
-            exchange_id: $scope.selectedMainSymbol.exchange_id,
-            main_symbol_id: $scope.selectedMainSymbol.main_symbol_id
+            exchange_id: $scope.selectedMainSymbol.exchangeId,
+            main_symbol_id: $scope.selectedMainSymbol.mainSymbolId
         };
         SymbolTradableDailyTempService.query(params, {}, function (data) {
             $scope.rowCollection = data;
@@ -39,8 +39,8 @@ function DailyTempController($scope, $translatePartialLoader, $translate, $log, 
             return item.tradable === 1;
         });
         var params = {
-            exchange_id: $scope.selectedMainSymbol.exchange_id,
-            main_symbol_id: $scope.selectedMainSymbol.main_symbol_id
+            exchange_id: $scope.selectedMainSymbol.exchangeId,
+            main_symbol_id: $scope.selectedMainSymbol.mainSymbolId
         };
         SymbolTradableDailyTempService.save(params, list, function (data) {
                 $scope.getList();

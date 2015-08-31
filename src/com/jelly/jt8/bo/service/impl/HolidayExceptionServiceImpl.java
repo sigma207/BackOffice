@@ -37,7 +37,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     private DataSource jt8Ds;
 
     @Override
-    public List<SymbolHoliday> selectHoliday(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolHoliday> selectHoliday(SystemMainSymbol mainSymbol) throws Exception {
         return holidayDao.select(mainSymbol);
     }
 
@@ -126,7 +126,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
     }
 
     @Override
-    public List<SymbolHolidayException> selectHolidayException(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolHolidayException> selectHolidayException(SystemMainSymbol mainSymbol) throws Exception {
         return holidayExceptionDao.select(mainSymbol);
     }
 

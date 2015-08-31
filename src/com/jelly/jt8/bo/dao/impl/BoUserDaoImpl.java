@@ -82,6 +82,9 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
         if(object.getParentBoUser()!=null){
             object.setParentUserId(object.getParentBoUser().getUserId());
         }
+        if(object.getBoOrganization()!=null){
+            object.setOrganizationId(object.getBoOrganization().getOrganizationId());
+        }
         int lastKey = insertByObject(conn,object);
         object.setUserId(lastKey);
     }

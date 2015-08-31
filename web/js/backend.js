@@ -45,10 +45,10 @@ backendApp.factory('LoginService', function (Restangular) {
 });
 
 backendApp.factory('RoleService', function (Restangular) {
-    return Restangular.service('role');
+    return Restangular.service('boRole');
 });
 backendApp.factory('OrganizationService', function (Restangular) {
-    return Restangular.service('organization');
+    return Restangular.service('boOrganization');
 });
 
 backendApp.factory('OrganizationMoveService', function (Restangular) {

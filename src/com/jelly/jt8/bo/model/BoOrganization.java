@@ -1,6 +1,7 @@
 package com.jelly.jt8.bo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by user on 2015/8/31.
@@ -13,6 +14,7 @@ public class BoOrganization extends BaseModel{
     private String organizationName;
     private Integer parentOrganizationId;
     private int sequence;
+    private List<BoOrganization> children;
 
     @Id
     @Column(name = "organization_id", insertable = false)
@@ -62,6 +64,15 @@ public class BoOrganization extends BaseModel{
 
     public void setSequence(int sequence) {
         this.sequence = sequence;
+    }
+
+    @Transient
+    public List<BoOrganization> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<BoOrganization> children) {
+        this.children = children;
     }
 
     @Override

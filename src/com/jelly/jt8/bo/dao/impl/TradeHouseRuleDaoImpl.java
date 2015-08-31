@@ -1,8 +1,6 @@
 package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.dao.TradeHouseRuleDao;
-import com.jelly.jt8.bo.model.Organization;
-import com.jelly.jt8.bo.model.TradeAccountGroup;
 import com.jelly.jt8.bo.model.TradeHouseRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

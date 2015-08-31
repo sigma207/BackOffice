@@ -19,7 +19,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                 enable: true
             },
             key:{
-                name:"organization_name"
+                name:"organizationName"
             }
         }
     };
@@ -149,7 +149,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
             } else {
                 $scope.editNode.sequence = 0;
             }
-            $scope.editNode.parent_organization_id = parentNode.organization_id;
+            $scope.editNode.parentOrganizationId = parentNode.organizationId;
         } else {
             var rootNodes = zTreeObj.getNodes();
             if (rootNodes) {
@@ -157,13 +157,13 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
             } else {
                 $scope.editNode.sequence = 0;
             }
-            $scope.editNode.parent_organization_id = undefined;
+            $scope.editNode.parentOrganizationId = undefined;
         }
     };
 
     $scope.onNodeMove = function (data) {
         for (var i = 0; i < data.length; i++) {
-            var node = zTreeObj.getNodeByParam("organization_id", data[i].organization_id);
+            var node = zTreeObj.getNodeByParam("organizationId", data[i].organizationId);
             node.sequence = data[i].sequence;
         }
         zTreeObj.moveNode(nodeMoveSetting.targetNode, nodeMoveSetting.treeNode, nodeMoveSetting.moveType, true);
@@ -213,8 +213,8 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
             $scope.editNode = editNode;
             switch ($scope.currentAction) {
                 case Action.NewNode:
-                    if ($scope.editNode.parent_organization_id) {
-                        var parent_node = zTreeObj.getNodeByParam("organization_id", $scope.editNode.parent_organization_id);
+                    if ($scope.editNode.parentOrganizationId) {
+                        var parent_node = zTreeObj.getNodeByParam("organizationId", $scope.editNode.parentOrganizationId);
                         zTreeObj.addNodes(parent_node, $scope.editNode, true);
                     } else {
                         zTreeObj.addNodes(null, $scope.editNode, true);

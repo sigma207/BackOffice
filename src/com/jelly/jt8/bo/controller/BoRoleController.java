@@ -1,8 +1,9 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.Organization;
-import com.jelly.jt8.bo.service.OrganizationService;
+import com.jelly.jt8.bo.model.BoRole;
+import com.jelly.jt8.bo.model.BoRolePermission;
+import com.jelly.jt8.bo.service.BoRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -13,21 +14,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by user on 2015/8/22.
+ * Created by user on 2015/8/31.
  */
 @Controller
-@RequestMapping("/organization")
-public class OrganizationController extends BaseController{
+@RequestMapping("/boRole")
+public class BoRoleController extends BaseController {
     @Autowired
-    @Qualifier("organizationService")
-    private OrganizationService service;
+    @Qualifier("boRoleService")
+    private BoRoleService service;
 
     @RequestMapping( method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> getList() {
+    ResponseEntity<String> getRoleList() {
         Gson gson = new Gson();
-        List<Organization> list = null;
+        List<BoRole> list = null;
         String payload = "";
         try {
             list = service.select();
@@ -40,35 +41,67 @@ public class OrganizationController extends BaseController{
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(value = "{id}",  method = RequestMethod.GET)
+    @RequestMapping( method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<String> get(@PathVariable("id") int id) {
+    ResponseEntity<String> addRole(@RequestBody BoRole object) {
         Gson gson = new Gson();
-        Organization organization = null;
         String payload = "";
         try {
-            organization = service.select(id);
+            service.insert(object);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(organization);
+        payload = gson.toJson(object);
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(value = "{id}/with_children",  method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public
     @ResponseBody
-    ResponseEntity<String> getList(@PathVariable("id") int id) {
+    ResponseEntity<String> updateRole(@PathVariable("id") String id, @RequestBody BoRole object) {
+        System.out.println("updateRole");
         Gson gson = new Gson();
-        List<Organization> list = null;
         String payload = "";
         try {
-            list = service.selectWithChildren(id);
+            service.update(object);
         } catch (Exception e) {
-            e.printStackTrace();
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(object);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public
+    @ResponseBody
+    ResponseEntity<String> deleteRole(@PathVariable("id") String id, @RequestBody BoRole object) {
+        Gson gson = new Gson();
+        String payload = "";
+        try {
+            service.delete(object);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(object);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(value = "{id}/permission", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<String> getRolePermissionList(@PathVariable("id") int id ) {
+        System.out.println("selectRolePermission");
+        Gson gson = new Gson();
+        List<BoRolePermission> list = null;
+        String payload = "";
+
+        try {
+            list = service.selectRolePermission(id);
+        } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
@@ -76,51 +109,20 @@ public class OrganizationController extends BaseController{
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "{id}/permission", method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<String> add(@RequestBody Organization organization) {
+    ResponseEntity<String> allocatePermission(@RequestBody BoRole object) {
+        System.out.println("allocatePermission");
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.insert(organization);
+            service.allocatePermission(object);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(organization);
-        return getResponseEntity(payload);
-    }
-
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public
-    @ResponseBody
-    ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody Organization organization) {
-        Gson gson = new Gson();
-        String payload = "";
-        try {
-            service.update(id, organization);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-
-        payload = gson.toJson(organization);
-        return getResponseEntity(payload);
-    }
-
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public
-    @ResponseBody
-    ResponseEntity<String> delete(@PathVariable("id") int id, @RequestBody Organization organization) {
-        Gson gson = new Gson();
-        String payload = "";
-        try {
-            service.delete(id,organization);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-
-        payload = gson.toJson(organization);
+        payload = gson.toJson(object);
         return getResponseEntity(payload);
     }
 }

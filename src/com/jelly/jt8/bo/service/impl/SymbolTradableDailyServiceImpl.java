@@ -1,8 +1,8 @@
 package com.jelly.jt8.bo.service.impl;
 
 import com.jelly.jt8.bo.dao.SymbolTradableDailyDao;
-import com.jelly.jt8.bo.model.MainSymbol;
 import com.jelly.jt8.bo.model.SymbolTradableDaily;
+import com.jelly.jt8.bo.model.SystemMainSymbol;
 import com.jelly.jt8.bo.service.SymbolTradableDailyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,12 +32,12 @@ public class SymbolTradableDailyServiceImpl implements SymbolTradableDailyServic
     }
 
     @Override
-    public List<SymbolTradableDaily> selectSymbolTradableDailyTemp(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolTradableDaily> selectSymbolTradableDailyTemp(SystemMainSymbol mainSymbol) throws Exception {
         return symbolTradableDailyDao.selectTemp(mainSymbol);
     }
 
     @Override
-    public void insertSymbolTradableDailyTemp(MainSymbol mainSymbol,List<SymbolTradableDaily> list) throws Exception {
+    public void insertSymbolTradableDailyTemp(SystemMainSymbol mainSymbol,List<SymbolTradableDaily> list) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
@@ -62,7 +62,7 @@ public class SymbolTradableDailyServiceImpl implements SymbolTradableDailyServic
     }
 
     @Override
-    public List<SymbolTradableDaily> selectSymbolTradableDaily(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolTradableDaily> selectSymbolTradableDaily(SystemMainSymbol mainSymbol) throws Exception {
         return symbolTradableDailyDao.select(mainSymbol);
     }
 }

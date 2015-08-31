@@ -1,8 +1,8 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.MainSymbol;
 import com.jelly.jt8.bo.model.SymbolTradableDaily;
+import com.jelly.jt8.bo.model.SystemMainSymbol;
 import com.jelly.jt8.bo.service.SymbolTradableDailyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,9 +34,9 @@ public class SymbolTradableDailyController extends BaseController {
         List<SymbolTradableDaily> list = null;
         String payload = "";
         try {
-            MainSymbol mainSymbol = new MainSymbol();
-            mainSymbol.setExchange_id(exchange_id);
-            mainSymbol.setMain_symbol_id(main_symbol_id);
+            SystemMainSymbol mainSymbol = new SystemMainSymbol();
+            mainSymbol.setExchangeId(exchange_id);
+            mainSymbol.setMainSymbolId(main_symbol_id);
             list = service.selectSymbolTradableDaily(mainSymbol);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);

@@ -1,10 +1,10 @@
 package com.jelly.jt8.bo.service.impl;
 
-import com.jelly.jt8.bo.dao.RoleDao;
-import com.jelly.jt8.bo.dao.RolePermissionDao;
-import com.jelly.jt8.bo.model.Role;
-import com.jelly.jt8.bo.model.RolePermission;
-import com.jelly.jt8.bo.service.RoleService;
+import com.jelly.jt8.bo.dao.BoRoleDao;
+import com.jelly.jt8.bo.dao.BoRolePermissionDao;
+import com.jelly.jt8.bo.model.BoRole;
+import com.jelly.jt8.bo.model.BoRolePermission;
+import com.jelly.jt8.bo.service.BoRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -15,71 +15,34 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by user on 2015/7/28.
+ * Created by user on 2015/8/31.
  */
-@Service("roleService")
-public class RoleServiceImpl implements RoleService {
+@Service("boRoleService")
+public class BoRoleServiceImpl implements BoRoleService {
+    @Autowired
+    @Qualifier("BoRoleDao")
+    private BoRoleDao boRoleDao;
 
     @Autowired
-    @Qualifier("RoleDao")
-    private RoleDao roleDao;
-
-    @Autowired
-    @Qualifier("RolePermissionDao")
-    private RolePermissionDao rolePermissionDao;
-
+    @Qualifier("BoRolePermissionDao")
+    private BoRolePermissionDao boRolePermissionDao;
 
     @Autowired
     @Qualifier("jt8Ds")
     private DataSource jt8Ds;
 
     @Override
-    public List<Role> selectRole() throws Exception {
-        return roleDao.selectRole();
+    public List<BoRole> select() throws Exception {
+        return boRoleDao.select();
     }
 
     @Override
-    public List<RolePermission> selectRolePermission(int id) throws Exception {
-        return rolePermissionDao.selectRolePermission(id);
-    }
-
-    @Override
-    public Role addRole(Role role) throws Exception {
+    public void insert(BoRole object) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            int id = roleDao.insertRole(conn, role);
-            role.setRole_id(id);
-            conn.commit();
-        }catch (Exception e) {
-            if (conn != null) {
-                conn.rollback();
-            }
-            throw e;
-        }finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                }catch (SQLException se){
-                    se.printStackTrace();
-                }
-            }
-        }
-        return role;
-    }
-
-    @Override
-    public void allocatePermission(Role role) throws Exception {
-        Connection conn = null;
-        try {
-            conn = jt8Ds.getConnection();
-            conn.setAutoCommit(false);
-            roleDao.updateRole(conn, role);
-            rolePermissionDao.deleteRolePermissionByRole(conn, role);
-            for(RolePermission rolePermission:role.getPermissionList()){
-                rolePermissionDao.insertRolePermission(conn,rolePermission);
-            }
+            boRoleDao.insert(conn, object);
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -98,13 +61,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void deleteRole(Role role) throws Exception {
+    public void delete(BoRole object) throws Exception {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            rolePermissionDao.deleteRolePermissionByRole(conn, role);
-            roleDao.deleteRole(conn, role);
+            boRolePermissionDao.delete(conn, object.getRoleId());
+            boRoleDao.delete(conn, object);
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -123,13 +86,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void updateRole(Role role) throws Exception {
+    public void update(BoRole object) throws Exception {
         Connection conn = null;
 
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            roleDao.updateRole(conn, role);
+            boRoleDao.update(conn, object);
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -147,4 +110,36 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
+    @Override
+    public List<BoRolePermission> selectRolePermission(int roleId) throws Exception {
+        return boRolePermissionDao.select(roleId);
+    }
+
+    @Override
+    public void allocatePermission(BoRole object) throws Exception {
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            conn.setAutoCommit(false);
+            boRoleDao.update(conn, object);
+            boRolePermissionDao.delete(conn, object.getRoleId());
+            for(BoRolePermission rolePermission:object.getBoRolePermissionList()){
+                boRolePermissionDao.insert(conn, rolePermission);
+            }
+            conn.commit();
+        }catch (Exception e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        }finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }catch (SQLException se){
+                    se.printStackTrace();
+                }
+            }
+        }
+    }
 }

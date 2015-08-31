@@ -7,7 +7,7 @@ function HolidayController($scope, $translatePartialLoader, $translate, $log, $m
     $translate.refresh();
 
     $scope.exchangeChange = function () {
-        $scope.selectedMainSymbol = $scope.selectedExchange.mainSymbolList[0];
+        $scope.selectedMainSymbol = $scope.selectedExchange.systemMainSymbolList[0];
         $scope.mainSymbolChange();
     };
 
@@ -26,8 +26,8 @@ function HolidayController($scope, $translatePartialLoader, $translate, $log, $m
 
     $scope.getHoliday = function () {
         var params = {
-            exchangeId:$scope.selectedMainSymbol.exchange_id,
-            mainSymbolId:$scope.selectedMainSymbol.main_symbol_id
+            exchangeId:$scope.selectedMainSymbol.exchangeId,
+            mainSymbolId:$scope.selectedMainSymbol.mainSymbolId
         };
         SymbolHolidayService.getList(params).then(function (data) {
             for(var i= 0,count=data.length;i<count;i++){
@@ -40,8 +40,8 @@ function HolidayController($scope, $translatePartialLoader, $translate, $log, $m
 
     $scope.getException = function () {
         var params = {
-            exchangeId:$scope.selectedMainSymbol.exchange_id,
-            mainSymbolId:$scope.selectedMainSymbol.main_symbol_id
+            exchangeId:$scope.selectedMainSymbol.exchangeId,
+            mainSymbolId:$scope.selectedMainSymbol.mainSymbolId
         };
         SymbolHolidayExceptionService.getList(params).then(function (data) {
             for(var i= 0,count=data.length;i<count;i++){
@@ -212,8 +212,8 @@ backendApp.controller('batchHolidayCtrl', function ($scope, $modalInstance, $log
 
     $scope.getNewRow = function () {
         return {
-            exchangeId:mainSymbol.exchange_id,
-            mainSymbolId:mainSymbol.main_symbol_id
+            exchangeId:mainSymbol.exchangeId,
+            mainSymbolId:mainSymbol.mainSymbolId
         };
     };
 
@@ -257,8 +257,8 @@ backendApp.controller('batchExceptionCtrl', function ($scope, $modalInstance, $l
 
     $scope.getNewRow = function () {
         return {
-            exchangeId:mainSymbol.exchange_id,
-            mainSymbolId:mainSymbol.main_symbol_id
+            exchangeId:mainSymbol.exchangeId,
+            mainSymbolId:mainSymbol.mainSymbolId
         };
     };
 

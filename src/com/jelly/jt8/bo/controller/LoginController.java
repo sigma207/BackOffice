@@ -2,9 +2,7 @@ package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
 import com.jelly.jt8.bo.model.BoUser;
-import com.jelly.jt8.bo.model.User;
 import com.jelly.jt8.bo.service.BoUserService;
-import com.jelly.jt8.bo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -30,13 +28,13 @@ public class LoginController extends BaseController{
 
     @RequestMapping(method = RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity<String> login( @RequestBody User user,HttpServletRequest request){
+    ResponseEntity<String> login( @RequestBody BoUser user,HttpServletRequest request){
         String payload = "";
         BoUser loginUser = null;
         System.out.println(request.getSession().getId());
         Gson gson = new Gson();
         try {
-            loginUser = userService.login(user.getLogin_id(),user.getPassword());
+            loginUser = userService.login(user.getLoginId(),user.getPassword());
         } catch (Exception e){
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

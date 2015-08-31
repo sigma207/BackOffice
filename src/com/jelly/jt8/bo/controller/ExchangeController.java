@@ -2,7 +2,7 @@ package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
 import com.jelly.jt8.bo.model.Exchange;
-import com.jelly.jt8.bo.service.MainSymbolService;
+import com.jelly.jt8.bo.service.SystemMainSymbolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,14 +21,13 @@ import java.util.List;
 @RequestMapping("/exchange")
 public class ExchangeController extends BaseController {
     @Autowired
-    @Qualifier("mainSymbolService")
-    private MainSymbolService service;
+    @Qualifier("systemMainSymbolService")
+    private SystemMainSymbolService service;
 
     @RequestMapping(method = RequestMethod.GET)
     public
     @ResponseBody
     ResponseEntity<String> getExchangeList() {
-        System.out.println("getExchangeList");
         Gson gson = new Gson();
         List<Exchange> list = null;
         String payload = "";

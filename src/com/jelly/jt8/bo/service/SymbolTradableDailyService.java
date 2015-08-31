@@ -1,7 +1,7 @@
 package com.jelly.jt8.bo.service;
 
-import com.jelly.jt8.bo.model.MainSymbol;
 import com.jelly.jt8.bo.model.SymbolTradableDaily;
+import com.jelly.jt8.bo.model.SystemMainSymbol;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface SymbolTradableDailyService {
     List<SymbolTradableDaily> selectSymbolTradableDailyTemp() throws Exception;
-    List<SymbolTradableDaily> selectSymbolTradableDailyTemp(MainSymbol mainSymbol) throws Exception;
-    void insertSymbolTradableDailyTemp(MainSymbol mainSymbol, List<SymbolTradableDaily> list) throws Exception;
-    List<SymbolTradableDaily> selectSymbolTradableDaily(MainSymbol mainSymbol) throws Exception;
+    List<SymbolTradableDaily> selectSymbolTradableDailyTemp(SystemMainSymbol mainSymbol) throws Exception;
+    void insertSymbolTradableDailyTemp(SystemMainSymbol mainSymbol, List<SymbolTradableDaily> list) throws Exception;
+    List<SymbolTradableDaily> selectSymbolTradableDaily(SystemMainSymbol mainSymbol) throws Exception;
 }

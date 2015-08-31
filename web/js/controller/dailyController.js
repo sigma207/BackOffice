@@ -7,7 +7,7 @@ function DailyController($scope, $translatePartialLoader, $translate, $log, Symb
     $translate.refresh();
 
     $scope.exchangeChange = function () {
-        $scope.selectedMainSymbol = $scope.selectedExchange.mainSymbolList[0];
+        $scope.selectedMainSymbol = $scope.selectedExchange.systemMainSymbolList[0];
         $scope.mainSymbolChange();
     };
 
@@ -17,8 +17,8 @@ function DailyController($scope, $translatePartialLoader, $translate, $log, Symb
 
     $scope.getList = function () {
         var params = {
-            exchange_id: $scope.selectedMainSymbol.exchange_id,
-            main_symbol_id: $scope.selectedMainSymbol.main_symbol_id
+            exchange_id: $scope.selectedMainSymbol.exchangeId,
+            main_symbol_id: $scope.selectedMainSymbol.mainSymbolId
         };
         SymbolTradableDailyService.query(params, {}, function (data) {
             $scope.rowCollection = data;

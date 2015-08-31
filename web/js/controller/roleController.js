@@ -36,7 +36,7 @@ function RoleController($scope, $translatePartialLoader, $translate, $log, $moda
     $scope.editRoleClick = function (row) {
         $scope.currentAction = Action.Edit;
         $scope.editRole = Restangular.copy(row);
-        $scope.modalTitle =  $scope.editRole.role_code+":"+$translate.instant("editRole");
+        $scope.modalTitle =  $scope.editRole.roleCode+":"+$translate.instant("editRole");
         $scope.openEditRole();
     };
 
@@ -44,7 +44,7 @@ function RoleController($scope, $translatePartialLoader, $translate, $log, $moda
         row.getList("permission").then(function (data) {
             row.permissionList = data;
             $scope.editRole = row;
-            $scope.modalTitle =  $scope.editRole.role_code+":"+$translate.instant("allocatePermission");
+            $scope.modalTitle =  $scope.editRole.roleCode+":"+$translate.instant("allocatePermission");
             $scope.openAllocatePermission();
         });
     };
@@ -166,7 +166,7 @@ backendApp.controller('allocatePermissionCtrl', function ($scope, $modalInstance
         $scope.zTreeObj.checkAllNodes(false);
         var node = undefined;
         for (var i = 0; i < $scope.editObj.permissionList.length; i++) {
-            node = $scope.zTreeObj.getNodeByParam("permission_id", $scope.editObj.permissionList[i].permission_id);
+            node = $scope.zTreeObj.getNodeByParam("permissionId", $scope.editObj.permissionList[i].permissionId);
             $scope.zTreeObj.checkNode(node, true, false);
         }
         $scope.zTreeObj.expandAll(true);
@@ -174,11 +174,11 @@ backendApp.controller('allocatePermissionCtrl', function ($scope, $modalInstance
 
     $scope.save = function () {
         var checkedNodes = $scope.zTreeObj.getCheckedNodes();
-        var role_id = $scope.editObj.role_id;
+        var roleId = $scope.editObj.roleId;
         var count = checkedNodes.length;
-        $scope.editObj.permissionList = [];
+        $scope.editObj.boRolePermissionList = [];
         for (var i = 0; i < count; i++) {
-            $scope.editObj.permissionList.push({permission_id: checkedNodes[i].permission_id, role_id: role_id});
+            $scope.editObj.boRolePermissionList.push({permissionId: checkedNodes[i].permissionId, roleId: roleId});
         }
         $scope.editObj.post("permission").then(function () {
             $modalInstance.close();

@@ -5,7 +5,7 @@
 backendApp.controller("LoginController", LoginController);
 function LoginController($scope, $translatePartialLoader, $translate, $log, LoginService, OrganizationService) {
     $scope.loginUser = {
-        login_id:"superAdmin",
+        loginId:"superAdmin",
         password:"123"
     };
     $scope.login = function () {
@@ -13,6 +13,7 @@ function LoginController($scope, $translatePartialLoader, $translate, $log, Logi
             if(user.organizationId){
                 OrganizationService.one(user.organizationId).get().then(function (organization) {
                     user.organization = organization;
+                    $scope.onLogin(user);
                 });
             }else{
                 $log.info("onLogin!!");
@@ -21,5 +22,5 @@ function LoginController($scope, $translatePartialLoader, $translate, $log, Logi
         });
     };
     //login auto for test
-    $scope.login();
+    //$scope.login();
 }

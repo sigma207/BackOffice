@@ -16,6 +16,9 @@
     <mapping class="com.jelly.jt8.bo.model.BoUser"/>
     <mapping class="com.jelly.jt8.bo.model.BoUserRole"/>
     <mapping class="com.jelly.jt8.bo.model.BoOrganization"/>
+    <mapping class="com.jelly.jt8.bo.model.BoRole"/>
+    <mapping class="com.jelly.jt8.bo.model.BoRolePermission"/>
+    <mapping class="com.jelly.jt8.bo.model.SystemMainSymbol"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

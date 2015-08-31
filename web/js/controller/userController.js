@@ -49,7 +49,6 @@ function UserController($scope, $translatePartialLoader, $translate, $log, $moda
     $scope.addUserClick = function () {
         $scope.currentAction = Action.Add;
         $scope.editUser = {};
-        $log.info($scope.loginUser);
         $scope.editUser.parentBoUser = $scope.loginUser;
         $scope.modalTitle = $translate.instant("addUser");
         $scope.openEditUser();
@@ -137,14 +136,14 @@ backendApp.controller('userEditCtrl', function ($scope, $modalInstance, $log, $m
             size: $scope.editSize,
             resolve: {
                 organization: function () {
-                    return $scope.editObj.parent_user.organization;
+                    return $scope.editObj.parentBoUser.organization;
                 }
             }
         });
 
         modalInstance.result.then(
             function (selectedNode) {
-                $scope.editObj.organization = selectedNode;
+                $scope.editObj.boOrganization = selectedNode;
             },
             function () {
                 //$log.info('Modal dismissed at: ' + new Date());
@@ -202,7 +201,7 @@ backendApp.controller('selectOrganizationCtrl', function ($scope, $modalInstance
                     enable: true
                 },
                 key:{
-                    name:"organization_name"
+                    name:"organizationName"
                 }
             }
         };
@@ -232,11 +231,11 @@ backendApp.controller('allocateRoleCtrl', function ($scope, $modalInstance, $log
         var i, count;
         var roleMap = {};
         for (i = 0, count = $scope.userRoleList.length; i < count; i++) {
-            roleMap[userRoleList[i].role_id] = 0;
+            roleMap[$scope.userRoleList[i].roleId] = 0;
         }
         for (i = 0, count = $scope.roleList.length; i < count; i++) {
-            if (typeof roleMap[$scope.roleList[i].role_id] !== typeof undefined) {
-                $scope.selectedRoleList.push(roleList[i]);
+            if (typeof roleMap[$scope.roleList[i].roleId] !== typeof undefined) {
+                $scope.selectedRoleList.push($scope.roleList[i]);
             }
         }
         $scope.rowCollection = $scope.roleList;
@@ -244,9 +243,9 @@ backendApp.controller('allocateRoleCtrl', function ($scope, $modalInstance, $log
 
     $scope.save = function () {
         var list = $scope.selectedRoleList;
-        $scope.editObj.userRoleList = [];
+        $scope.editObj.boUserRoleList = [];
         for(var i= 0,count=list.length;i<count;i++){
-            $scope.editObj.userRoleList.push({userId: $scope.editObj.userId, roleId: list[i].role_id});
+            $scope.editObj.boUserRoleList.push({userId: $scope.editObj.userId, roleId: list[i].roleId});
         }
         $scope.editObj.post("userRoles").then(function (data) {
             $modalInstance.close(data);

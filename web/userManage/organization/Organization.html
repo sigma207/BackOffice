@@ -15,17 +15,17 @@
             <table st-table="rowCollection" class="table table-striped table-condensed">
                 <thead>
                 <tr>
-                    <th>{{'organization_code'|translate}}</th>
-                    <th>{{'organization_name'|translate}}</th>
-                    <th>{{'organization_manage'|translate}}</th>
+                    <th>{{'organizationCode'|translate}}</th>
+                    <th>{{'organizationName'|translate}}</th>
+                    <th>{{'organizationManage'|translate}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="row in rowCollection">
-                    <td>{{row.organization_code}}</td>
-                    <td>{{row.organization_name}}</td>
-                    <td> <button type="button" class="btn-xs btn-primary" translate="remove_organization" ng-click="removeRoleClick(row)" ></button>
-                        <button type="button" class="btn-xs btn-primary" translate="edit_organization" ng-click="editRoleClick(row)" ></button>
+                    <td>{{row.organizationCode}}</td>
+                    <td>{{row.organizationName}}</td>
+                    <td> <button type="button" class="btn-xs btn-primary" translate="remove" ng-click="removeRoleClick(row)" ></button>
+                        <button type="button" class="btn-xs btn-primary" translate="edit" ng-click="editRoleClick(row)" ></button>
                     </td>
                 </tr>
                 </tbody>
@@ -40,15 +40,15 @@
         <div class="modal-body">
             <form name="editForm" class="form-horizontal" role="form">
                 <div class="form-group">
-                    <label for="organization_code" class="col-md-2 control-label" translate="organization_code"></label>
+                    <label for="organizationCode" class="col-md-2 control-label" translate="organizationCode"></label>
                     <div class="col-md-10">
-                        <input id="organization_code"  type="text" ng-model="editNode.organization_code" class="input-sm form-control" focus="true" required/>
+                        <input id="organizationCode" type="text" ng-model="editNode.organizationCode" class="input-sm form-control" focus="true" required/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="organization_name" class="col-md-2 control-label" translate="organization_name"></label>
+                    <label for="organizationName" class="col-md-2 control-label" translate="organizationName"></label>
                     <div class="col-md-10">
-                        <input id="organization_name"  type="text" ng-model="editNode.organization_name" class="input-sm form-control" required/>
+                        <input id="organizationName" type="text" ng-model="editNode.organizationName" class="input-sm form-control" required/>
                     </div>
                 </div>
 

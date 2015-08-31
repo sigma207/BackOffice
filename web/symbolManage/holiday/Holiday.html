@@ -8,10 +8,10 @@
 <body>
 <div ng-controller="HolidayController">
     <select ng-model="selectedExchange" ng-change="exchangeChange();"
-            ng-options="exchange.exchange_id for exchange in exchangeList">
+            ng-options="exchange.exchangeId for exchange in exchangeList">
     </select>
     <select ng-model="selectedMainSymbol" ng-change="mainSymbolChange();"
-            ng-options="main_symbol.main_symbol_id for main_symbol in selectedExchange.mainSymbolList">
+            ng-options="mainSymbol.mainSymbolId for mainSymbol in selectedExchange.systemMainSymbolList">
     </select>
     <button type="button" class="btn-xs btn-primary" translate="addHoliday" ng-click="batchAddHolidayClick()"></button>
     <button type="button" class="btn-xs btn-primary" translate="addException" ng-click="batchAddExceptionClick()"></button>

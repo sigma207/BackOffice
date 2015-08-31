@@ -1,9 +1,8 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.MainSymbol;
-import com.jelly.jt8.bo.model.SymbolHoliday;
 import com.jelly.jt8.bo.model.SymbolHolidayException;
+import com.jelly.jt8.bo.model.SystemMainSymbol;
 import com.jelly.jt8.bo.service.HolidayExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,9 +30,9 @@ public class SymbolHolidayExceptionController extends BaseController{
         Gson gson = new Gson();
         List<SymbolHolidayException> list = null;
         String payload = "";
-        MainSymbol mainSymbol = new MainSymbol();
-        mainSymbol.setExchange_id(exchangeId);
-        mainSymbol.setMain_symbol_id(mainSymbolId);
+        SystemMainSymbol mainSymbol = new SystemMainSymbol();
+        mainSymbol.setExchangeId(exchangeId);
+        mainSymbol.setMainSymbolId(mainSymbolId);
         try {
             list = service.selectHolidayException(mainSymbol);
         } catch (Exception e) {

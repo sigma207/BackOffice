@@ -1,10 +1,8 @@
 package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.dao.SymbolHolidayDao;
-import com.jelly.jt8.bo.model.MainSymbol;
 import com.jelly.jt8.bo.model.SymbolHoliday;
-import com.jelly.jt8.bo.model.TradeAccountGroup;
-import com.jelly.jt8.common.Utils;
+import com.jelly.jt8.bo.model.SystemMainSymbol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -25,6 +23,7 @@ public class SymbolHolidayDaoImpl extends BaseDao implements SymbolHolidayDao {
     public SymbolHolidayDaoImpl() {
         super(SymbolHoliday.class);
     }
+
     private final static String WHERE_MAIN_SYMBOL = " WHERE exchange_id = ? AND main_symbol_id = ? ";
 
     @Autowired
@@ -32,18 +31,18 @@ public class SymbolHolidayDaoImpl extends BaseDao implements SymbolHolidayDao {
     private DataSource jt8Ds;
 
     @Override
-    public List<SymbolHoliday> select(MainSymbol mainSymbol) throws Exception {
-        List<SymbolHoliday> list =  new LinkedList<SymbolHoliday>();
+    public List<SymbolHoliday> select(SystemMainSymbol mainSymbol) throws Exception {
+        List<SymbolHoliday> list = new LinkedList<SymbolHoliday>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(selectSQL() + WHERE_MAIN_SYMBOL);
-            stmt.setString(1,mainSymbol.getExchange_id());
-            stmt.setString(2, mainSymbol.getMain_symbol_id());
+            stmt.setString(1, mainSymbol.getExchangeId());
+            stmt.setString(2, mainSymbol.getMainSymbolId());
             rs = stmt.executeQuery();
-            selectToObject(rs,list);
+            selectToObject(rs, list);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -66,13 +65,13 @@ public class SymbolHolidayDaoImpl extends BaseDao implements SymbolHolidayDao {
 
     @Override
     public void insert(Connection conn, SymbolHoliday symbolHoliday) throws Exception {
-        int lastKey = insertByObject(conn,symbolHoliday);
+        int lastKey = insertByObject(conn, symbolHoliday);
         symbolHoliday.setHolidayId(lastKey);
     }
 
     @Override
     public void insert(Connection conn, List<SymbolHoliday> list) throws Exception {
-        insertByObject(conn,list);
+        insertByObject(conn, list);
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.dao.SymbolHolidayExceptionDao;
-import com.jelly.jt8.bo.model.MainSymbol;
-import com.jelly.jt8.bo.model.SymbolHoliday;
 import com.jelly.jt8.bo.model.SymbolHolidayException;
+import com.jelly.jt8.bo.model.SystemMainSymbol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -31,7 +30,7 @@ public class SymbolHolidayExceptionDaoImpl extends BaseDao implements SymbolHoli
     private DataSource jt8Ds;
 
     @Override
-    public List<SymbolHolidayException> select(MainSymbol mainSymbol) throws Exception {
+    public List<SymbolHolidayException> select(SystemMainSymbol mainSymbol) throws Exception {
         List<SymbolHolidayException> list =  new LinkedList<SymbolHolidayException>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -39,8 +38,8 @@ public class SymbolHolidayExceptionDaoImpl extends BaseDao implements SymbolHoli
         try {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(selectSQL() + WHERE_MAIN_SYMBOL);
-            stmt.setString(1,mainSymbol.getExchange_id());
-            stmt.setString(2, mainSymbol.getMain_symbol_id());
+            stmt.setString(1,mainSymbol.getExchangeId());
+            stmt.setString(2, mainSymbol.getMainSymbolId());
             rs = stmt.executeQuery();
             selectToObject(rs,list);
         } catch (Exception e) {

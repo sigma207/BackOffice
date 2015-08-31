@@ -250,6 +250,17 @@ public class BoUser extends BaseModel{
         this.parentBoUser = parentBoUser;
     }
 
+    private BoOrganization boOrganization;
+
+    @Transient
+    public BoOrganization getBoOrganization() {
+        return boOrganization;
+    }
+
+    public void setBoOrganization(BoOrganization boOrganization) {
+        this.boOrganization = boOrganization;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
