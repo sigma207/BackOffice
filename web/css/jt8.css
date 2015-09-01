@@ -24,6 +24,15 @@ input.ng-dirty.ng-invalid {
     }
 }
 
+@media (min-width: 768px) {
+    .modal-dialog-lg {
+        width: 900px;
+    }
+    .modal-dialog-xg {
+        width: 1200px;
+    }
+}
+
 .the-legend {
     border-style: none;
     border-width: 0;
@@ -116,4 +125,21 @@ input.ng-dirty.ng-invalid {
 .table-jt8 > tbody > tr > td,
 .table-jt8 > tfoot > tr > td {
     padding: 0px;
+}
+
+.modal-backdrop.am-fade {
+    opacity: .5;
+    transition: opacity .15s linear;
+&.ng-enter {
+     opacity: 0;
+&.ng-enter-active {
+     opacity: .5;
+ }
+}
+&.ng-leave {
+     opacity: .5;
+&.ng-leave-active {
+     opacity: 0;
+ }
+}
 }

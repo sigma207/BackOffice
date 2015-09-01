@@ -1,7 +1,8 @@
 /**
  * Created by user on 2015/8/5.
  */
-var backendApp = angular.module("backendApp", ["pascalprecht.translate", "ui.bootstrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
+    //ui.bootstrap
+var backendApp = angular.module("backendApp", ["pascalprecht.translate", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
 //backendApp.factory('PermissionService', ['$resource', function ($resource) {
 //    return $resource('api/permission/:permissionId',
 //        {},
@@ -183,7 +184,7 @@ backendApp.directive('datePickerOpen', DatePickerOpen);
 //backendApp.directive('dateGreaterThan', DateGreaterThan);
 
 backendApp.controller("BackendController", BackendController);
-function BackendController($scope, $translate, $location, $log, $modal, PermissionService, HostUrl, request, locale, datepickerPopupConfig) {
+function BackendController($scope, $translate, $location, $log, PermissionService, HostUrl, request, locale) {
     $log.info("BackendController!!");
     request.changeHostUrl(HostUrl);
     locale.changeLang(locale.zh_TW);
@@ -215,9 +216,9 @@ function BackendController($scope, $translate, $location, $log, $modal, Permissi
     $scope.changeLanguage = function (langKey) {
         $translate.use(langKey);
         // TRANSLATION
-        datepickerPopupConfig.currentText = $translate.instant("datePicker.currentText");
-        datepickerPopupConfig.clearText = $translate.instant("datePicker.clearText");
-        datepickerPopupConfig.closeText = $translate.instant("datePicker.closeText");
+        //datepickerPopupConfig.currentText = $translate.instant("datePicker.currentText");
+        //datepickerPopupConfig.clearText = $translate.instant("datePicker.clearText");
+        //datepickerPopupConfig.closeText = $translate.instant("datePicker.closeText");
     };
 
     $location.path("/Login");
