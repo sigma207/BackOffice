@@ -35,351 +35,359 @@
     </table>
 </div>
 <script type="text/ng-template" id="accountGroupEdit.html">
-    <div class="modal-header">
-        <h3 class="modal-title">{{title}}</h3>
-    </div>
-    <div class="modal-body" ng-init="init()">
-        <form name="editForm" class="form-horizontal" role="form">
-            <fieldset class="well well-xs the-fieldset">
-                <legend class="the-legend">base</legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="groupName" class="col-md-5 control-label" translate="groupName"></label>
-                            <div class="col-md-7 valueCol">
-                                <text-input id="groupName" ng-model="editObj.groupName" focus="true" required></text-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="scale" class="col-md-5 control-label" translate="scale"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="scale" ng-model="editObj.scale" required></number-input>
-                            </div>
-                        </div>
-                    </div>
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-xg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="initialMargin" class="col-md-5 control-label" translate="initialMargin"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="initialMargin" ng-model="editObj.initialMargin" required></number-input>
+                <div class="modal-body" ng-init="init()">
+                    <form name="editForm" class="form-horizontal" role="form">
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">base</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="groupName" class="col-md-5 control-label" translate="groupName"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <text-input id="groupName" ng-model="editObj.groupName" focus="true" required></text-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="scale" class="col-md-5 control-label" translate="scale"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="scale" ng-model="editObj.scale" required></number-input>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="maintainMargin" class="col-md-5 control-label" translate="maintainMargin"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="maintainMargin" ng-model="editObj.maintainMargin" required></number-input>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="initialMargin" class="col-md-5 control-label" translate="initialMargin"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="initialMargin" ng-model="editObj.initialMargin" required></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="maintainMargin" class="col-md-5 control-label" translate="maintainMargin"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="maintainMargin" ng-model="editObj.maintainMargin" required></number-input>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="buyCommission" class="col-md-5 control-label" translate="buyCommission"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="buyCommission" ng-model="editObj.buyCommission" required></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="sellCommission" class="col-md-5 control-label" translate="sellCommission"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="sellCommission" ng-model="editObj.sellCommission" required></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="tax" class="col-md-5 control-label" translate="tax"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="tax" ng-model="editObj.tax"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="fee1" class="col-md-5 control-label" translate="fee1"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="fee1" ng-model="editObj.fee1"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="fee2" class="col-md-5 control-label" translate="fee2"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="fee2" ng-model="editObj.fee2"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="fee3" class="col-md-5 control-label" translate="fee3"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="fee3" ng-model="editObj.fee3"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="fee4" class="col-md-5 control-label" translate="fee4"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="fee4" ng-model="editObj.fee4"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="fee5" class="col-md-5 control-label" translate="fee5"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="fee5" ng-model="editObj.fee5"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="well well-xs the-fieldset">
-                <legend class="the-legend">part1</legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="uplimit" class="col-md-5 control-label" translate="uplimit"></label>
-                            <div class="col-md-7 valueCol">
-                                <div class="input-group">
-                                    <text-input id="uplimit" ng-model="editObj.uplimit" percentage></text-input>
-                                    <span class="input-group-addon">%</span>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="buyCommission" class="col-md-5 control-label" translate="buyCommission"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="buyCommission" ng-model="editObj.buyCommission" required></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="sellCommission" class="col-md-5 control-label" translate="sellCommission"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="sellCommission" ng-model="editObj.sellCommission" required></number-input>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="downlimit" class="col-md-5 control-label" translate="downlimit"></label>
-                            <div class="col-md-7 valueCol">
-                                <div class="input-group">
-                                    <text-input id="downlimit" ng-model="editObj.downlimit" percentage></text-input>
-                                    <span class="input-group-addon">%</span>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="tax" class="col-md-5 control-label" translate="tax"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="tax" ng-model="editObj.tax"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="fee1" class="col-md-5 control-label" translate="fee1"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="fee1" ng-model="editObj.fee1"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="fee2" class="col-md-5 control-label" translate="fee2"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="fee2" ng-model="editObj.fee2"></number-input>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="marketDownlimit" class="col-md-5 control-label" translate="marketDownlimit"></label>
-                            <div class="col-md-7 valueCol">
-                                <div class="input-group">
-                                    <text-input id="marketDownlimit" ng-model="editObj.marketDownlimit" percentage></text-input>
-                                    <span class="input-group-addon">%</span>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="fee3" class="col-md-5 control-label" translate="fee3"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="fee3" ng-model="editObj.fee3"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="fee4" class="col-md-5 control-label" translate="fee4"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="fee4" ng-model="editObj.fee4"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="fee5" class="col-md-5 control-label" translate="fee5"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="fee5" ng-model="editObj.fee5"></number-input>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="marketUpdownlimitCharge" class="col-md-5 control-label" translate="marketUpdownlimitCharge"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="marketUpdownlimitCharge" ng-model="editObj.marketUpdownlimitCharge"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="well well-xs the-fieldset">
-                <legend class="the-legend">part2</legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="specialStockRule" class="col-md-5 control-label" translate="specialStockRule"></label>
-                            <div class="col-md-7 valueCol">
-                                <label class="radio-inline">
-                                    <input type="radio" ng-model="editObj.specialStockRule" value="1"/>{{'yes'|translate}}
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" ng-model="editObj.specialStockRule" value="0"/>{{'no'|translate}}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="specialStockCharge" class="col-md-5 control-label" translate="specialStockCharge"></label>
-                            <div class="col-md-7 valueCol">
-                                <div class="input-group">
-                                    <text-input id="specialStockCharge" ng-model="editObj.specialStockCharge" percentage></text-input>
-                                    <span class="input-group-addon">%</span>
+                        </fieldset>
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">part1</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="uplimit" class="col-md-5 control-label" translate="uplimit"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <text-input id="uplimit" ng-model="editObj.uplimit" percentage></text-input>
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="downlimit" class="col-md-5 control-label" translate="downlimit"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <text-input id="downlimit" ng-model="editObj.downlimit" percentage></text-input>
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="well well-xs the-fieldset">
-                <legend class="the-legend">part3</legend>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="tvolDeltaRule" class="col-md-5 control-label" translate="tvolDeltaRule"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="tvolDeltaRule" ng-model="editObj.tvolDeltaRule"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="tvolDeltaMinute" class="col-md-5 control-label" translate="tvolDeltaMinute"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="tvolDeltaMinute" ng-model="editObj.tvolDeltaMinute"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group form-group-xs">
-                            <label for="tvolDeltaCharge" class="col-md-5 control-label" translate="tvolDeltaCharge"></label>
-                            <div class="col-md-7 valueCol">
-                                <div class="input-group">
-                                    <text-input id="tvolDeltaCharge" ng-model="editObj.tvolDeltaCharge" percentage></text-input>
-                                    <span class="input-group-addon">%</span>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="marketDownlimit" class="col-md-5 control-label" translate="marketDownlimit"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <text-input id="marketDownlimit" ng-model="editObj.marketDownlimit" percentage></text-input>
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="marketUpdownlimitCharge" class="col-md-5 control-label" translate="marketUpdownlimitCharge"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="marketUpdownlimitCharge" ng-model="editObj.marketUpdownlimitCharge"></number-input>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="newOrderCloseTimeLimit" class="col-md-5 control-label" translate="newOrderCloseTimeLimit"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="newOrderCloseTimeLimit" ng-model="editObj.newOrderCloseTimeLimit"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="oiDay" class="col-md-5 control-label" translate="oiDay"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="oiDay" ng-model="editObj.oiDay"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="oiCharge" class="col-md-5 control-label" translate="oiCharge"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="oiCharge" ng-model="editObj.oiCharge"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="oiLots" class="col-md-5 control-label" translate="oiLots"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="oiLots" ng-model="editObj.oiLots"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="well well-xs the-fieldset">
-                <legend class="the-legend">part4</legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="overWithdrawalCreditPercentage" class="col-md-5 control-label" translate="overWithdrawalCreditPercentage"></label>
-                            <div class="col-md-7 valueCol">
-                                <div class="input-group">
-                                    <text-input id="overWithdrawalCreditPercentage" ng-model="editObj.overWithdrawalCreditPercentage" percentage></text-input>
-                                    <span class="input-group-addon">%</span>
+                        </fieldset>
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">part2</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="specialStockRule" class="col-md-5 control-label" translate="specialStockRule"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <label class="radio-inline">
+                                                <input type="radio" ng-model="editObj.specialStockRule" value="1"/>{{'yes'|translate}}
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" ng-model="editObj.specialStockRule" value="0"/>{{'no'|translate}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="specialStockCharge" class="col-md-5 control-label" translate="specialStockCharge"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <text-input id="specialStockCharge" ng-model="editObj.specialStockCharge" percentage></text-input>
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="overWithdrawalCreditPercentageCharge" class="col-md-5 control-label" translate="overWithdrawalCreditPercentageCharge"></label>
-                            <div class="col-md-7 valueCol">
-                                <div class="input-group">
-                                    <text-input id="overWithdrawalCreditPercentageCharge" ng-model="editObj.overWithdrawalCreditPercentageCharge" percentage></text-input>
-                                    <span class="input-group-addon">%</span>
+                        </fieldset>
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">part3</legend>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="tvolDeltaRule" class="col-md-5 control-label" translate="tvolDeltaRule"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="tvolDeltaRule" ng-model="editObj.tvolDeltaRule"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="tvolDeltaMinute" class="col-md-5 control-label" translate="tvolDeltaMinute"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="tvolDeltaMinute" ng-model="editObj.tvolDeltaMinute"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="tvolDeltaCharge" class="col-md-5 control-label" translate="tvolDeltaCharge"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <text-input id="tvolDeltaCharge" ng-model="editObj.tvolDeltaCharge" percentage></text-input>
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="newOrderCloseTimeLimit" class="col-md-5 control-label" translate="newOrderCloseTimeLimit"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="newOrderCloseTimeLimit" ng-model="editObj.newOrderCloseTimeLimit"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="oiDay" class="col-md-5 control-label" translate="oiDay"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="oiDay" ng-model="editObj.oiDay"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="oiCharge" class="col-md-5 control-label" translate="oiCharge"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="oiCharge" ng-model="editObj.oiCharge"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="oiLots" class="col-md-5 control-label" translate="oiLots"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="oiLots" ng-model="editObj.oiLots"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">part4</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="overWithdrawalCreditPercentage" class="col-md-5 control-label" translate="overWithdrawalCreditPercentage"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <text-input id="overWithdrawalCreditPercentage" ng-model="editObj.overWithdrawalCreditPercentage" percentage></text-input>
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="overWithdrawalCreditPercentageCharge" class="col-md-5 control-label" translate="overWithdrawalCreditPercentageCharge"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <text-input id="overWithdrawalCreditPercentageCharge" ng-model="editObj.overWithdrawalCreditPercentageCharge" percentage></text-input>
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="overWithdrawalCreditLimit" class="col-md-5 control-label" translate="overWithdrawalCreditLimit"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="overWithdrawalCreditLimit" ng-model="editObj.overWithdrawalCreditLimit"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="overWithdrawalCreditLimitCharge" class="col-md-5 control-label" translate="overWithdrawalCreditLimitCharge"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="overWithdrawalCreditLimitCharge" ng-model="editObj.overWithdrawalCreditLimitCharge"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-xs">
+                                        <label for="liquidationRate" class="col-md-5 control-label" translate="liquidationRate"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="liquidationRate" ng-model="editObj.liquidationRate"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-xs">
+                                        <label for="marginCallRate" class="col-md-5 control-label" translate="marginCallRate"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="marginCallRate" ng-model="editObj.marginCallRate"></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-xs">
+                                        <label for="marginRate" class="col-md-5 control-label" translate="marginRate"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="marginRate" ng-model="editObj.marginRate" required></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group form-group-xs">
+                                        <label for="maxLots" class="col-md-5 control-label" translate="maxLots"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <number-input id="maxLots" ng-model="editObj.maxLots" required></number-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="overWithdrawalCreditLimit" class="col-md-5 control-label" translate="overWithdrawalCreditLimit"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="overWithdrawalCreditLimit" ng-model="editObj.overWithdrawalCreditLimit"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-xs">
-                            <label for="overWithdrawalCreditLimitCharge" class="col-md-5 control-label" translate="overWithdrawalCreditLimitCharge"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="overWithdrawalCreditLimitCharge" ng-model="editObj.overWithdrawalCreditLimitCharge"></number-input>
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                    <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
                 </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group form-group-xs">
-                            <label for="liquidationRate" class="col-md-5 control-label" translate="liquidationRate"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="liquidationRate" ng-model="editObj.liquidationRate"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group form-group-xs">
-                            <label for="marginCallRate" class="col-md-5 control-label" translate="marginCallRate"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="marginCallRate" ng-model="editObj.marginCallRate"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group form-group-xs">
-                            <label for="marginRate" class="col-md-5 control-label" translate="marginRate"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="marginRate" ng-model="editObj.marginRate" required></number-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group form-group-xs">
-                            <label for="maxLots" class="col-md-5 control-label" translate="maxLots"></label>
-                            <div class="col-md-7 valueCol">
-                                <number-input id="maxLots" ng-model="editObj.maxLots" required></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
+            </div>
+        </div>
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
-        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
-    </div>
+
 </script>
 </body>
 </html>

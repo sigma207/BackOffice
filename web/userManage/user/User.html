@@ -26,94 +26,115 @@
         </tbody>
     </table>
     <script type="text/ng-template" id="userEdit.html">
-        <div class="modal-header">
-            <h3 class="modal-title">{{title}}</h3>
-        </div>
-        <div class="modal-body">
-            <form name="editForm" class="form-horizontal" role="form">
-                <div class="form-group">
-                    <label for="loginId" class="col-md-2 control-label" translate="loginId"></label>
-                    <div class="col-md-10">
-                        <input id="loginId" type="text" ng-model="editObj.loginId" class="input-sm form-control" focus="true" required/>
+        <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <modal-close></modal-close>
+                        <h3 class="modal-title">{{modalTitle}}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form name="editForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="loginId" class="col-md-2 control-label" translate="loginId"></label>
+                                <div class="col-md-10">
+                                    <input id="loginId" type="text" ng-model="editObj.loginId" class="input-sm form-control" focus="true" required/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-md-2 control-label" translate="userPassword"></label>
+                                <div class="col-md-10">
+                                    <input id="password" type="password" ng-model="editObj.password" class="input-sm form-control" required/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAgain" class="col-md-2 control-label" translate="inputAgain"></label>
+                                <div class="col-md-10">
+                                    <input id="inputAgain" type="password" ng-model="editObj.inputAgain" class="input-sm form-control" required/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="org_id" class="col-md-2 control-label" translate="org.code"></label>
+                                <div class="col-md-10">
+                                    <input id="org_id" type="text" ng-model="editObj.boOrganization.organizationName" class="input-sm " />
+                                    <button type="button" class="btn-xs btn-primary" translate="org.select" ng-click="selectOrganization()"></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="parent_user_name" class="col-md-2 control-label" translate="user.parent"></label>
+                                <div class="col-md-10">
+                                    <input id="parent_user_name" type="text" ng-model="editObj.parentBoUser.loginId" class="input-sm " />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="password" class="col-md-2 control-label" translate="userPassword"></label>
-                    <div class="col-md-10">
-                        <input id="password" type="password" ng-model="editObj.password" class="input-sm form-control" required/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputAgain" class="col-md-2 control-label" translate="inputAgain"></label>
-                    <div class="col-md-10">
-                        <input id="inputAgain" type="password" ng-model="editObj.inputAgain" class="input-sm form-control" required/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="org_id" class="col-md-2 control-label" translate="org.code"></label>
-                    <div class="col-md-10">
-                        <input id="org_id" type="text" ng-model="editObj.boOrganization.organizationName" class="input-sm " />
-                        <button type="button" class="btn-xs btn-primary" translate="org.select" ng-click="selectOrganization()"></button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="parent_user_name" class="col-md-2 control-label" translate="user.parent"></label>
-                    <div class="col-md-10">
-                        <input id="parent_user_name" type="text" ng-model="editObj.parentBoUser.loginId" class="input-sm " />
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
-            <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+            </div>
         </div>
     </script>
 
     <script type="text/ng-template" id="selectOrganization.html">
-        <div class="modal-header">
-            <h3 class="modal-title">{{title}}</h3>
-        </div>
-        <div class="modal-body" ng-init="init()">
-            <form class="form-horizontal" role="form">
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        <ul id="organizationTree" class="ztree"></ul>
+        <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <modal-close></modal-close>
+                        <h3 class="modal-title">{{modalTitle}}</h3>
+                    </div>
+                    <div class="modal-body" ng-init="init()">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <ul id="organizationTree" class="ztree"></ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                        <button class="btn btn-primary" ng-click="save()" translate="save"></button>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
-            <button class="btn btn-primary" ng-click="save()" translate="save"></button>
+            </div>
         </div>
     </script>
 
     <script type="text/ng-template" id="allocateRole.html">
-        <div class="modal-header">
-            <h3 class="modal-title">{{title}}</h3>
-        </div>
-        <div class="modal-body" ng-init="init()">
-            <table st-table="rowCollection" class="table table-striped table-condensed table-jt8" table-select-checkbox selected-Items="selectedRoleList">
-                <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>{{'roleCode'|translate}}</th>
-                    <th>{{'roleName'|translate}}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="row in rowCollection">
-                    <td row-select-checkbox row="row" index="$index"></td>
-                    <td>{{row.roleCode}}</td>
-                    <td>{{row.roleName}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
-            <button class="btn btn-primary" ng-click="save()" translate="save"></button>
+        <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <modal-close></modal-close>
+                        <h3 class="modal-title">{{modalTitle}}</h3>
+                    </div>
+                    <div class="modal-body" ng-init="init()">
+                        <table st-table="rowCollection" class="table table-striped table-condensed table-jt8" table-select-checkbox selected-Items="selectedRoleList">
+                            <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>{{'roleCode'|translate}}</th>
+                                <th>{{'roleName'|translate}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in rowCollection">
+                                <td row-select-checkbox row="row" index="$index"></td>
+                                <td>{{row.roleCode}}</td>
+                                <td>{{row.roleName}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                        <button class="btn btn-primary" ng-click="save()" translate="save"></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </script>
 </div>

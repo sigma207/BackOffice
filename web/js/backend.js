@@ -2,7 +2,7 @@
  * Created by user on 2015/8/5.
  */
     //ui.bootstrap
-var backendApp = angular.module("backendApp", ["pascalprecht.translate", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
+var backendApp = angular.module("backendApp", ["pascalprecht.translate", "ngAnimate", "ngSanitize", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
 //backendApp.factory('PermissionService', ['$resource', function ($resource) {
 //    return $resource('api/permission/:permissionId',
 //        {},
@@ -32,6 +32,20 @@ backendApp.config(function (RestangularProvider) {
         return true; // 停止promise链
     });
 });
+backendApp.config(function($modalProvider) {
+    angular.extend($modalProvider.defaults, {
+        animation: 'am-flip-x'
+    });
+});
+backendApp.config(function($timepickerProvider) {
+    angular.extend($timepickerProvider.defaults, {
+        timeFormat:"HH:mm:ss",
+        modelTimeFormat:"HHmmss",
+        timeType:"string",
+        minuteStep: 1,
+        secondStep: 1
+    });
+})
 
 backendApp.factory('ExchangeService', function (Restangular) {
     return Restangular.service('exchange');
@@ -64,8 +78,8 @@ backendApp.factory('TradeHouseRuleService', function (Restangular) {
     return Restangular.service('tradeHouseRule');
 });
 
-backendApp.factory('TradeAccountGroupService', function (Restangular) {
-    return Restangular.service('tradeAccountGroup');
+backendApp.factory('TradeGroupService', function (Restangular) {
+    return Restangular.service('tradeGroup');
 });
 
 backendApp.factory('SymbolHolidayService', function (Restangular) {
@@ -179,6 +193,8 @@ backendApp.directive('parseInt', ParseInt);
 backendApp.directive('numbersOnly', NumbersOnly);
 backendApp.directive('textInput', TextInput);
 backendApp.directive('numberInput', NumberInput);
+backendApp.directive('timeInput', TimeInput);
+backendApp.directive('modalClose', ModalClose);
 backendApp.directive('datePickerOpen', DatePickerOpen);
 //backendApp.directive('dateLowerThan',DateLowerThan);
 //backendApp.directive('dateGreaterThan', DateGreaterThan);

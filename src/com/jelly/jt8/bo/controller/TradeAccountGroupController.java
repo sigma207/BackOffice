@@ -1,8 +1,8 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.TradeAccountGroup;
-import com.jelly.jt8.bo.service.TradeAccountGroupService;
+import com.jelly.jt8.bo.model.TradeGroup;
+import com.jelly.jt8.bo.service.TradeGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -16,18 +16,18 @@ import java.util.List;
  * Created by user on 2015/8/26.
  */
 @Controller
-@RequestMapping("/tradeAccountGroup")
+@RequestMapping("/tradeGroup")
 public class TradeAccountGroupController extends BaseController{
     @Autowired
-    @Qualifier("tradeAccountGroupService")
-    private TradeAccountGroupService service;
+    @Qualifier("tradeGroupService")
+    private TradeGroupService service;
 
     @RequestMapping( method = RequestMethod.GET)
     public
     @ResponseBody
     ResponseEntity<String> getList() {
         Gson gson = new Gson();
-        List<TradeAccountGroup> list = null;
+        List<TradeGroup> list = null;
         String payload = "";
         try {
             list = service.select();
@@ -42,48 +42,48 @@ public class TradeAccountGroupController extends BaseController{
     @RequestMapping(method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<String> add(@RequestBody TradeAccountGroup tradeAccountGroup) {
+    ResponseEntity<String> add(@RequestBody TradeGroup object) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.insert(tradeAccountGroup);
+            service.insert(object);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(tradeAccountGroup);
+        payload = gson.toJson(object);
         return getResponseEntity(payload);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public
     @ResponseBody
-    ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody TradeAccountGroup tradeAccountGroup) {
+    ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody TradeGroup object) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.update(tradeAccountGroup);
+            service.update(object);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(tradeAccountGroup);
+        payload = gson.toJson(object);
         return getResponseEntity(payload);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public
     @ResponseBody
-    ResponseEntity<String> delete(@PathVariable("id") int id, @RequestBody TradeAccountGroup tradeAccountGroup) {
+    ResponseEntity<String> delete(@PathVariable("id") int id, @RequestBody TradeGroup object) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.delete(tradeAccountGroup);
+            service.delete(object);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
-        payload = gson.toJson(tradeAccountGroup);
+        payload = gson.toJson(object);
         return getResponseEntity(payload);
     }
 }

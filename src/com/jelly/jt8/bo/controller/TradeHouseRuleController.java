@@ -1,9 +1,7 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.TradeAccountGroup;
 import com.jelly.jt8.bo.model.TradeHouseRule;
-import com.jelly.jt8.bo.service.TradeAccountGroupService;
 import com.jelly.jt8.bo.service.TradeHouseRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

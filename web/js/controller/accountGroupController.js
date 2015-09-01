@@ -2,7 +2,7 @@
  * Created by user on 2015/8/27.
  */
 backendApp.controller("AccountGroupController", AccountGroupController);//交易帳號屬性群組
-function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, TradeHouseRuleService, TradeAccountGroupService) {
+function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, TradeHouseRuleService, TradeGroupService) {
     $translatePartialLoader.addPart("accountGroup");
     $translate.refresh();
 
@@ -16,7 +16,7 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
     };
 
     $scope.getTradeAccountGroupList = function () {
-        TradeAccountGroupService.getList().then(function (data) {
+        TradeGroupService.getList().then(function (data) {
             $scope.rowCollection = data;
         })
     };
@@ -39,14 +39,14 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
         $scope.editObj.maxLots = 3;
         $scope.editObj.ownerId = $scope.loginUser.userId;
         $scope.modalTitle = $translate.instant("tradeAccountGroup");
-        $scope.open();
+        $scope.showModal();
     };
 
     $scope.editClick = function (row) {
         $scope.currentAction = Action.Edit;
         $scope.editObj = Restangular.copy(row);
         $scope.modalTitle = $translate.instant("tradeAccountGroup");
-        $scope.open();
+        $scope.showModal();
     };
 
     $scope.deleteClick = function (row) {
@@ -55,58 +55,39 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
         });
     };
 
-    $scope.open = function () {
-        $scope.editSize = "xg";
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'accountGroupEdit.html',
-            controller: 'accountGroupEditCtrl',
-            size: $scope.editSize,
-            resolve: {
-                editObj: function () {
-                    return $scope.editObj;
-                },
-                title: function () {
-                    return $scope.modalTitle;
-                },
-                currentAction: function () {
-                    return $scope.currentAction;
-                }
+    function ModalController($scope){
+        $scope.save = function () {
+            switch ($scope.currentAction) {
+                case Action.Add:
+                    TradeGroupService.post( $scope.editObj).then(function (data) {
+                        $scope.getTradeAccountGroupList();
+                        $scope.hideModal();
+                    });
+                    break;
+                case Action.Edit:
+                    $scope.editObj.put().then(function (data) {
+                        $scope.getTradeAccountGroupList();
+                        $scope.hideModal();
+                    });
+                    break;
             }
-        });
+        };
+    }
 
-        modalInstance.result.then(function (editNode) {
+    var modal = $modal({
+        scope: $scope,
+        controller: ModalController,
+        templateUrl:"accountGroupEdit.html",
+        show:false
+    });
 
-            $scope.getTradeAccountGroupList();
-        }, function () {
-            //$log.info('Modal dismissed at: ' + new Date());
-        });
+    $scope.showModal = function() {
+        modal.$promise.then(modal.show);
+    };
+    $scope.hideModal = function() {
+        modal.$promise.then(modal.hide);
     };
 
     $scope.getTradeHouseRuleList();
     $scope.getTradeAccountGroupList();
 }
-
-
-backendApp.controller('accountGroupEditCtrl', function ($scope, $modalInstance, $log, TradeAccountGroupService, title, editObj, currentAction) {
-    $scope.title = title;
-    $scope.editObj = editObj;
-    $scope.save = function () {
-        switch (currentAction) {
-            case Action.Add:
-                TradeAccountGroupService.post( $scope.editObj).then(function (data) {
-                    $modalInstance.close($scope.editObj);
-                });
-                break;
-            case Action.Edit:
-                $scope.editObj.put().then(function (data) {
-                    $modalInstance.close();
-                });
-                break;
-        }
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});

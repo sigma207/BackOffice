@@ -1,8 +1,8 @@
 package com.jelly.jt8.bo.service.impl;
 
-import com.jelly.jt8.bo.dao.TradeAccountGroupDao;
-import com.jelly.jt8.bo.model.TradeAccountGroup;
-import com.jelly.jt8.bo.service.TradeAccountGroupService;
+import com.jelly.jt8.bo.dao.TradeGroupDao;
+import com.jelly.jt8.bo.model.TradeGroup;
+import com.jelly.jt8.bo.service.TradeGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -15,30 +15,30 @@ import java.util.List;
 /**
  * Created by user on 2015/8/26.
  */
-@Service("tradeAccountGroupService")
-public class TradeAccountGroupServiceImpl implements TradeAccountGroupService {
+@Service("tradeGroupService")
+public class TradeGroupServiceImpl implements TradeGroupService {
 
     @Autowired
     @Qualifier("jt8Ds")
     private DataSource jt8Ds;
 
     @Autowired
-    @Qualifier("TradeAccountGroupDao")
-    private TradeAccountGroupDao tradeAccountGroupDao;
+    @Qualifier("TradeGroupDao")
+    private TradeGroupDao tradeGroupDao;
 
     @Override
-    public List<TradeAccountGroup> select() throws Exception {
-        return tradeAccountGroupDao.select();
+    public List<TradeGroup> select() throws Exception {
+        return tradeGroupDao.select();
     }
 
     @Override
-    public void insert(TradeAccountGroup tradeAccountGroup) throws Exception {
+    public void insert(TradeGroup object) throws Exception {
         Connection conn = null;
 
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            tradeAccountGroupDao.insert(conn, tradeAccountGroup);
+            tradeGroupDao.insert(conn, object);
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -57,13 +57,13 @@ public class TradeAccountGroupServiceImpl implements TradeAccountGroupService {
     }
 
     @Override
-    public void update(TradeAccountGroup tradeAccountGroup) throws Exception {
+    public void update(TradeGroup object) throws Exception {
         Connection conn = null;
 
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            tradeAccountGroupDao.update(conn, tradeAccountGroup);
+            tradeGroupDao.update(conn, object);
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {
@@ -82,13 +82,13 @@ public class TradeAccountGroupServiceImpl implements TradeAccountGroupService {
     }
 
     @Override
-    public void delete(TradeAccountGroup tradeAccountGroup) throws Exception {
+    public void delete(TradeGroup object) throws Exception {
         Connection conn = null;
 
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            tradeAccountGroupDao.delete(conn, tradeAccountGroup);
+            tradeGroupDao.delete(conn, object);
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {

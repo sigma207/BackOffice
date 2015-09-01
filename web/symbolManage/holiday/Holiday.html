@@ -65,6 +65,18 @@
     </table>
 </div>
 <script type="text/ng-template" id="batchHoliday.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="modal-header">
         <h3 class="modal-title">{{title}}</h3>
     </div>
@@ -98,12 +110,24 @@
         </table>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
         <button class="btn btn-primary" ng-disabled="holidayForm.$invalid" ng-click="save()" translate="save"></button>
     </div>
 </script>
 
 <script type="text/ng-template" id="batchException.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="modal-header">
         <h3 class="modal-title">{{title}}</h3>
     </div>
@@ -132,12 +156,24 @@
         </table>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
         <button class="btn btn-primary" ng-disabled="exceptionForm.$invalid" ng-click="save()" translate="save"></button>
     </div>
 </script>
 
 <script type="text/ng-template" id="holidayEdit.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="modal-header">
         <h3 class="modal-title">{{title}}</h3>
     </div>
@@ -167,7 +203,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
         <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
     </div>
 </script>
@@ -175,6 +211,18 @@
 </html>
 
 <script type="text/ng-template" id="exceptionEdit.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="modal-header">
         <h3 class="modal-title">{{title}}</h3>
     </div>
@@ -196,7 +244,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" ng-click="cancel()" translate="cancel"></button>
+        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
         <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
     </div>
 </script>

@@ -1,20 +1,57 @@
 package com.jelly.jt8.bo.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
- * Created by user on 2015/8/27.
+ * Created by user on 2015/9/1.
  */
 @Entity
-@javax.persistence.Table(name = "trade_account_group", schema = "dbo", catalog = "jt8")
-public class TradeAccountGroup extends BaseModel{
+@Table(name = "trade_group", schema = "dbo", catalog = "jt8")
+public class TradeGroup extends BaseModel{
     private int groupId;
+    private String groupName;
+    private String category;
+    private String exchangeId;
+    private int ownerId;
+    private Integer scale;
+    private BigDecimal initialMargin;
+    private BigDecimal maintainMargin;
+    private BigDecimal openCommission;
+    private BigDecimal closeCommission;
+    private BigDecimal buyCommission;
+    private BigDecimal sellCommission;
+    private BigDecimal tax;
+    private BigDecimal fee1;
+    private BigDecimal fee2;
+    private BigDecimal fee3;
+    private BigDecimal fee4;
+    private BigDecimal fee5;
+    private BigDecimal uplimit;
+    private BigDecimal downlimit;
+    private BigDecimal marketUplimit;
+    private BigDecimal marketDownlimit;
+    private BigDecimal marketUpdownlimitCharge;
+    private int specialStockRule;
+    private BigDecimal specialStockCharge;
+    private Long tvolDeltaRule;
+    private Integer tvolDeltaMinute;
+    private BigDecimal tvolDeltaCharge;
+    private String newOrderCloseTimeLimit;
+    private Integer oiDay;
+    private BigDecimal oiCharge;
+    private BigDecimal oiLots;
+    private BigDecimal overWithdrawalCreditPercentage;
+    private BigDecimal overWithdrawalCreditPercentageCharge;
+    private BigDecimal overWithdrawalCreditLimit;
+    private BigDecimal overWithdrawalCreditLimitCharge;
+    private BigDecimal liquidationRate;
+    private BigDecimal marginCallRate;
+    private int marginRate;
+    private BigDecimal maxLots;
 
     @Id
-    @javax.persistence.Column(name = "group_id", insertable = false)
+    @Column(name = "group_id", insertable = false)
     public int getGroupId() {
         return groupId;
     }
@@ -23,10 +60,8 @@ public class TradeAccountGroup extends BaseModel{
         this.groupId = groupId;
     }
 
-    private String groupName;
-
     @Basic
-    @javax.persistence.Column(name = "group_name")
+    @Column(name = "group_name")
     public String getGroupName() {
         return groupName;
     }
@@ -35,10 +70,28 @@ public class TradeAccountGroup extends BaseModel{
         this.groupName = groupName;
     }
 
-    private int ownerId;
+    @Basic
+    @Column(name = "category")
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     @Basic
-    @javax.persistence.Column(name = "owner_id")
+    @Column(name = "exchange_id")
+    public String getExchangeId() {
+        return exchangeId;
+    }
+
+    public void setExchangeId(String exchangeId) {
+        this.exchangeId = exchangeId;
+    }
+
+    @Basic
+    @Column(name = "owner_id")
     public int getOwnerId() {
         return ownerId;
     }
@@ -47,10 +100,8 @@ public class TradeAccountGroup extends BaseModel{
         this.ownerId = ownerId;
     }
 
-    private Integer scale;
-
     @Basic
-    @javax.persistence.Column(name = "scale")
+    @Column(name = "scale")
     public Integer getScale() {
         return scale;
     }
@@ -59,10 +110,8 @@ public class TradeAccountGroup extends BaseModel{
         this.scale = scale;
     }
 
-    private BigDecimal initialMargin;
-
     @Basic
-    @javax.persistence.Column(name = "initial_margin")
+    @Column(name = "initial_margin")
     public BigDecimal getInitialMargin() {
         return initialMargin;
     }
@@ -71,10 +120,8 @@ public class TradeAccountGroup extends BaseModel{
         this.initialMargin = initialMargin;
     }
 
-    private BigDecimal maintainMargin;
-
     @Basic
-    @javax.persistence.Column(name = "maintain_margin")
+    @Column(name = "maintain_margin")
     public BigDecimal getMaintainMargin() {
         return maintainMargin;
     }
@@ -83,10 +130,8 @@ public class TradeAccountGroup extends BaseModel{
         this.maintainMargin = maintainMargin;
     }
 
-    private BigDecimal openCommission;
-
     @Basic
-    @javax.persistence.Column(name = "open_commission")
+    @Column(name = "open_commission")
     public BigDecimal getOpenCommission() {
         return openCommission;
     }
@@ -95,10 +140,8 @@ public class TradeAccountGroup extends BaseModel{
         this.openCommission = openCommission;
     }
 
-    private BigDecimal closeCommission;
-
     @Basic
-    @javax.persistence.Column(name = "close_commission")
+    @Column(name = "close_commission")
     public BigDecimal getCloseCommission() {
         return closeCommission;
     }
@@ -107,10 +150,8 @@ public class TradeAccountGroup extends BaseModel{
         this.closeCommission = closeCommission;
     }
 
-    private BigDecimal buyCommission;
-
     @Basic
-    @javax.persistence.Column(name = "buy_commission")
+    @Column(name = "buy_commission")
     public BigDecimal getBuyCommission() {
         return buyCommission;
     }
@@ -119,10 +160,8 @@ public class TradeAccountGroup extends BaseModel{
         this.buyCommission = buyCommission;
     }
 
-    private BigDecimal sellCommission;
-
     @Basic
-    @javax.persistence.Column(name = "sell_commission")
+    @Column(name = "sell_commission")
     public BigDecimal getSellCommission() {
         return sellCommission;
     }
@@ -131,10 +170,8 @@ public class TradeAccountGroup extends BaseModel{
         this.sellCommission = sellCommission;
     }
 
-    private BigDecimal tax;
-
     @Basic
-    @javax.persistence.Column(name = "tax")
+    @Column(name = "tax")
     public BigDecimal getTax() {
         return tax;
     }
@@ -143,10 +180,8 @@ public class TradeAccountGroup extends BaseModel{
         this.tax = tax;
     }
 
-    private BigDecimal fee1;
-
     @Basic
-    @javax.persistence.Column(name = "fee1")
+    @Column(name = "fee1")
     public BigDecimal getFee1() {
         return fee1;
     }
@@ -155,10 +190,8 @@ public class TradeAccountGroup extends BaseModel{
         this.fee1 = fee1;
     }
 
-    private BigDecimal fee2;
-
     @Basic
-    @javax.persistence.Column(name = "fee2")
+    @Column(name = "fee2")
     public BigDecimal getFee2() {
         return fee2;
     }
@@ -167,10 +200,8 @@ public class TradeAccountGroup extends BaseModel{
         this.fee2 = fee2;
     }
 
-    private BigDecimal fee3;
-
     @Basic
-    @javax.persistence.Column(name = "fee3")
+    @Column(name = "fee3")
     public BigDecimal getFee3() {
         return fee3;
     }
@@ -179,10 +210,8 @@ public class TradeAccountGroup extends BaseModel{
         this.fee3 = fee3;
     }
 
-    private BigDecimal fee4;
-
     @Basic
-    @javax.persistence.Column(name = "fee4")
+    @Column(name = "fee4")
     public BigDecimal getFee4() {
         return fee4;
     }
@@ -191,10 +220,8 @@ public class TradeAccountGroup extends BaseModel{
         this.fee4 = fee4;
     }
 
-    private BigDecimal fee5;
-
     @Basic
-    @javax.persistence.Column(name = "fee5")
+    @Column(name = "fee5")
     public BigDecimal getFee5() {
         return fee5;
     }
@@ -203,10 +230,8 @@ public class TradeAccountGroup extends BaseModel{
         this.fee5 = fee5;
     }
 
-    private BigDecimal uplimit;
-
     @Basic
-    @javax.persistence.Column(name = "uplimit")
+    @Column(name = "uplimit")
     public BigDecimal getUplimit() {
         return uplimit;
     }
@@ -215,10 +240,8 @@ public class TradeAccountGroup extends BaseModel{
         this.uplimit = uplimit;
     }
 
-    private BigDecimal downlimit;
-
     @Basic
-    @javax.persistence.Column(name = "downlimit")
+    @Column(name = "downlimit")
     public BigDecimal getDownlimit() {
         return downlimit;
     }
@@ -227,10 +250,8 @@ public class TradeAccountGroup extends BaseModel{
         this.downlimit = downlimit;
     }
 
-    private BigDecimal marketUplimit;
-
     @Basic
-    @javax.persistence.Column(name = "market_uplimit")
+    @Column(name = "market_uplimit")
     public BigDecimal getMarketUplimit() {
         return marketUplimit;
     }
@@ -239,10 +260,8 @@ public class TradeAccountGroup extends BaseModel{
         this.marketUplimit = marketUplimit;
     }
 
-    private BigDecimal marketDownlimit;
-
     @Basic
-    @javax.persistence.Column(name = "market_downlimit")
+    @Column(name = "market_downlimit")
     public BigDecimal getMarketDownlimit() {
         return marketDownlimit;
     }
@@ -251,10 +270,8 @@ public class TradeAccountGroup extends BaseModel{
         this.marketDownlimit = marketDownlimit;
     }
 
-    private BigDecimal marketUpdownlimitCharge;
-
     @Basic
-    @javax.persistence.Column(name = "market_updownlimit_charge")
+    @Column(name = "market_updownlimit_charge")
     public BigDecimal getMarketUpdownlimitCharge() {
         return marketUpdownlimitCharge;
     }
@@ -263,10 +280,8 @@ public class TradeAccountGroup extends BaseModel{
         this.marketUpdownlimitCharge = marketUpdownlimitCharge;
     }
 
-    private int specialStockRule;
-
     @Basic
-    @javax.persistence.Column(name = "special_stock_rule")
+    @Column(name = "special_stock_rule")
     public int getSpecialStockRule() {
         return specialStockRule;
     }
@@ -275,10 +290,8 @@ public class TradeAccountGroup extends BaseModel{
         this.specialStockRule = specialStockRule;
     }
 
-    private BigDecimal specialStockCharge;
-
     @Basic
-    @javax.persistence.Column(name = "special_stock_charge")
+    @Column(name = "special_stock_charge")
     public BigDecimal getSpecialStockCharge() {
         return specialStockCharge;
     }
@@ -287,10 +300,8 @@ public class TradeAccountGroup extends BaseModel{
         this.specialStockCharge = specialStockCharge;
     }
 
-    private Long tvolDeltaRule;
-
     @Basic
-    @javax.persistence.Column(name = "tvol_delta_rule")
+    @Column(name = "tvol_delta_rule")
     public Long getTvolDeltaRule() {
         return tvolDeltaRule;
     }
@@ -299,10 +310,8 @@ public class TradeAccountGroup extends BaseModel{
         this.tvolDeltaRule = tvolDeltaRule;
     }
 
-    private Integer tvolDeltaMinute;
-
     @Basic
-    @javax.persistence.Column(name = "tvol_delta_minute")
+    @Column(name = "tvol_delta_minute")
     public Integer getTvolDeltaMinute() {
         return tvolDeltaMinute;
     }
@@ -311,10 +320,8 @@ public class TradeAccountGroup extends BaseModel{
         this.tvolDeltaMinute = tvolDeltaMinute;
     }
 
-    private BigDecimal tvolDeltaCharge;
-
     @Basic
-    @javax.persistence.Column(name = "tvol_delta_charge")
+    @Column(name = "tvol_delta_charge")
     public BigDecimal getTvolDeltaCharge() {
         return tvolDeltaCharge;
     }
@@ -323,10 +330,8 @@ public class TradeAccountGroup extends BaseModel{
         this.tvolDeltaCharge = tvolDeltaCharge;
     }
 
-    private String newOrderCloseTimeLimit;
-
     @Basic
-    @javax.persistence.Column(name = "new_order_close_time_limit")
+    @Column(name = "new_order_close_time_limit")
     public String getNewOrderCloseTimeLimit() {
         return newOrderCloseTimeLimit;
     }
@@ -335,10 +340,8 @@ public class TradeAccountGroup extends BaseModel{
         this.newOrderCloseTimeLimit = newOrderCloseTimeLimit;
     }
 
-    private Integer oiDay;
-
     @Basic
-    @javax.persistence.Column(name = "oi_day")
+    @Column(name = "oi_day")
     public Integer getOiDay() {
         return oiDay;
     }
@@ -347,10 +350,8 @@ public class TradeAccountGroup extends BaseModel{
         this.oiDay = oiDay;
     }
 
-    private BigDecimal oiCharge;
-
     @Basic
-    @javax.persistence.Column(name = "oi_charge")
+    @Column(name = "oi_charge")
     public BigDecimal getOiCharge() {
         return oiCharge;
     }
@@ -359,10 +360,8 @@ public class TradeAccountGroup extends BaseModel{
         this.oiCharge = oiCharge;
     }
 
-    private BigDecimal oiLots;
-
     @Basic
-    @javax.persistence.Column(name = "oi_lots")
+    @Column(name = "oi_lots")
     public BigDecimal getOiLots() {
         return oiLots;
     }
@@ -371,10 +370,8 @@ public class TradeAccountGroup extends BaseModel{
         this.oiLots = oiLots;
     }
 
-    private BigDecimal overWithdrawalCreditPercentage;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_percentage")
+    @Column(name = "over_withdrawal_credit_percentage")
     public BigDecimal getOverWithdrawalCreditPercentage() {
         return overWithdrawalCreditPercentage;
     }
@@ -383,10 +380,8 @@ public class TradeAccountGroup extends BaseModel{
         this.overWithdrawalCreditPercentage = overWithdrawalCreditPercentage;
     }
 
-    private BigDecimal overWithdrawalCreditPercentageCharge;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_percentage_charge")
+    @Column(name = "over_withdrawal_credit_percentage_charge")
     public BigDecimal getOverWithdrawalCreditPercentageCharge() {
         return overWithdrawalCreditPercentageCharge;
     }
@@ -395,10 +390,8 @@ public class TradeAccountGroup extends BaseModel{
         this.overWithdrawalCreditPercentageCharge = overWithdrawalCreditPercentageCharge;
     }
 
-    private BigDecimal overWithdrawalCreditLimit;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_limit")
+    @Column(name = "over_withdrawal_credit_limit")
     public BigDecimal getOverWithdrawalCreditLimit() {
         return overWithdrawalCreditLimit;
     }
@@ -407,10 +400,8 @@ public class TradeAccountGroup extends BaseModel{
         this.overWithdrawalCreditLimit = overWithdrawalCreditLimit;
     }
 
-    private BigDecimal overWithdrawalCreditLimitCharge;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_limit_charge")
+    @Column(name = "over_withdrawal_credit_limit_charge")
     public BigDecimal getOverWithdrawalCreditLimitCharge() {
         return overWithdrawalCreditLimitCharge;
     }
@@ -419,10 +410,8 @@ public class TradeAccountGroup extends BaseModel{
         this.overWithdrawalCreditLimitCharge = overWithdrawalCreditLimitCharge;
     }
 
-    private BigDecimal liquidationRate;
-
     @Basic
-    @javax.persistence.Column(name = "liquidation_rate")
+    @Column(name = "liquidation_rate")
     public BigDecimal getLiquidationRate() {
         return liquidationRate;
     }
@@ -431,10 +420,8 @@ public class TradeAccountGroup extends BaseModel{
         this.liquidationRate = liquidationRate;
     }
 
-    private BigDecimal marginCallRate;
-
     @Basic
-    @javax.persistence.Column(name = "margin_call_rate")
+    @Column(name = "margin_call_rate")
     public BigDecimal getMarginCallRate() {
         return marginCallRate;
     }
@@ -443,10 +430,8 @@ public class TradeAccountGroup extends BaseModel{
         this.marginCallRate = marginCallRate;
     }
 
-    private int marginRate;
-
     @Basic
-    @javax.persistence.Column(name = "margin_rate")
+    @Column(name = "margin_rate")
     public int getMarginRate() {
         return marginRate;
     }
@@ -455,10 +440,8 @@ public class TradeAccountGroup extends BaseModel{
         this.marginRate = marginRate;
     }
 
-    private BigDecimal maxLots;
-
     @Basic
-    @javax.persistence.Column(name = "max_lots")
+    @Column(name = "max_lots")
     public BigDecimal getMaxLots() {
         return maxLots;
     }
@@ -472,13 +455,15 @@ public class TradeAccountGroup extends BaseModel{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TradeAccountGroup that = (TradeAccountGroup) o;
+        TradeGroup that = (TradeGroup) o;
 
         if (groupId != that.groupId) return false;
         if (ownerId != that.ownerId) return false;
         if (specialStockRule != that.specialStockRule) return false;
         if (marginRate != that.marginRate) return false;
         if (groupName != null ? !groupName.equals(that.groupName) : that.groupName != null) return false;
+        if (category != null ? !category.equals(that.category) : that.category != null) return false;
+        if (exchangeId != null ? !exchangeId.equals(that.exchangeId) : that.exchangeId != null) return false;
         if (scale != null ? !scale.equals(that.scale) : that.scale != null) return false;
         if (initialMargin != null ? !initialMargin.equals(that.initialMargin) : that.initialMargin != null)
             return false;
@@ -540,6 +525,8 @@ public class TradeAccountGroup extends BaseModel{
     public int hashCode() {
         int result = groupId;
         result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (exchangeId != null ? exchangeId.hashCode() : 0);
         result = 31 * result + ownerId;
         result = 31 * result + (scale != null ? scale.hashCode() : 0);
         result = 31 * result + (initialMargin != null ? initialMargin.hashCode() : 0);

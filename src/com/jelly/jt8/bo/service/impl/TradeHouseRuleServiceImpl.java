@@ -1,6 +1,5 @@
 package com.jelly.jt8.bo.service.impl;
 
-import com.jelly.jt8.bo.dao.TradeAccountGroupDao;
 import com.jelly.jt8.bo.dao.TradeHouseRuleDao;
 import com.jelly.jt8.bo.model.TradeHouseRule;
 import com.jelly.jt8.bo.service.TradeHouseRuleService;

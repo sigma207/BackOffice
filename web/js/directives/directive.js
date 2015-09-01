@@ -131,6 +131,22 @@ function NumberInput(){
     }
 }
 
+function TimeInput(){
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<input type="text" class="form-control" bs-timepicker/>'
+    }
+}
+
+function ModalClose(){
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>'
+    }
+}
+
 function NumbersOnly(){
     return {
         require: 'ngModel',

@@ -2,7 +2,7 @@
  * Created by user on 2015/8/7.
  */
 backendApp.controller("UserController", UserController);
-function UserController($scope, $translatePartialLoader, $translate, $log, $modal, UserService, RoleService) {
+function UserController($scope, $translatePartialLoader, $translate, $log, $modal, UserService, RoleService, OrganizationService) {
     $translatePartialLoader.addPart("user");
     $translate.refresh();
 
@@ -31,228 +31,171 @@ function UserController($scope, $translatePartialLoader, $translate, $log, $moda
     };
 
     $scope.editUserClick = function (row) {
-        //$scope.currentAction = Action.Edit;
-        //$scope.editRole = angular.copy(row.entity);
-        //$scope.modalTitle =  $scope.editRole.role_code+":"+$translate.instant("editRole");
-        //$scope.openEditRole();
     };
 
     $scope.allocateRoleClick = function (row) {
-        $scope.editUser = row;
+        $scope.editObj = row;
         row.getList("userRoles").then(function (data) {
             $scope.userRoleList = data;
-            $scope.modalTitle = $scope.editUser.loginId+":"+$translate.instant("allocateRole");
-            $scope.openAllocateRole();
+            $scope.modalTitle = $scope.editObj.loginId+":"+$translate.instant("allocateRole");
+            $scope.showAllocateModal();
         });
     };
 
     $scope.addUserClick = function () {
         $scope.currentAction = Action.Add;
-        $scope.editUser = {};
-        $scope.editUser.parentBoUser = $scope.loginUser;
+        $scope.editObj = {};
+        $scope.editObj.parentBoUser = $scope.loginUser;
         $scope.modalTitle = $translate.instant("addUser");
-        $scope.openEditUser();
+        $scope.showEditModal();
     };
 
-    $scope.openEditUser = function () {
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'userEdit.html',
-            controller: 'userEditCtrl',
-            size: $scope.editSize,
-            resolve: {
-                editObj: function () {
-                    return $scope.editUser;
-                },
-                title: function () {
-                    return $scope.modalTitle;
-                },
-                currentAction: function () {
-                    return $scope.currentAction;
-                }
-            }
-        });
-
-        modalInstance.result.then(
-            function (editObj) {
-                switch ($scope.currentAction) {
-                    case Action.Add:
-                        $scope.getUserList();
-                        break;
-                    case Action.Edit:
-                        $scope.getUserList();
-                        break;
-                }
-            },
-            function () {
-                //$log.info('Modal dismissed at: ' + new Date());
-            }
-        );
+    //editModal
+    $scope.editModalClose = function () {
+        $scope.getUserList();
+        $scope.hideEditModal();
     };
 
-    $scope.openAllocateRole = function () {
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'allocateRole.html',
-            controller: 'allocateRoleCtrl',
-            size: $scope.editSize,
-            resolve: {
-                editObj: function () {
-                    return $scope.editUser;
-                },
-                userRoleList: function () {
-                    return $scope.userRoleList;
-                },
-                roleList: function () {
-                    return $scope.roleList;
-                },
-                title: function () {
-                    return $scope.modalTitle;
-                }
+    function EditModalController($scope){
+        $scope.selectOrganization = function () {
+            $scope.showOrganizationModal();
+        };
+
+        $scope.save = function () {
+            switch ($scope.currentAction) {
+                case Action.Add:
+                    UserService.post( $scope.editObj).then(function (data) {
+                        $scope.editModalClose();
+                    });
+                    break;
+                case Action.Edit:
+                    $scope.editObj.put().then(function (data) {
+                        $scope.editModalClose();
+                    });
+                    break;
             }
+        };
+
+        //organizationModal
+        $scope.organizationModalClose = function () {
+            $scope.hideOrganizationModal();
+        };
+
+        function OrganizationController($scope){
+            var zTreeObj;
+            $scope.init = function() {
+                $scope.title = $translate.instant("org.select");
+                if($scope.editObj.parentBoUser.organization){
+                    $scope.editObj.parentBoUser.organization.getList("with_children").then(function (data) {
+                        $scope.initTree(data);
+                    });
+                }else{
+                    OrganizationService.getList().then(function (data) {
+                        $scope.initTree(data);
+                    });
+                }
+            };
+
+            $scope.initTree = function (data) {
+                var tree = $("#organizationTree");
+                var treeSetting = {
+                    data: {
+                        simpleData: {
+                            enable: true
+                        },
+                        key:{
+                            name:"organizationName"
+                        }
+                    }
+                };
+                $.fn.zTree.init(tree, treeSetting, data);
+                zTreeObj = $.fn.zTree.getZTreeObj("organizationTree");
+                zTreeObj.expandAll(true);
+            };
+
+            $scope.save = function () {
+                $scope.editObj.boOrganization = zTreeObj.getSelectedNodes()[0];
+                $scope.organizationModalClose();
+            };
+        }
+        var organizationModal = $modal({
+            scope: $scope,
+            controller: OrganizationController,
+            templateUrl:"selectOrganization.html",
+            show:false
         });
 
-        modalInstance.result.then(
-            function () {
-                $scope.getUserList();
-            },
-            function () {
-                //$log.info('Modal dismissed at: ' + new Date());
+        $scope.showOrganizationModal = function() {
+            organizationModal.$promise.then(organizationModal.show);
+        };
+        $scope.hideOrganizationModal = function() {
+            organizationModal.$promise.then(organizationModal.hide);
+        };
+        /////////////////////////////////////////////////
+    }
+
+    var editModal = $modal({
+        scope: $scope,
+        controller: EditModalController,
+        templateUrl:"userEdit.html",
+        show:false
+    });
+
+    $scope.showEditModal = function() {
+        editModal.$promise.then(editModal.show);
+    };
+    $scope.hideEditModal = function() {
+        editModal.$promise.then(editModal.hide);
+    };
+
+    //allocateModal
+    $scope.allocateModalClose = function () {
+        $scope.getUserList();
+        $scope.hideAllocateModal();
+    };
+
+    function AllocateModalController($scope){
+        $log.info("AllocateModalController");
+        $scope.selectedRoleList = [];
+        $scope.init = function() {
+            var i, count;
+            var roleMap = {};
+            for (i = 0, count = $scope.userRoleList.length; i < count; i++) {
+                roleMap[$scope.userRoleList[i].roleId] = 0;
             }
-        )
+            for (i = 0, count = $scope.roleList.length; i < count; i++) {
+                if (typeof roleMap[$scope.roleList[i].roleId] !== typeof undefined) {
+                    $scope.selectedRoleList.push($scope.roleList[i]);
+                }
+            }
+            $scope.rowCollection = $scope.roleList;//沒有和userList的rowCollection衡突到
+        };
+
+        $scope.save = function () {
+            var list = $scope.selectedRoleList;
+            $scope.editObj.boUserRoleList = [];
+            for(var i= 0,count=list.length;i<count;i++){
+                $scope.editObj.boUserRoleList.push({userId: $scope.editObj.userId, roleId: list[i].roleId});
+            }
+            $scope.editObj.post("userRoles").then(function (data) {
+                $scope.allocateModalClose();
+            });
+        };
+    }
+
+    var allocateModal = $modal({
+        scope: $scope,
+        controller: AllocateModalController,
+        templateUrl:"allocateRole.html",
+        show:false
+    });
+
+    $scope.showAllocateModal = function() {
+        allocateModal.$promise.then(allocateModal.show);
+    };
+    $scope.hideAllocateModal = function() {
+        allocateModal.$promise.then(allocateModal.hide);
     };
 
     $scope.getUserList();
 }
-
-backendApp.controller('userEditCtrl', function ($scope, $modalInstance, $log, $modal, UserService, title, editObj, currentAction) {
-    $scope.title = title;
-    $scope.editObj = editObj;
-    $scope.selectOrganization = function () {
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'selectOrganization.html',
-            controller: 'selectOrganizationCtrl',
-            size: $scope.editSize,
-            resolve: {
-                organization: function () {
-                    return $scope.editObj.parentBoUser.organization;
-                }
-            }
-        });
-
-        modalInstance.result.then(
-            function (selectedNode) {
-                $scope.editObj.boOrganization = selectedNode;
-            },
-            function () {
-                //$log.info('Modal dismissed at: ' + new Date());
-            }
-        )
-    };
-
-    $scope.save = function () {
-        switch (currentAction) {
-            case Action.Add:
-                //$log.info($scope.editObj);
-                UserService.post( $scope.editObj).then(function (data) {
-                    $modalInstance.close(data);
-                });
-                break;
-            case Action.Edit:
-                $scope.editObj.put().then(function (data) {
-                    $modalInstance.close();
-                });
-                break;
-        }
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-
-});
-
-backendApp.controller('selectOrganizationCtrl', function ($scope, $modalInstance, $log, $translate, OrganizationService, organization) {
-
-    var zTreeObj;
-    $log.info(organization);
-    $scope.init = function() {
-        $scope.title = $translate.instant("org.select");
-        if(organization){
-            organization.getList("with_children").then(function (data) {
-                $scope.initTree(data);
-            });
-        }else{
-            OrganizationService.getList().then(function (data) {
-                $scope.initTree(data);
-            });
-        }
-
-
-    };
-
-    $scope.initTree = function (data) {
-        var tree = $("#organizationTree");
-        var treeSetting = {
-            data: {
-                simpleData: {
-                    enable: true
-                },
-                key:{
-                    name:"organizationName"
-                }
-            }
-        };
-        $.fn.zTree.init(tree, treeSetting, data);
-        zTreeObj = $.fn.zTree.getZTreeObj("organizationTree");
-        zTreeObj.expandAll(true);
-    };
-
-    $scope.save = function () {
-        var selectedNode = zTreeObj.getSelectedNodes()[0];
-        $modalInstance.close(selectedNode);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});
-
-backendApp.controller('allocateRoleCtrl', function ($scope, $modalInstance, $log, $timeout, title, editObj, userRoleList, roleList) {
-    $scope.title = title;
-    $scope.editObj = editObj;
-    $scope.userRoleList = userRoleList;
-    $scope.roleList = roleList;
-    $scope.selectedRoleList = [];
-
-    $scope.init = function() {
-        var i, count;
-        var roleMap = {};
-        for (i = 0, count = $scope.userRoleList.length; i < count; i++) {
-            roleMap[$scope.userRoleList[i].roleId] = 0;
-        }
-        for (i = 0, count = $scope.roleList.length; i < count; i++) {
-            if (typeof roleMap[$scope.roleList[i].roleId] !== typeof undefined) {
-                $scope.selectedRoleList.push($scope.roleList[i]);
-            }
-        }
-        $scope.rowCollection = $scope.roleList;
-    };
-
-    $scope.save = function () {
-        var list = $scope.selectedRoleList;
-        $scope.editObj.boUserRoleList = [];
-        for(var i= 0,count=list.length;i<count;i++){
-            $scope.editObj.boUserRoleList.push({userId: $scope.editObj.userId, roleId: list[i].roleId});
-        }
-        $scope.editObj.post("userRoles").then(function (data) {
-            $modalInstance.close(data);
-        });
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});

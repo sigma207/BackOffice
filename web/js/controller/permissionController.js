@@ -18,8 +18,7 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
             }
         }
     };
-    $scope.editSize = undefined;
-    $scope.editTitle = "新增節點";
+    $scope.modalTitle = "新增節點";
 
     PermissionService.getList().then(function (data) {
         $scope.permissionList = data;
@@ -60,8 +59,8 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                         } else {
                             $scope.editNewObject(currentNode.getParentNode());
                         }
-                        $scope.editTitle = "新增節點";
-                        $scope.open();
+                        $scope.modalTitle = "新增節點";
+                        $scope.showModal();
                     }
                 };
                 menu[Action.NewChildNode] = {
@@ -70,8 +69,8 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                         $log.info(Action.NewChildNode);
                         $scope.currentAction = Action.NewChildNode;
                         $scope.editNewObject(currentNode);
-                        $scope.editTitle = currentNode[locale.zh_TW] + ":新增子節點";
-                        $scope.open();
+                        $scope.modalTitle = currentNode[locale.zh_TW] + ":新增子節點";
+                        $scope.showModal();
                     }
                 };
                 menu[Action.MoveFirst] = {
@@ -119,8 +118,8 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                         $scope.currentAction = Action.Edit;
                         $scope.editNode = Restangular.copy(currentNode);
                         locale.convertDashToBaseLine($scope.editNode.permissionNameMap);
-                        $scope.editTitle = currentNode.name + ":編輯";
-                        $scope.open();
+                        $scope.modalTitle = currentNode.name + ":編輯";
+                        $scope.showModal();
                     }
                 };
                 menu[Action.Remove] = {
@@ -182,85 +181,68 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
         } else {
             $scope.editNewObject(selectedNode);
         }
-        $scope.editTitle = "新增節點";
-        $scope.open();
+        $scope.modalTitle = "新增節點";
+        $scope.showModal();
     };
 
-    $scope.open = function () {
-        //$scope.editSize = "sm";
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'permissionEdit.html',
-            controller: 'permissionEditCtrl',
-            size: $scope.editSize,
-            resolve: {
-                editNode: function () {
-                    return $scope.editNode;
-                },
-                title: function () {
-                    return $scope.editTitle;
-                },
-                currentAction: function () {
-                    return $scope.currentAction;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (editNode) {
-
-            var selectedNode = undefined;
-            $scope.editNode = editNode;
-            locale.node($scope.editNode, $scope.editNode);
-            switch ($scope.currentAction) {
-                case Action.NewNode:
-                    if ($scope.editNode.parentPermissionId) {
-                        var parent_node = zTreeObj.getNodeByParam("permissionId", $scope.editNode.parentPermissionId);
-                        zTreeObj.addNodes(parent_node, $scope.editNode, true);
-                    } else {
-                        zTreeObj.addNodes(null, $scope.editNode, true);
-                    }
-                    break;
-                case Action.NewChildNode:
-                    selectedNode = zTreeObj.getSelectedNodes()[0];
-                    zTreeObj.addNodes(selectedNode, $scope.editNode, true);
-                    zTreeObj.expandNode(selectedNode, true);
-                    break;
-                case Action.Edit:
-                    selectedNode = zTreeObj.getSelectedNodes()[0];
-                    selectedNode.permission_code = $scope.editNode.permission_code;
-                    selectedNode.permissionNameMap = $scope.editNode.permissionNameMap;
-                    locale.node(selectedNode, $scope.editNode);
-                    zTreeObj.updateNode(selectedNode);
-                    break;
-            }
-        }, function () {
-            //$log.info('Modal dismissed at: ' + new Date());
-        });
-    };
-}
-
-backendApp.controller('permissionEditCtrl', function ($scope, $modalInstance, $log, PermissionService, locale, title, editNode, currentAction) {
-    $scope.title = title;
-    $scope.editNode = editNode;
-    $scope.ok = function () {
-        locale.convertBaseLineToDash($scope.editNode.permissionNameMap);
-        switch (currentAction) {
+    $scope.modalClose = function () {
+        var selectedNode = undefined;
+        locale.node($scope.editNode, $scope.editNode);
+        switch ($scope.currentAction) {
             case Action.NewNode:
+                if ($scope.editNode.parentPermissionId) {
+                    var parent_node = zTreeObj.getNodeByParam("permissionId", $scope.editNode.parentPermissionId);
+                    zTreeObj.addNodes(parent_node, $scope.editNode, true);
+                } else {
+                    zTreeObj.addNodes(null, $scope.editNode, true);
+                }
+                break;
             case Action.NewChildNode:
-                PermissionService.post( $scope.editNode).then(function (data) {
-                    $modalInstance.close(data);
-                });
+                selectedNode = zTreeObj.getSelectedNodes()[0];
+                zTreeObj.addNodes(selectedNode, $scope.editNode, true);
+                zTreeObj.expandNode(selectedNode, true);
                 break;
             case Action.Edit:
-                $scope.editNode.put().then(function (data) {
-                    $modalInstance.close(data);
-                });
+                selectedNode = zTreeObj.getSelectedNodes()[0];
+                selectedNode.permission_code = $scope.editNode.permission_code;
+                selectedNode.permissionNameMap = $scope.editNode.permissionNameMap;
+                locale.node(selectedNode, $scope.editNode);
+                zTreeObj.updateNode(selectedNode);
                 break;
         }
+        $scope.hideModal();
     };
 
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
+    function ModalController($scope){
+        $scope.save = function () {
+            locale.convertBaseLineToDash($scope.editNode.permissionNameMap);
+            switch ($scope.currentAction) {
+                case Action.NewNode:
+                case Action.NewChildNode:
+                    PermissionService.post( $scope.editNode).then(function (data) {
+                        $scope.modalClose();
+                    });
+                    break;
+                case Action.Edit:
+                    $scope.editNode.put().then(function (data) {
+                        $scope.modalClose();
+                    });
+                    break;
+            }
+        };
+    }
 
-});
+    var modal = $modal({
+        scope: $scope,
+        controller: ModalController,
+        templateUrl:"permissionEdit.html",
+        show:false
+    });
+
+    $scope.showModal = function() {
+        modal.$promise.then(modal.show);
+    };
+    $scope.hideModal = function() {
+        modal.$promise.then(modal.hide);
+    };
+}

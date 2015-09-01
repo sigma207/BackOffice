@@ -2,7 +2,7 @@
  * Created by user on 2015/8/6.
  */
 backendApp.controller("RoleController", RoleController);
-function RoleController($scope, $translatePartialLoader, $translate, $log, $modal, Restangular, RoleService, PermissionService, locale) {
+function RoleController($scope, $translatePartialLoader, $translate, $log, $modal, $timeout, Restangular, RoleService, PermissionService, locale) {
     $translatePartialLoader.addPart("role");
     $translate.refresh();
     $log.info("RoleController!!");
@@ -35,157 +35,118 @@ function RoleController($scope, $translatePartialLoader, $translate, $log, $moda
 
     $scope.editRoleClick = function (row) {
         $scope.currentAction = Action.Edit;
-        $scope.editRole = Restangular.copy(row);
-        $scope.modalTitle =  $scope.editRole.roleCode+":"+$translate.instant("editRole");
-        $scope.openEditRole();
+        $scope.editObj = Restangular.copy(row);
+        $scope.modalTitle =  $scope.editObj.roleCode+":"+$translate.instant("editRole");
+        $scope.showEditModal();
     };
 
     $scope.allocatePermissionClick = function (row) {
         row.getList("permission").then(function (data) {
             row.permissionList = data;
-            $scope.editRole = row;
-            $scope.modalTitle =  $scope.editRole.roleCode+":"+$translate.instant("allocatePermission");
-            $scope.openAllocatePermission();
+            $scope.editObj = row;
+            $scope.modalTitle =  $scope.editObj.roleCode+":"+$translate.instant("allocatePermission");
+            $scope.showAllocateModal();
         });
     };
 
     $scope.addRoleClick = function () {
         $scope.currentAction = Action.Add;
-        $scope.editRole = {};
+        $scope.editObj = {};
         $scope.modalTitle = $translate.instant("addRole");
-        $scope.openEditRole();
+        $scope.showEditModal();
     };
 
-    $scope.openEditRole = function () {
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'roleEdit.html',
-            controller: 'roleEditCtrl',
-            size: $scope.editSize,
-            resolve: {
-                editObj: function () {
-                    return $scope.editRole;
-                },
-                title: function () {
-                    return $scope.modalTitle;
-                },
-                currentAction: function () {
-                    return $scope.currentAction;
-                }
-            }
-        });
-
-        modalInstance.result.then(
-            function (editObj) {
-                switch ($scope.currentAction) {
-                    case Action.Add:
-                        $scope.getRoleList();
-                        break;
-                    case Action.Edit:
-                        $scope.getRoleList();
-                        break;
-                }
-            },
-            function () {
-                //$log.info('Modal dismissed at: ' + new Date());
-            }
-        );
+    $scope.editModalClose = function () {
+        $scope.getRoleList();
+        $scope.hideEditModal();
     };
 
-    $scope.openAllocatePermission = function () {
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'allocatePermission.html',
-            controller: 'allocatePermissionCtrl',
-            size: $scope.editSize,
-            resolve: {
-                editObj: function () {
-                    return $scope.editRole;
-                },
-                permissionList: function () {
-                    $log.info($scope.permissionList);
-                    return $scope.permissionList;
-                },
-                title: function () {
-                    return $scope.modalTitle;
-                }
+    function EditModalController($scope){
+        $scope.save = function () {
+            switch ($scope.currentAction) {
+                case Action.Add:
+                    RoleService.post( $scope.editObj).then(function (data) {
+                        $scope.editModalClose();
+                    });
+                    break;
+                case Action.Edit:
+                    $scope.editObj.put().then(function (data) {
+                        $scope.editModalClose();
+                    });
+                    break;
             }
+        };
+    }
+
+    var editModal = $modal({
+        scope: $scope,
+        controller: EditModalController,
+        templateUrl:"roleEdit.html",
+        show:false
+    });
+
+    $scope.showEditModal = function() {
+        editModal.$promise.then(editModal.show);
+    };
+    $scope.hideEditModal = function() {
+        editModal.$promise.then(editModal.hide);
+    };
+
+    $scope.allocateModalClose = function () {
+        $scope.getRoleList();
+        $scope.hideAllocateModal();
+    };
+
+    function AllocateModalController($scope){
+        $log.info("AllocateModalController");
+
+        var zTreeObj;
+        $timeout(function(){
+            var tree = $("#permissionTree");
+            var treeSetting = {
+                check: {
+                    enable: true
+                }
+            };
+
+            $.fn.zTree.init(tree, treeSetting, $scope.permissionList);
+            zTreeObj = $.fn.zTree.getZTreeObj("permissionTree");
+            zTreeObj.checkAllNodes(false);
+            var node = undefined;
+            for (var i = 0; i < $scope.editObj.permissionList.length; i++) {
+                node = zTreeObj.getNodeByParam("permissionId", $scope.editObj.permissionList[i].permissionId);
+                zTreeObj.checkNode(node, true, false);
+            }
+            zTreeObj.expandAll(true);
         });
 
-        modalInstance.result.then(
-            function () {
-                $scope.getRoleList();
-            },
-            function () {
-                //$log.info('Modal dismissed at: ' + new Date());
+        $scope.save = function () {
+            var checkedNodes = zTreeObj.getCheckedNodes();
+            var roleId = $scope.editObj.roleId;
+            var count = checkedNodes.length;
+            $scope.editObj.boRolePermissionList = [];
+            for (var i = 0; i < count; i++) {
+                $scope.editObj.boRolePermissionList.push({permissionId: checkedNodes[i].permissionId, roleId: roleId});
             }
-        )
+            $scope.editObj.post("permission").then(function () {
+                $scope.allocateModalClose();
+            });
+        };
+    }
+
+    var allocateModal = $modal({
+        scope: $scope,
+        controller: AllocateModalController,
+        templateUrl:"allocatePermission.html",
+        show:false
+    });
+
+    $scope.showAllocateModal = function() {
+        allocateModal.$promise.then(allocateModal.show);
+    };
+    $scope.hideAllocateModal = function() {
+        allocateModal.$promise.then(allocateModal.hide);
     };
 
     $scope.getRoleList();
 }
-
-backendApp.controller('roleEditCtrl', function ($scope, $modalInstance, $log, RoleService, request, locale, title, editObj, currentAction) {
-    $scope.title = title;
-    $scope.editObj = editObj;
-    $scope.save = function () {
-        switch (currentAction) {
-            case Action.Add:
-                RoleService.post( $scope.editObj).then(function (data) {
-                    $modalInstance.close($scope.editObj);
-                });
-                break;
-            case Action.Edit:
-                $scope.editObj.put().then(function (data) {
-                    $log.info(data);
-                    $modalInstance.close();
-                });
-                break;
-        }
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});
-
-backendApp.controller('allocatePermissionCtrl', function ($scope, $modalInstance, $log, request, title, permissionList, editObj) {
-    $scope.title = title;
-    $scope.permissionList = permissionList;
-    $scope.editObj = editObj;
-    $log.info("allocatePermissionCtrl");
-    $scope.init = function() {
-        $scope.treeSetting= {
-            check: {
-                enable: true
-            }
-        };
-        $scope.tree = $("#permissionTree");
-        $.fn.zTree.init($scope.tree, $scope.treeSetting, $scope.permissionList);
-        $scope.zTreeObj = $.fn.zTree.getZTreeObj("permissionTree");
-        $scope.zTreeObj.checkAllNodes(false);
-        var node = undefined;
-        for (var i = 0; i < $scope.editObj.permissionList.length; i++) {
-            node = $scope.zTreeObj.getNodeByParam("permissionId", $scope.editObj.permissionList[i].permissionId);
-            $scope.zTreeObj.checkNode(node, true, false);
-        }
-        $scope.zTreeObj.expandAll(true);
-    };
-
-    $scope.save = function () {
-        var checkedNodes = $scope.zTreeObj.getCheckedNodes();
-        var roleId = $scope.editObj.roleId;
-        var count = checkedNodes.length;
-        $scope.editObj.boRolePermissionList = [];
-        for (var i = 0; i < count; i++) {
-            $scope.editObj.boRolePermissionList.push({permissionId: checkedNodes[i].permissionId, roleId: roleId});
-        }
-        $scope.editObj.post("permission").then(function () {
-            $modalInstance.close();
-        });
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});
