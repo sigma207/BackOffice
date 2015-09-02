@@ -26,10 +26,6 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
         super(BoUser.class);
     }
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public BoUser login(String loginId) throws Exception {
         List<BoUser> list = new LinkedList<BoUser>();

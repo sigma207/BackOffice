@@ -10,4 +10,7 @@ import java.util.List;
 public interface TradeHouseRuleService {
     List<TradeHouseRule> select() throws Exception;
     List<TradeHouseRule> select(String houseId) throws Exception;
+    void insert(TradeHouseRule object) throws Exception;
+    void delete(TradeHouseRule object) throws Exception;
+    void update(TradeHouseRule object) throws Exception;
 }

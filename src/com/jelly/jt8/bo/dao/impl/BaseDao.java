@@ -3,11 +3,14 @@ package com.jelly.jt8.bo.dao.impl;
 import com.jelly.jt8.bo.util.DBUtils;
 import com.jelly.jt8.bo.util.ErrorMsg;
 import com.jelly.jt8.bo.util.RsMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.sql.DataSource;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -78,6 +81,10 @@ public class BaseDao {
 
         }
     }
+
+    @Autowired
+    @Qualifier("jt8Ds")
+    protected DataSource jt8Ds;
 
     final int batchSize = 1000;
     public void execute(Connection conn, String sql, List list, Class c) throws Exception {

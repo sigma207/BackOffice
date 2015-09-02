@@ -25,10 +25,6 @@ public class SymbolHolidayExceptionDaoImpl extends BaseDao implements SymbolHoli
     }
     private final static String WHERE_MAIN_SYMBOL = " WHERE exchange_id = ? AND main_symbol_id = ? ";
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<SymbolHolidayException> select(SystemMainSymbol mainSymbol) throws Exception {
         List<SymbolHolidayException> list =  new LinkedList<SymbolHolidayException>();

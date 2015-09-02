@@ -45,7 +45,7 @@
                         <fieldset class="well well-xs the-fieldset">
                             <legend class="the-legend">base</legend>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group form-group-xs">
                                         <label for="houseName" class="col-md-5 control-label" translate="houseName"></label>
                                         <div class="col-md-7 valueCol">
@@ -53,15 +53,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="exchangeId" class="col-md-5 control-label" translate="exchangeId"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <text-input id="exchangeId" ng-model="editObj.exchangeId" required></text-input>
-                                        </div>
+                                <div class="col-md-4">
+                                    <label for="systemCategory" class="col-md-5 control-label" translate="category"></label>
+                                    <div class="col-md-7 valueCol">
+                                        <select id="systemCategory" ng-model="editObj.systemCategory" ng-change="systemCategoryChange();"
+                                                ng-options="systemCategory.category for systemCategory in systemCategoryList">
+                                        </select>
                                     </div>
                                 </div>
-
+                                <div class="col-md-4">
+                                    <label for="useTradeGroup" class="col-md-5 control-label" translate="useTradeGroup"></label>
+                                    <div class="col-md-7 valueCol">
+                                        <button type="button" class="btn btn-default btn-sm" id="useTradeGroup" ng-model="editObj.selectedTradeGroup" ng-change="useTradeGroupChange();"
+                                                data-html="1" data-multiple="1" data-all-none-buttons="1"
+                                                bs-options="tradeGroup as tradeGroup.label for tradeGroup in tradeGroupList" bs-select>
+                                            <span class="caret"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -76,7 +85,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="overnightCharge" class="col-md-5 control-label" translate="overnightCharge"></label>
                                         <div class="col-md-7 valueCol">
-                                            <number-input id="overnightCharge" ng-model="editObj.overnightCharge" required></number-input>
+                                            <number-input id="overnightCharge" ng-model="editObj.overnightCharge"></number-input>
                                         </div>
                                     </div>
                                 </div>
@@ -86,7 +95,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="initialMargin" class="col-md-5 control-label" translate="initialMargin"></label>
                                         <div class="col-md-7 valueCol">
-                                            <number-input id="initialMargin" ng-model="editObj.initialMargin" required></number-input>
+                                            <number-input id="initialMargin" ng-model="editObj.initialMargin"></number-input>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +103,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="maintainMargin" class="col-md-5 control-label" translate="maintainMargin"></label>
                                         <div class="col-md-7 valueCol">
-                                            <number-input id="maintainMargin" ng-model="editObj.maintainMargin" required></number-input>
+                                            <number-input id="maintainMargin" ng-model="editObj.maintainMargin"></number-input>
                                         </div>
                                     </div>
                                 </div>
@@ -102,17 +111,17 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-group-xs">
-                                        <label for="buyCommission" class="col-md-5 control-label" translate="buyCommission"></label>
+                                        <label for="openCommission" class="col-md-5 control-label" translate="openCommission"></label>
                                         <div class="col-md-7 valueCol">
-                                            <number-input id="buyCommission" ng-model="editObj.buyCommission" required></number-input>
+                                            <number-input id="openCommission" ng-model="editObj.openCommission"></number-input>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group form-group-xs">
-                                        <label for="sellCommission" class="col-md-5 control-label" translate="sellCommission"></label>
+                                        <label for="closeCommission" class="col-md-5 control-label" translate="closeCommission"></label>
                                         <div class="col-md-7 valueCol">
-                                            <number-input id="sellCommission" ng-model="editObj.sellCommission" required></number-input>
+                                            <number-input id="closeCommission" ng-model="editObj.closeCommission"></number-input>
                                         </div>
                                     </div>
                                 </div>
@@ -177,7 +186,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="openTime1" class="col-md-5 control-label" translate="openTime1"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="openTime1" ng-model="editObj.openTime1" required></time-input>
+                                            <time-input id="openTime1" ng-model="editObj.openTime1"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +194,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="closeTime1" class="col-md-5 control-label" translate="closeTime1"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="closeTime1" ng-model="editObj.closeTime1" required></time-input>
+                                            <time-input id="closeTime1" ng-model="editObj.closeTime1"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -193,7 +202,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="resetTime1" class="col-md-5 control-label" translate="resetTime1"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="resetTime1" ng-model="editObj.resetTime1" required></time-input>
+                                            <time-input id="resetTime1" ng-model="editObj.resetTime1"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +212,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="openTime2" class="col-md-5 control-label" translate="openTime2"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="openTime2" ng-model="editObj.openTime2" required></time-input>
+                                            <time-input id="openTime2" ng-model="editObj.openTime2"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -211,7 +220,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="closeTime2" class="col-md-5 control-label" translate="closeTime2"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="closeTime2" ng-model="editObj.closeTime2" required></time-input>
+                                            <time-input id="closeTime2" ng-model="editObj.closeTime2"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -219,7 +228,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="resetTime2" class="col-md-5 control-label" translate="resetTime2"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="resetTime2" ng-model="editObj.resetTime2" required></time-input>
+                                            <time-input id="resetTime2" ng-model="editObj.resetTime2"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -229,7 +238,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="rolloverTime" class="col-md-5 control-label" translate="rolloverTime"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="rolloverTime" ng-model="editObj.rolloverTime" required></time-input>
+                                            <time-input id="rolloverTime" ng-model="editObj.rolloverTime"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +246,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="settlementTime" class="col-md-5 control-label" translate="settlementTime"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="settlementTime" ng-model="editObj.settlementTime" required></time-input>
+                                            <time-input id="settlementTime" ng-model="editObj.settlementTime"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -247,7 +256,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="newOrderTime" class="col-md-5 control-label" translate="newOrderTime"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="newOrderTime" ng-model="editObj.newOrderTime" required></time-input>
+                                            <time-input id="newOrderTime" ng-model="editObj.newOrderTime"></time-input>
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +264,7 @@
                                     <div class="form-group form-group-xs">
                                         <label for="lastOrderTime" class="col-md-5 control-label" translate="lastOrderTime"></label>
                                         <div class="col-md-7 valueCol">
-                                            <time-input id="lastOrderTime" ng-model="editObj.lastOrderTime" required></time-input>
+                                            <time-input id="lastOrderTime" ng-model="editObj.lastOrderTime"></time-input>
                                         </div>
                                     </div>
                                 </div>

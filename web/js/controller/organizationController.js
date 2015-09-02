@@ -62,7 +62,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                             $scope.editNewObject(currentNode.getParentNode());
                         }
                         $scope.editTitle = $translate.instant("add_organization");
-                        $scope.open();
+                        $scope.showEditModal();
                     }
                 };
                 menu[Action.NewChildNode] = {
@@ -72,7 +72,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                         $scope.editNewObject(currentNode);
                         $log.info(currentNode);
                         $scope.editTitle = currentNode.organization_name + ":"+$translate.instant("add_sub_organization");
-                        $scope.open();
+                        $scope.showEditModal();
                     }
                 };
                 menu[Action.MoveFirst] = {
@@ -120,7 +120,7 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                         $scope.currentAction = Action.Edit;
                         $scope.editNode = Restangular.copy(currentNode);
                         $scope.editTitle = currentNode.organization_name + ":"+$translate.instant("edit");
-                        $scope.open();
+                        $scope.showEditModal();
                     }
                 };
                 menu[Action.Remove] = {
@@ -184,7 +184,65 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
             $scope.editNewObject(selectedNode);
         }
         $scope.editTitle = $translate.instant("add_organization");
-        $scope.open();
+        $scope.showEditModal();
+    };
+
+    $scope.editModalClose = function () {
+        var selectedNode = undefined;
+        switch ($scope.currentAction) {
+            case Action.NewNode:
+                if ($scope.editNode.parentOrganizationId) {
+                    var parent_node = zTreeObj.getNodeByParam("organizationId", $scope.editNode.parentOrganizationId);
+                    zTreeObj.addNodes(parent_node, $scope.editNode, true);
+                } else {
+                    zTreeObj.addNodes(null, $scope.editNode, true);
+                }
+                break;
+            case Action.NewChildNode:
+                selectedNode = zTreeObj.getSelectedNodes()[0];
+                zTreeObj.addNodes(selectedNode, $scope.editNode, true);
+                zTreeObj.expandNode(selectedNode, true);
+                break;
+            case Action.Edit:
+                selectedNode = zTreeObj.getSelectedNodes()[0];
+                selectedNode.organization_code = $scope.editNode.organization_code;
+                selectedNode.organization_name = $scope.editNode.organization_name;
+                zTreeObj.updateNode(selectedNode);
+                break;
+        }
+        $scope.hideEditModal();
+    };
+
+    function EditModalController($scope){
+        $scope.save = function () {
+            switch ($scope.currentAction) {
+                case Action.NewNode:
+                case Action.NewChildNode:
+                    OrganizationService.post( $scope.editNode).then(function (data) {
+                        $scope.editModalClose();
+                    });
+                    break;
+                case Action.Edit:
+                    $scope.editNode.put().then(function (data) {
+                        $scope.editModalClose();
+                    });
+                    break;
+            }
+        };
+    }
+
+    var editModal = $modal({
+        scope: $scope,
+        controller: EditModalController,
+        templateUrl:"organizationEdit.html",
+        show:false
+    });
+
+    $scope.showEditModal = function() {
+        editModal.$promise.then(editModal.show);
+    };
+    $scope.hideEditModal = function() {
+        editModal.$promise.then(editModal.hide);
     };
 
     $scope.open = function () {

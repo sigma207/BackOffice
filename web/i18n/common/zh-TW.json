@@ -9,6 +9,7 @@
   },
   "yes":"是",
   "no":"否",
+  "category":"種類別",
   "exchangeId":"交易所",
   "mainSymbolId":"主商品",
   "symbolId":"商品",

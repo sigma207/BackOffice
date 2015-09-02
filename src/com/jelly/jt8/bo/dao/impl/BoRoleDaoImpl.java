@@ -21,10 +21,6 @@ public class BoRoleDaoImpl extends BaseDao implements BoRoleDao {
         super(BoRole.class);
     }
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<BoRole> select() throws Exception {
         List<BoRole> list = new LinkedList<BoRole>();

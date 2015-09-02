@@ -1,13 +1,15 @@
 package com.jelly.jt8.bo.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by user on 2015/8/26.
  */
 @Entity
-@javax.persistence.Table(name = "trade_house_rule", schema = "dbo", catalog = "jt8")
+@Table(name = "trade_house_rule", schema = "dbo", catalog = "jt8")
+@IdClass(TradeHouseRulePK.class)
 public class TradeHouseRule extends BaseModel{
     private String houseId;
     private String exchangeId;
@@ -52,9 +54,11 @@ public class TradeHouseRule extends BaseModel{
     private BigDecimal overWithdrawalCreditLimitCharge;
     private BigDecimal liquidationRate;
     private BigDecimal marginCallRate;
+    private String category;
+    private List<TradeHouseRuleGroup> tradeHouseRuleGroupList;
 
-    @javax.persistence.Id
-    @javax.persistence.Column(name = "house_id")
+    @Id
+    @Column(name = "house_id")
     public String getHouseId() {
         return houseId;
     }
@@ -63,8 +67,8 @@ public class TradeHouseRule extends BaseModel{
         this.houseId = houseId;
     }
 
-    @javax.persistence.Id
-    @javax.persistence.Column(name = "exchange_id")
+    @Id
+    @Column(name = "exchange_id")
     public String getExchangeId() {
         return exchangeId;
     }
@@ -73,8 +77,8 @@ public class TradeHouseRule extends BaseModel{
         this.exchangeId = exchangeId;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "house_name")
+    @Basic
+    @Column(name = "house_name")
     public String getHouseName() {
         return houseName;
     }
@@ -83,8 +87,8 @@ public class TradeHouseRule extends BaseModel{
         this.houseName = houseName;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "scale")
+    @Basic
+    @Column(name = "scale")
     public Integer getScale() {
         return scale;
     }
@@ -93,8 +97,8 @@ public class TradeHouseRule extends BaseModel{
         this.scale = scale;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "initial_margin")
+    @Basic
+    @Column(name = "initial_margin")
     public BigDecimal getInitialMargin() {
         return initialMargin;
     }
@@ -103,8 +107,8 @@ public class TradeHouseRule extends BaseModel{
         this.initialMargin = initialMargin;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "maintain_margin")
+    @Basic
+    @Column(name = "maintain_margin")
     public BigDecimal getMaintainMargin() {
         return maintainMargin;
     }
@@ -113,8 +117,8 @@ public class TradeHouseRule extends BaseModel{
         this.maintainMargin = maintainMargin;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "open_commission")
+    @Basic
+    @Column(name = "open_commission")
     public BigDecimal getOpenCommission() {
         return openCommission;
     }
@@ -123,8 +127,8 @@ public class TradeHouseRule extends BaseModel{
         this.openCommission = openCommission;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "close_commission")
+    @Basic
+    @Column(name = "close_commission")
     public BigDecimal getCloseCommission() {
         return closeCommission;
     }
@@ -133,8 +137,8 @@ public class TradeHouseRule extends BaseModel{
         this.closeCommission = closeCommission;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "overnight_charge")
+    @Basic
+    @Column(name = "overnight_charge")
     public BigDecimal getOvernightCharge() {
         return overnightCharge;
     }
@@ -143,8 +147,8 @@ public class TradeHouseRule extends BaseModel{
         this.overnightCharge = overnightCharge;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "tax")
+    @Basic
+    @Column(name = "tax")
     public BigDecimal getTax() {
         return tax;
     }
@@ -153,8 +157,8 @@ public class TradeHouseRule extends BaseModel{
         this.tax = tax;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "fee1")
+    @Basic
+    @Column(name = "fee1")
     public BigDecimal getFee1() {
         return fee1;
     }
@@ -163,8 +167,8 @@ public class TradeHouseRule extends BaseModel{
         this.fee1 = fee1;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "fee2")
+    @Basic
+    @Column(name = "fee2")
     public BigDecimal getFee2() {
         return fee2;
     }
@@ -173,8 +177,8 @@ public class TradeHouseRule extends BaseModel{
         this.fee2 = fee2;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "fee3")
+    @Basic
+    @Column(name = "fee3")
     public BigDecimal getFee3() {
         return fee3;
     }
@@ -183,8 +187,8 @@ public class TradeHouseRule extends BaseModel{
         this.fee3 = fee3;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "fee4")
+    @Basic
+    @Column(name = "fee4")
     public BigDecimal getFee4() {
         return fee4;
     }
@@ -193,8 +197,8 @@ public class TradeHouseRule extends BaseModel{
         this.fee4 = fee4;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "fee5")
+    @Basic
+    @Column(name = "fee5")
     public BigDecimal getFee5() {
         return fee5;
     }
@@ -203,8 +207,8 @@ public class TradeHouseRule extends BaseModel{
         this.fee5 = fee5;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "open_time1")
+    @Basic
+    @Column(name = "open_time1")
     public String getOpenTime1() {
         return openTime1;
     }
@@ -213,8 +217,8 @@ public class TradeHouseRule extends BaseModel{
         this.openTime1 = openTime1;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "close_time1")
+    @Basic
+    @Column(name = "close_time1")
     public String getCloseTime1() {
         return closeTime1;
     }
@@ -223,8 +227,8 @@ public class TradeHouseRule extends BaseModel{
         this.closeTime1 = closeTime1;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "reset_time1")
+    @Basic
+    @Column(name = "reset_time1")
     public String getResetTime1() {
         return resetTime1;
     }
@@ -233,8 +237,8 @@ public class TradeHouseRule extends BaseModel{
         this.resetTime1 = resetTime1;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "open_time2")
+    @Basic
+    @Column(name = "open_time2")
     public String getOpenTime2() {
         return openTime2;
     }
@@ -243,8 +247,8 @@ public class TradeHouseRule extends BaseModel{
         this.openTime2 = openTime2;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "close_time2")
+    @Basic
+    @Column(name = "close_time2")
     public String getCloseTime2() {
         return closeTime2;
     }
@@ -253,8 +257,8 @@ public class TradeHouseRule extends BaseModel{
         this.closeTime2 = closeTime2;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "reset_time2")
+    @Basic
+    @Column(name = "reset_time2")
     public String getResetTime2() {
         return resetTime2;
     }
@@ -263,8 +267,8 @@ public class TradeHouseRule extends BaseModel{
         this.resetTime2 = resetTime2;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "rollover_time")
+    @Basic
+    @Column(name = "rollover_time")
     public String getRolloverTime() {
         return rolloverTime;
     }
@@ -273,8 +277,8 @@ public class TradeHouseRule extends BaseModel{
         this.rolloverTime = rolloverTime;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "settlement_time")
+    @Basic
+    @Column(name = "settlement_time")
     public String getSettlementTime() {
         return settlementTime;
     }
@@ -283,8 +287,8 @@ public class TradeHouseRule extends BaseModel{
         this.settlementTime = settlementTime;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "new_order_time")
+    @Basic
+    @Column(name = "new_order_time")
     public String getNewOrderTime() {
         return newOrderTime;
     }
@@ -293,8 +297,8 @@ public class TradeHouseRule extends BaseModel{
         this.newOrderTime = newOrderTime;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "last_order_time")
+    @Basic
+    @Column(name = "last_order_time")
     public String getLastOrderTime() {
         return lastOrderTime;
     }
@@ -303,8 +307,8 @@ public class TradeHouseRule extends BaseModel{
         this.lastOrderTime = lastOrderTime;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "uplimit")
+    @Basic
+    @Column(name = "uplimit")
     public BigDecimal getUplimit() {
         return uplimit;
     }
@@ -313,8 +317,8 @@ public class TradeHouseRule extends BaseModel{
         this.uplimit = uplimit;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "downlimit")
+    @Basic
+    @Column(name = "downlimit")
     public BigDecimal getDownlimit() {
         return downlimit;
     }
@@ -323,8 +327,8 @@ public class TradeHouseRule extends BaseModel{
         this.downlimit = downlimit;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "market_uplimit")
+    @Basic
+    @Column(name = "market_uplimit")
     public BigDecimal getMarketUplimit() {
         return marketUplimit;
     }
@@ -333,8 +337,8 @@ public class TradeHouseRule extends BaseModel{
         this.marketUplimit = marketUplimit;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "market_downlimit")
+    @Basic
+    @Column(name = "market_downlimit")
     public BigDecimal getMarketDownlimit() {
         return marketDownlimit;
     }
@@ -343,8 +347,8 @@ public class TradeHouseRule extends BaseModel{
         this.marketDownlimit = marketDownlimit;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "market_updownlimit_charge")
+    @Basic
+    @Column(name = "market_updownlimit_charge")
     public BigDecimal getMarketUpdownlimitCharge() {
         return marketUpdownlimitCharge;
     }
@@ -353,8 +357,8 @@ public class TradeHouseRule extends BaseModel{
         this.marketUpdownlimitCharge = marketUpdownlimitCharge;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "special_stock_rule")
+    @Basic
+    @Column(name = "special_stock_rule")
     public BigDecimal getSpecialStockRule() {
         return specialStockRule;
     }
@@ -363,8 +367,8 @@ public class TradeHouseRule extends BaseModel{
         this.specialStockRule = specialStockRule;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "special_stock_charge")
+    @Basic
+    @Column(name = "special_stock_charge")
     public BigDecimal getSpecialStockCharge() {
         return specialStockCharge;
     }
@@ -373,8 +377,8 @@ public class TradeHouseRule extends BaseModel{
         this.specialStockCharge = specialStockCharge;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "tvol_delta_rule")
+    @Basic
+    @Column(name = "tvol_delta_rule")
     public Long getTvolDeltaRule() {
         return tvolDeltaRule;
     }
@@ -383,8 +387,8 @@ public class TradeHouseRule extends BaseModel{
         this.tvolDeltaRule = tvolDeltaRule;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "tvol_delta_minute")
+    @Basic
+    @Column(name = "tvol_delta_minute")
     public Integer getTvolDeltaMinute() {
         return tvolDeltaMinute;
     }
@@ -393,8 +397,8 @@ public class TradeHouseRule extends BaseModel{
         this.tvolDeltaMinute = tvolDeltaMinute;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "tvol_delta_charge")
+    @Basic
+    @Column(name = "tvol_delta_charge")
     public BigDecimal getTvolDeltaCharge() {
         return tvolDeltaCharge;
     }
@@ -403,8 +407,8 @@ public class TradeHouseRule extends BaseModel{
         this.tvolDeltaCharge = tvolDeltaCharge;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "new_order_close_time_limit")
+    @Basic
+    @Column(name = "new_order_close_time_limit")
     public String getNewOrderCloseTimeLimit() {
         return newOrderCloseTimeLimit;
     }
@@ -413,8 +417,8 @@ public class TradeHouseRule extends BaseModel{
         this.newOrderCloseTimeLimit = newOrderCloseTimeLimit;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "oi_day")
+    @Basic
+    @Column(name = "oi_day")
     public Integer getOiDay() {
         return oiDay;
     }
@@ -423,8 +427,8 @@ public class TradeHouseRule extends BaseModel{
         this.oiDay = oiDay;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_percentage")
+    @Basic
+    @Column(name = "over_withdrawal_credit_percentage")
     public BigDecimal getOverWithdrawalCreditPercentage() {
         return overWithdrawalCreditPercentage;
     }
@@ -433,8 +437,8 @@ public class TradeHouseRule extends BaseModel{
         this.overWithdrawalCreditPercentage = overWithdrawalCreditPercentage;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_percentage_charge")
+    @Basic
+    @Column(name = "over_withdrawal_credit_percentage_charge")
     public BigDecimal getOverWithdrawalCreditPercentageCharge() {
         return overWithdrawalCreditPercentageCharge;
     }
@@ -443,8 +447,8 @@ public class TradeHouseRule extends BaseModel{
         this.overWithdrawalCreditPercentageCharge = overWithdrawalCreditPercentageCharge;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_limit")
+    @Basic
+    @Column(name = "over_withdrawal_credit_limit")
     public BigDecimal getOverWithdrawalCreditLimit() {
         return overWithdrawalCreditLimit;
     }
@@ -453,8 +457,8 @@ public class TradeHouseRule extends BaseModel{
         this.overWithdrawalCreditLimit = overWithdrawalCreditLimit;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_limit_charge")
+    @Basic
+    @Column(name = "over_withdrawal_credit_limit_charge")
     public BigDecimal getOverWithdrawalCreditLimitCharge() {
         return overWithdrawalCreditLimitCharge;
     }
@@ -463,8 +467,8 @@ public class TradeHouseRule extends BaseModel{
         this.overWithdrawalCreditLimitCharge = overWithdrawalCreditLimitCharge;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "liquidation_rate")
+    @Basic
+    @Column(name = "liquidation_rate")
     public BigDecimal getLiquidationRate() {
         return liquidationRate;
     }
@@ -473,14 +477,33 @@ public class TradeHouseRule extends BaseModel{
         this.liquidationRate = liquidationRate;
     }
 
-    @javax.persistence.Basic
-    @javax.persistence.Column(name = "margin_call_rate")
+    @Basic
+    @Column(name = "margin_call_rate")
     public BigDecimal getMarginCallRate() {
         return marginCallRate;
     }
 
     public void setMarginCallRate(BigDecimal marginCallRate) {
         this.marginCallRate = marginCallRate;
+    }
+
+    @Id
+    @Column(name = "category")
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    @Transient
+    public List<TradeHouseRuleGroup> getTradeHouseRuleGroupList() {
+        return tradeHouseRuleGroupList;
+    }
+
+    public void setTradeHouseRuleGroupList(List<TradeHouseRuleGroup> tradeHouseRuleGroupList) {
+        this.tradeHouseRuleGroupList = tradeHouseRuleGroupList;
     }
 
     @Override

@@ -20,6 +20,8 @@
     <mapping class="com.jelly.jt8.bo.model.BoRolePermission"/>
     <mapping class="com.jelly.jt8.bo.model.SystemMainSymbol"/>
     <mapping class="com.jelly.jt8.bo.model.TradeGroup"/>
+    <mapping class="com.jelly.jt8.bo.model.SystemCategory"/>
+    <mapping class="com.jelly.jt8.bo.model.TradeHouseRuleGroup"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

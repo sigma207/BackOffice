@@ -1,23 +1,26 @@
 package com.jelly.jt8.bo.service.impl;
 
+import com.jelly.jt8.bo.dao.SystemCategoryDao;
 import com.jelly.jt8.bo.dao.SystemMainSymbolDao;
 import com.jelly.jt8.bo.model.Exchange;
+import com.jelly.jt8.bo.model.SystemCategory;
 import com.jelly.jt8.bo.model.SystemMainSymbol;
-import com.jelly.jt8.bo.service.SystemMainSymbolService;
+import com.jelly.jt8.bo.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * Created by user on 2015/8/31.
+ * Created by user on 2015/9/2.
  */
-@Service("systemMainSymbolService")
-public class SystemMainSymbolServiceImpl implements SystemMainSymbolService {
+@Service("systemService")
+public class SystemServiceImpl implements SystemService {
+    @Autowired
+    @Qualifier("SystemCategoryDao")
+    private SystemCategoryDao systemCategoryDao;
+
     @Autowired
     @Qualifier("SystemMainSymbolDao")
     private SystemMainSymbolDao systemMainSymbolDao;
@@ -42,5 +45,19 @@ public class SystemMainSymbolServiceImpl implements SystemMainSymbolService {
             exchange.getSystemMainSymbolList().add(mainSymbol);
         }
         return exchangeList;
+    }
+
+    @Override
+    public List<SystemCategory> selectSystemCategory() throws Exception {
+        List<SystemCategory> list = systemCategoryDao.select();
+        List<SystemCategory> systemCategoryList = new ArrayList<SystemCategory>();
+        Set<String> keys = new HashSet<String>();
+        for(SystemCategory systemCategory:list){
+            if(!keys.contains(systemCategory.getCategory())){
+                systemCategoryList.add(systemCategory);
+                keys.add(systemCategory.getCategory());
+            }
+        }
+        return systemCategoryList;
     }
 }

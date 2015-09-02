@@ -29,12 +29,23 @@ backendApp.config(function (RestangularProvider) {
         var status = resp.status;
         var errorJson = resp.data;
         console.log(resp);
+        var $alert =  angular.injector(['ng']).get('$alert');
+        var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
+        myAlert.show();
         return true; // 停止promise链
     });
 });
 backendApp.config(function($modalProvider) {
     angular.extend($modalProvider.defaults, {
         animation: 'am-flip-x'
+    });
+});
+backendApp.config(function($datepickerProvider) {
+    angular.extend($datepickerProvider.defaults, {
+        dateFormat: 'yyyy-MM-dd',
+        modelDateFormat: 'yyyyMMdd',
+        //dateType: "string",
+        startWeek: 1
     });
 });
 backendApp.config(function($timepickerProvider) {
@@ -45,10 +56,14 @@ backendApp.config(function($timepickerProvider) {
         minuteStep: 1,
         secondStep: 1
     });
-})
+});
 
 backendApp.factory('ExchangeService', function (Restangular) {
     return Restangular.service('exchange');
+});
+
+backendApp.factory('SystemCategoryService', function (Restangular) {
+    return Restangular.service('systemCategories');
 });
 
 backendApp.factory('UserService', function (Restangular) {
@@ -193,6 +208,7 @@ backendApp.directive('parseInt', ParseInt);
 backendApp.directive('numbersOnly', NumbersOnly);
 backendApp.directive('textInput', TextInput);
 backendApp.directive('numberInput', NumberInput);
+backendApp.directive('dateInput', DateInput);
 backendApp.directive('timeInput', TimeInput);
 backendApp.directive('modalClose', ModalClose);
 backendApp.directive('datePickerOpen', DatePickerOpen);
@@ -248,6 +264,10 @@ function BackendController($scope, $translate, $location, $log, PermissionServic
             $scope.initMenuTree();
         });
     };
+
+    $scope.getLoginId = function () {
+        return $scope.loginUser.loginId;
+    }
 }
 
 var Action = {

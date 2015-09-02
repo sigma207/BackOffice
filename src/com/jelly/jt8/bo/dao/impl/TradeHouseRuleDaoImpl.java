@@ -19,20 +19,16 @@ import java.util.List;
  */
 @Repository("TradeHouseRuleDao")
 public class TradeHouseRuleDaoImpl extends BaseDao implements TradeHouseRuleDao {
+    private final static String WHERE_HOUSE_ID = " WHERE house_id = ? ";
+
     public TradeHouseRuleDaoImpl() {
         super(TradeHouseRule.class);
     }
 
-    private final static String WHERE_HOUSE_ID = " WHERE house_id = ? ";
-
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<TradeHouseRule> select() throws Exception {
-        List<TradeHouseRule> list =  new LinkedList<TradeHouseRule>();
-        selectByObject(jt8Ds.getConnection(),list);
+        List<TradeHouseRule> list = new LinkedList<TradeHouseRule>();
+        selectByObject(jt8Ds.getConnection(), list);
         return list;
     }
 
@@ -45,8 +41,8 @@ public class TradeHouseRuleDaoImpl extends BaseDao implements TradeHouseRuleDao 
         try {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(selectSQL() + WHERE_HOUSE_ID);
-            if(houseId!=null)
-            stmt.setString(1, houseId);
+            if (houseId != null)
+                stmt.setString(1, houseId);
             rs = stmt.executeQuery();
             selectToObject(rs, list);
         } catch (Exception e) {
@@ -67,5 +63,20 @@ public class TradeHouseRuleDaoImpl extends BaseDao implements TradeHouseRuleDao 
             }
         }
         return list;
+    }
+
+    @Override
+    public void insert(Connection conn, TradeHouseRule object) throws Exception {
+        insertByObject(conn, object);
+    }
+
+    @Override
+    public void update(Connection conn, TradeHouseRule object) throws Exception {
+        updateByObject(conn, object);
+    }
+
+    @Override
+    public void delete(Connection conn, TradeHouseRule object) throws Exception {
+        deleteByObject(conn, object);
     }
 }

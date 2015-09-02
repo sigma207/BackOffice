@@ -16,18 +16,47 @@ import java.util.List;
  */
 @Repository("TradeGroupDao")
 public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
+    private final static String WHERE_CATEGORY = " WHERE category = ? ";
     public TradeGroupDaoImpl() {
         super(TradeGroup.class);
     }
-
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
 
     @Override
     public List<TradeGroup> select() throws Exception {
         List<TradeGroup> list =  new LinkedList<TradeGroup>();
         selectByObject(jt8Ds.getConnection(),list);
+        return list;
+    }
+
+    @Override
+    public List<TradeGroup> select(String category) throws Exception {
+        List<TradeGroup> list =  new LinkedList<TradeGroup>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectSQL() + WHERE_CATEGORY);
+            stmt.setString(1, category);
+            rs = stmt.executeQuery();
+            selectToObject(rs,list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return list;
     }
 

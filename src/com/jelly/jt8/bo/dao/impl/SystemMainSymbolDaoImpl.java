@@ -19,10 +19,6 @@ public class SystemMainSymbolDaoImpl extends BaseDao implements SystemMainSymbol
         super(SystemMainSymbol.class);
     }
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<SystemMainSymbol> select() throws Exception {
         List<SystemMainSymbol> list =  new LinkedList<SystemMainSymbol>();

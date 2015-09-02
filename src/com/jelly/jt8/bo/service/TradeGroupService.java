@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface TradeGroupService {
     List<TradeGroup> select() throws Exception;
+    List<TradeGroup> select(String category) throws Exception;
     void insert(TradeGroup object) throws Exception;
     void update(TradeGroup object) throws Exception;
     void delete(TradeGroup object) throws Exception;

@@ -25,10 +25,6 @@ public class BoRolePermissionDaoImpl extends BaseDao implements BoRolePermission
         super(BoRolePermission.class);
     }
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<BoRolePermission> select(int roleId) throws Exception {
         List<BoRolePermission> list =  new LinkedList<BoRolePermission>();

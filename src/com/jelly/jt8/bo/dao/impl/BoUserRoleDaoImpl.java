@@ -26,10 +26,6 @@ public class BoUserRoleDaoImpl extends BaseDao implements BoUserRoleDao {
         super(BoUserRole.class);
     }
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<BoUserRole> select(int user_id) throws Exception {
         List<BoUserRole> list =  new LinkedList<BoUserRole>();

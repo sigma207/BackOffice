@@ -16,6 +16,7 @@
         <thead>
         <tr>
             <th>{{'groupName'|translate}}</th>
+            <th>{{'category'|translate}}</th>
             <th>{{'scale'|translate}}</th>
             <th>{{'initialMargin'|translate}}</th>
             <th>{{'groupManage'|translate}}</th>
@@ -24,6 +25,7 @@
         <tbody>
         <tr ng-repeat="row in rowCollection">
             <td>{{row.groupName}}</td>
+            <td>{{row.category}}</td>
             <td>{{row.scale}}</td>
             <td>{{row.initialMargin}}</td>
             <td>
@@ -47,7 +49,7 @@
                         <fieldset class="well well-xs the-fieldset">
                             <legend class="the-legend">base</legend>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group form-group-xs">
                                         <label for="groupName" class="col-md-5 control-label" translate="groupName"></label>
                                         <div class="col-md-7 valueCol">
@@ -55,7 +57,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="systemCategory" class="col-md-5 control-label" translate="category"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <select id="systemCategory" ng-model="editObj.systemCategory" ng-change="systemCategoryChange();"
+                                                    ng-options="systemCategory.category for systemCategory in systemCategoryList">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
                                     <div class="form-group form-group-xs">
                                         <label for="scale" class="col-md-5 control-label" translate="scale"></label>
                                         <div class="col-md-7 valueCol">

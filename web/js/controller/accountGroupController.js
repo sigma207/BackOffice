@@ -2,7 +2,7 @@
  * Created by user on 2015/8/27.
  */
 backendApp.controller("AccountGroupController", AccountGroupController);//交易帳號屬性群組
-function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, TradeHouseRuleService, TradeGroupService) {
+function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $translate, $alert, Restangular, SystemCategoryService, TradeHouseRuleService, TradeGroupService) {
     $translatePartialLoader.addPart("accountGroup");
     $translate.refresh();
 
@@ -28,6 +28,7 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
     $scope.addClick = function () {
         $scope.currentAction = Action.Add;
         $scope.editObj = angular.copy($scope.selectedTradeHouseRule);
+        $scope.editObj.exchangeId = "*";
         //$scope.editObj.uplimit = 0.05;
         $scope.editObj.groupName = "ABC";
         $scope.editObj.specialStockRule = 0;
@@ -52,10 +53,39 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
     $scope.deleteClick = function (row) {
         row.remove().then(function () {
             $scope.getTradeAccountGroupList();
+        }).then(function () {
+            $log.info("fail");
+            var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
+            myAlert.show();
         });
     };
 
     function ModalController($scope){
+        var i,count;
+        $scope.getSystemCategoryList = function () {
+            SystemCategoryService.getList().then(function (data) {
+                $scope.systemCategoryList = data;
+                if($scope.systemCategoryList.length>0){
+                    for(i= 0,count=$scope.systemCategoryList.length;i<count;i++){
+                        if($scope.editObj.category==$scope.systemCategoryList[i].category){
+                            $scope.editObj.systemCategory = $scope.systemCategoryList[i];
+                        }
+                    }
+                    switch ($scope.currentAction) {
+                        case Action.Add:
+                            $scope.systemCategoryChange();
+                            break;
+                        case Action.Edit:
+                            break;
+                    }
+                }
+            });
+        };
+
+        $scope.systemCategoryChange = function () {
+            $scope.editObj.category = $scope.editObj.systemCategory.category;
+        };
+
         $scope.save = function () {
             switch ($scope.currentAction) {
                 case Action.Add:
@@ -72,6 +102,8 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
                     break;
             }
         };
+
+        $scope.getSystemCategoryList();
     }
 
     var modal = $modal({

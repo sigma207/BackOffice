@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/tradeGroup")
-public class TradeAccountGroupController extends BaseController{
+public class TradeGroupController extends BaseController{
     @Autowired
     @Qualifier("tradeGroupService")
     private TradeGroupService service;
@@ -31,6 +31,23 @@ public class TradeAccountGroupController extends BaseController{
         String payload = "";
         try {
             list = service.select();
+        } catch (Exception e) {
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(list);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping( params = {"category"},method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<String> getList(@RequestParam(value="category") String category) {
+        Gson gson = new Gson();
+        List<TradeGroup> list = null;
+        String payload = "";
+        try {
+            list = service.select(category);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

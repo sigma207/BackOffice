@@ -131,6 +131,15 @@ function NumberInput(){
     }
 }
 
+function DateInput(){
+    //<button type="button" class="btn-xs btn-default" date-picker-open open-status="row.beginDateOpened"><i class="glyphicon glyphicon-calendar"></i></button>
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<input type="text" size="10" bs-datepicker/>'
+    }
+}
+
 function TimeInput(){
     return {
         restrict:"E",

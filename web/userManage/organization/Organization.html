@@ -41,34 +41,29 @@
                         <modal-close></modal-close>
                         <h3 class="modal-title">{{modalTitle}}</h3>
                     </div>
+                    <div class="modal-body">
+                        <form name="editForm" class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="organizationCode" class="col-md-2 control-label" translate="organizationCode"></label>
+                                <div class="col-md-10">
+                                    <input id="organizationCode" type="text" ng-model="editNode.organizationCode" class="input-sm form-control" focus="true" required/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="organizationName" class="col-md-2 control-label" translate="organizationName"></label>
+                                <div class="col-md-10">
+                                    <input id="organizationName" type="text" ng-model="editNode.organizationName" class="input-sm form-control" required/>
+                                </div>
+                            </div>
 
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="modal-header">
-            <h3 class="modal-title">{{title}}</h3>
-        </div>
-        <div class="modal-body">
-            <form name="editForm" class="form-horizontal" role="form">
-                <div class="form-group">
-                    <label for="organizationCode" class="col-md-2 control-label" translate="organizationCode"></label>
-                    <div class="col-md-10">
-                        <input id="organizationCode" type="text" ng-model="editNode.organizationCode" class="input-sm form-control" focus="true" required/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="organizationName" class="col-md-2 control-label" translate="organizationName"></label>
-                    <div class="col-md-10">
-                        <input id="organizationName" type="text" ng-model="editNode.organizationName" class="input-sm form-control" required/>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
-            <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="ok()" translate="save"></button>
         </div>
     </script>
 </div>

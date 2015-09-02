@@ -40,10 +40,6 @@ public class BoOrganizationDaoImpl extends BaseDao implements BoOrganizationDao 
         super(BoOrganization.class);
     }
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<BoOrganization> select() throws Exception {
         List<BoOrganization> list =  new LinkedList<BoOrganization>();

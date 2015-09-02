@@ -28,10 +28,6 @@ public class SymbolTradableDailyDaoImpl extends BaseDao implements SymbolTradabl
     private final static String INSERT = "INSERT INTO symbol_stock_daily_temp (exchange_id, symbol_id, update_time) VALUES (?, ?, ?);";
     private final static String DELETE = "DELETE symbol_stock_daily_temp WHERE exchange_id = ? ";
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
-
     @Override
     public List<SymbolTradableDaily> selectTemp() throws Exception {
         List<SymbolTradableDaily> list = new LinkedList<SymbolTradableDaily>();

@@ -7,6 +7,7 @@ public class ErrorMsg {
     public static String LOGIN_ACCOUNT = "login_account";
     public static String LOGIN_PASSWORD = "login_password";
     public static String DIRTY_DATA = "dirtyData";
+    public static String TRADE_GROUP_HAS_USED = "tradeGroupHasUsed";
     public static String BALANCE_NOT_ENOUGH = "balanceNotEnough";
     public static String DB_ERROR = "db_error";
 }

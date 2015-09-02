@@ -1,7 +1,7 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.Exchange;
+import com.jelly.jt8.bo.model.SystemCategory;
 import com.jelly.jt8.bo.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
- * Created by user on 2015/8/19.
+ * Created by user on 2015/9/2.
  */
 @Controller
-@RequestMapping("/exchange")
-public class ExchangeController extends BaseController {
+@RequestMapping("/systemCategories")
+public class SystemCategoryController extends BaseController {
     @Autowired
     @Qualifier("systemService")
     private SystemService service;
@@ -29,10 +29,10 @@ public class ExchangeController extends BaseController {
     @ResponseBody
     ResponseEntity<String> getList() {
         Gson gson = new Gson();
-        List<Exchange> list = null;
+        List<SystemCategory> list = null;
         String payload = "";
         try {
-            list = service.selectExchange();
+            list = service.selectSystemCategory();
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);

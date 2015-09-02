@@ -1,8 +1,11 @@
 package com.jelly.jt8.bo.service.impl;
 
 import com.jelly.jt8.bo.dao.TradeGroupDao;
+import com.jelly.jt8.bo.dao.TradeHouseRuleGroupDao;
 import com.jelly.jt8.bo.model.TradeGroup;
+import com.jelly.jt8.bo.model.TradeHouseRuleGroup;
 import com.jelly.jt8.bo.service.TradeGroupService;
+import com.jelly.jt8.bo.util.ErrorMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -26,9 +29,18 @@ public class TradeGroupServiceImpl implements TradeGroupService {
     @Qualifier("TradeGroupDao")
     private TradeGroupDao tradeGroupDao;
 
+    @Autowired
+    @Qualifier("TradeHouseRuleGroupDao")
+    private TradeHouseRuleGroupDao tradeHouseRuleGroupDao;
+
     @Override
     public List<TradeGroup> select() throws Exception {
         return tradeGroupDao.select();
+    }
+
+    @Override
+    public List<TradeGroup> select(String category) throws Exception {
+        return tradeGroupDao.select(category);
     }
 
     @Override
@@ -86,7 +98,12 @@ public class TradeGroupServiceImpl implements TradeGroupService {
         Connection conn = null;
 
         try {
+            List<TradeHouseRuleGroup> list = tradeHouseRuleGroupDao.select(object);
+            if(list.size()>0){
+                throw new Exception(ErrorMsg.TRADE_GROUP_HAS_USED);
+            }
             conn = jt8Ds.getConnection();
+
             conn.setAutoCommit(false);
             tradeGroupDao.delete(conn, object);
             conn.commit();

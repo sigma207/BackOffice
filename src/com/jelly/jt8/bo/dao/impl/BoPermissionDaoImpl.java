@@ -21,9 +21,6 @@ public class BoPermissionDaoImpl extends BaseDao implements BoPermissionDao {
         super(BoPermission.class);
     }
 
-    @Autowired
-    @Qualifier("jt8Ds")
-    private DataSource jt8Ds;
     @Override
     public List<BoPermission> select() throws Exception {
         List<BoPermission> list =  new LinkedList<BoPermission>();

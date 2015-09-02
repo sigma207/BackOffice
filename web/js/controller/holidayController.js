@@ -65,228 +65,202 @@ function HolidayController($scope, $translatePartialLoader, $translate, $log, $m
 
     $scope.editHolidayClick = function (row) {
         $scope.modalTitle = $translate.instant("editHoliday");
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'holidayEdit.html',
-            controller: 'holidayEditCtrl',
-            size: $scope.editSize,
-            resolve: {
-                title: function () {
-                    return $scope.modalTitle;
-                },
-                editObj: function () {
-                    return Restangular.copy(row);
-                }
-            }
-        });
-
-        modalInstance.result.then(
-            function () {
-                $scope.getHoliday();
-            },
-            function () {
-            }
-        )
+        $scope.editObj = Restangular.copy(row);
+        $scope.showHolidayEditModal();
     };
 
     $scope.editExceptionClick = function (row) {
         $scope.modalTitle = $translate.instant("editException");
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'exceptionEdit.html',
-            controller: 'exceptionEditCtrl',
-            size: $scope.editSize,
-            resolve: {
-                title: function () {
-                    return $scope.modalTitle;
-                },
-                editObj: function () {
-                    return Restangular.copy(row);
-                }
-            }
-        });
-
-        modalInstance.result.then(
-            function () {
-                $scope.getException();
-            },
-            function () {
-            }
-        )
+        $scope.editObj = Restangular.copy(row);
+        $scope.showExceptionEditModal();
     };
 
     $scope.batchAddHolidayClick = function () {
         $scope.modalTitle = $translate.instant("addHoliday");
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'batchHoliday.html',
-            controller: 'batchHolidayCtrl',
-            size: $scope.editSize,
-            resolve: {
-                title: function () {
-                    return $scope.modalTitle;
-                },
-                mainSymbol: function () {
-                    return $scope.selectedMainSymbol;
-                }
-            }
-        });
-
-        modalInstance.result.then(
-            function () {
-                $scope.getHoliday();
-            },
-            function () {
-            }
-        )
+        $scope.showBatchHolidayModal();
     };
 
     $scope.batchAddExceptionClick = function () {
         $scope.modalTitle = $translate.instant("addException");
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'batchException.html',
-            controller: 'batchExceptionCtrl',
-            size: $scope.editSize,
-            resolve: {
-                title: function () {
-                    return $scope.modalTitle;
-                },
-                mainSymbol: function () {
-                    return $scope.selectedMainSymbol;
-                }
-            }
-        });
+        $scope.showBatchExceptionModal();
+    };
 
-        modalInstance.result.then(
-            function () {
-                $scope.getException();
-            },
-            function () {
+    //editHolidayModal
+    $scope.editHolidayModalClose = function () {
+        $scope.getHoliday();
+        $scope.hideHolidayEditModal();
+    };
+
+    function EditHolidayModalController($scope){
+        $scope.save = function () {
+            DateTool.dateToYyyyMMdd($scope.editObj,"begin_date","beginDate");
+            DateTool.dateToYyyyMMdd($scope.editObj,"end_date","endDate");
+
+            $scope.editObj.put().then(function (data) {
+                $scope.editHolidayModalClose();
+            });
+        };
+    }
+
+    var editHolidayModal = $modal({
+        scope: $scope,
+        controller: EditHolidayModalController,
+        templateUrl:"holidayEdit.html",
+        show:false
+    });
+
+    $scope.showHolidayEditModal = function() {
+        editHolidayModal.$promise.then(editHolidayModal.show);
+    };
+    $scope.hideHolidayEditModal = function() {
+        editHolidayModal.$promise.then(editHolidayModal.hide);
+    };
+
+    //editExceptionModal
+    $scope.editExceptionModalClose = function () {
+        $scope.getException();
+        $scope.hideExceptionEditModal();
+    };
+
+    function EditExceptionModalController($scope){
+        $scope.save = function () {
+            DateTool.dateToYyyyMMdd($scope.editObj,"calendarDate","calendar");
+            $scope.editObj.put().then(function (data) {
+                $scope.editExceptionModalClose();
+            });
+        };
+    }
+
+    var editExceptionModal = $modal({
+        scope: $scope,
+        controller: EditExceptionModalController,
+        templateUrl:"exceptionEdit.html",
+        show:false
+    });
+
+    $scope.showExceptionEditModal = function() {
+        editExceptionModal.$promise.then(editExceptionModal.show);
+    };
+    $scope.hideExceptionEditModal = function() {
+        editExceptionModal.$promise.then(editExceptionModal.hide);
+    };
+
+    //batchHolidayModal
+    $scope.batchHolidayModalClose = function () {
+        $scope.getHoliday();
+        $scope.hideBatchHolidayModal();
+    };
+
+    function BatchHolidayModalController($scope){
+        $scope.init = function () {
+            $scope.rowCollection = [];
+            $scope.addRow();
+        };
+
+        $scope.getNewRow = function () {
+            return {
+                exchangeId:$scope.selectedMainSymbol.exchangeId,
+                mainSymbolId:$scope.selectedMainSymbol.mainSymbolId
+            };
+        };
+
+        $scope.addClick = function (index,row) {
+            $scope.addRow();
+        };
+
+        $scope.deleteClick = function (index,row) {
+            $scope.rowCollection.splice(index, 1);
+            if($scope.rowCollection.length==0){
+                $scope.addRow();
             }
-        )
+        };
+
+        $scope.addRow = function () {
+            $scope.rowCollection.push($scope.getNewRow());
+        };
+
+        $scope.save = function () {
+            for(var i= 0,count = $scope.rowCollection.length;i<count;i++){
+                DateTool.dateToYyyyMMdd($scope.rowCollection[i],"begin_date","beginDate");
+                DateTool.dateToYyyyMMdd($scope.rowCollection[i],"end_date","endDate");
+            }
+            SymbolHolidayService.post($scope.rowCollection).then(function (data) {
+                $scope.batchHolidayModalClose();
+            });
+        };
+    }
+
+    var batchHolidayModal = $modal({
+        scope: $scope,
+        controller: BatchHolidayModalController,
+        templateUrl:"batchHoliday.html",
+        show:false
+    });
+
+    $scope.showBatchHolidayModal = function() {
+        batchHolidayModal.$promise.then(batchHolidayModal.show);
+    };
+    $scope.hideBatchHolidayModal = function() {
+        batchHolidayModal.$promise.then(batchHolidayModal.hide);
+    };
+
+    //batchExceptionModal
+    $scope.batchExceptionModalClose = function () {
+        $scope.getException();
+        $scope.hideBatchExceptionModal();
+    };
+
+    function BatchExceptionModalController($scope){
+        $scope.init = function () {
+            $scope.rowCollection = [];
+            $scope.addRow();
+        };
+
+        $scope.getNewRow = function () {
+            return {
+                exchangeId:$scope.selectedMainSymbol.exchangeId,
+                mainSymbolId:$scope.selectedMainSymbol.mainSymbolId
+            };
+        };
+
+        $scope.addClick = function (index,row) {
+            $scope.addRow();
+        };
+
+        $scope.deleteClick = function (index,row) {
+            $scope.rowCollection.splice(index, 1);
+            if($scope.rowCollection.length==0){
+                $scope.addRow();
+            }
+        };
+
+        $scope.addRow = function () {
+            $scope.rowCollection.push($scope.getNewRow());
+        };
+
+        $scope.save = function () {
+            for(var i= 0,count = $scope.rowCollection.length;i<count;i++){
+                DateTool.dateToYyyyMMdd($scope.rowCollection[i],"calendarDate","calendar");
+            }
+            SymbolHolidayExceptionService.post($scope.rowCollection).then(function (data) {
+                $scope.batchExceptionModalClose();
+            });
+        };
+    }
+
+    var batchExceptionModal = $modal({
+        scope: $scope,
+        controller: BatchExceptionModalController,
+        templateUrl:"batchException.html",
+        show:false
+    });
+
+    $scope.showBatchExceptionModal = function() {
+        batchExceptionModal.$promise.then(batchExceptionModal.show);
+    };
+    $scope.hideBatchExceptionModal = function() {
+        batchExceptionModal.$promise.then(batchExceptionModal.hide);
     };
 
     $scope.getExchangeList();
 }
-
-backendApp.controller("holidayEditCtrl", function ($scope, $modalInstance, $log, title, editObj) {
-    $scope.title = title;
-    $scope.editObj = editObj;
-    $scope.save = function () {
-        DateTool.dateToYyyyMMdd($scope.editObj,"begin_date","beginDate");
-        DateTool.dateToYyyyMMdd($scope.editObj,"end_date","endDate");
-
-        $scope.editObj.put().then(function (data) {
-            $modalInstance.close(data);
-        });
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});
-
-backendApp.controller("exceptionEditCtrl", function ($scope, $modalInstance, $log, title, editObj) {
-    $scope.title = title;
-    $scope.editObj = editObj;
-    $scope.save = function () {
-        DateTool.dateToYyyyMMdd($scope.editObj,"calendarDate","calendar");
-        $scope.editObj.put().then(function (data) {
-            $modalInstance.close(data);
-        });
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});
-
-backendApp.controller('batchHolidayCtrl', function ($scope, $modalInstance, $log, title, mainSymbol, SymbolHolidayService) {
-    $scope.title = title;
-
-    $scope.init = function () {
-        $scope.rowCollection = [];
-        $scope.addRow();
-    };
-
-    $scope.getNewRow = function () {
-        return {
-            exchangeId:mainSymbol.exchangeId,
-            mainSymbolId:mainSymbol.mainSymbolId
-        };
-    };
-
-    $scope.addClick = function (index,row) {
-        $scope.addRow();
-    };
-
-    $scope.deleteClick = function (index,row) {
-        $scope.rowCollection.splice(index, 1);
-        if($scope.rowCollection.length==0){
-            $scope.addRow();
-        }
-    };
-
-    $scope.addRow = function () {
-        $scope.rowCollection.push($scope.getNewRow());
-    };
-
-    $scope.save = function () {
-        for(var i= 0,count = $scope.rowCollection.length;i<count;i++){
-            DateTool.dateToYyyyMMdd($scope.rowCollection[i],"begin_date","beginDate");
-            DateTool.dateToYyyyMMdd($scope.rowCollection[i],"end_date","endDate");
-        }
-        SymbolHolidayService.post($scope.rowCollection).then(function (data) {
-            $modalInstance.close(data);
-        });
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});
-
-backendApp.controller('batchExceptionCtrl', function ($scope, $modalInstance, $log, title, mainSymbol, SymbolHolidayExceptionService) {
-    $scope.title = title;
-
-    $scope.init = function () {
-        $scope.rowCollection = [];
-        $scope.addRow();
-    };
-
-    $scope.getNewRow = function () {
-        return {
-            exchangeId:mainSymbol.exchangeId,
-            mainSymbolId:mainSymbol.mainSymbolId
-        };
-    };
-
-    $scope.addClick = function (index,row) {
-        $scope.addRow();
-    };
-
-    $scope.deleteClick = function (index,row) {
-        $scope.rowCollection.splice(index, 1);
-        if($scope.rowCollection.length==0){
-            $scope.addRow();
-        }
-    };
-
-    $scope.addRow = function () {
-        $scope.rowCollection.push($scope.getNewRow());
-    };
-
-    $scope.save = function () {
-        for(var i= 0,count = $scope.rowCollection.length;i<count;i++){
-            DateTool.dateToYyyyMMdd($scope.rowCollection[i],"calendarDate","calendar");
-        }
-        SymbolHolidayExceptionService.post($scope.rowCollection).then(function (data) {
-            $modalInstance.close(data);
-        });
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-});

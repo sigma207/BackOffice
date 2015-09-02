@@ -220,6 +220,9 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                 case Action.NewNode:
                 case Action.NewChildNode:
                     PermissionService.post( $scope.editNode).then(function (data) {
+                        $log.info(data);
+                        $log.info($scope.editNode);
+                        $scope.editNode = data;
                         $scope.modalClose();
                     });
                     break;
