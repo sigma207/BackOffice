@@ -51,13 +51,12 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
     };
 
     $scope.deleteClick = function (row) {
-        row.remove().then(function () {
-            $scope.getTradeAccountGroupList();
-        }).then(function () {
-            $log.info("fail");
-            var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
-            myAlert.show();
-        });
+        //var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
+        row.remove().then(
+            function () {
+                $scope.getTradeAccountGroupList();
+            }
+        );
     };
 
     function ModalController($scope){

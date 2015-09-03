@@ -358,14 +358,45 @@ public class BaseDao {
     }
 
     protected String selectSQL() throws Exception{
+        return selectSQL(null);
+    }
+
+    protected String selectSQL(List<String> groupByList) throws Exception{
         StringBuffer columnNames = new StringBuffer();
         Set<String> keys = columnKeyMap.keySet();
-        for(String key:keys){
-            columnNames.append(key+",");
+        if(groupByList!=null&&groupByList.size()>0){
+            for(String key:keys){
+                if(groupByList.contains(key)){
+                    columnNames.append(key+",");
+                }
+            }
+        }else{
+            for(String key:keys){
+                columnNames.append(key+",");
+            }
         }
 
         columnNames.deleteCharAt(columnNames.length() - 1);
         return "SELECT "+columnNames.toString()+" FROM "+tableName +" ";
+    }
+
+    protected String groupBySQL(List<String> groupByList) throws Exception{
+        StringBuffer sb = new StringBuffer();
+        for(String key:groupByList){
+            sb.append(key+",");
+        }
+        if(sb.length()>0)sb.deleteCharAt(sb.length() - 1);
+        return " GROUP BY "+sb.toString();
+    }
+
+    protected String whereInSQL(String sql,String condition, int size) throws Exception{
+        sql += (sql.length()==0)?" WHERE ":" AND ";
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<size;i++){
+            sb.append("?,");
+        }
+        if(sb.length()>0)sb.deleteCharAt(sb.length() - 1);
+        return sql+condition+" in ("+sb.toString()+")";
     }
 
     protected void selectToObject(ResultSet rs,List list) throws Exception{

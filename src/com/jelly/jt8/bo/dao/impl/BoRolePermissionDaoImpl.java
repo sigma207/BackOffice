@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,13 +22,15 @@ import java.util.List;
 @Repository("BoRolePermissionDao")
 public class BoRolePermissionDaoImpl extends BaseDao implements BoRolePermissionDao {
     private final static String WHERE_ROLE_ID = " WHERE role_id = ? ";
+    private final static String GROUP_BY_PERMISSION_ID = " GROUP BY permission_id ";
+
     public BoRolePermissionDaoImpl() {
         super(BoRolePermission.class);
     }
 
     @Override
     public List<BoRolePermission> select(int roleId) throws Exception {
-        List<BoRolePermission> list =  new LinkedList<BoRolePermission>();
+        List<BoRolePermission> list = new LinkedList<BoRolePermission>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
@@ -36,7 +39,47 @@ public class BoRolePermissionDaoImpl extends BaseDao implements BoRolePermission
             stmt = conn.prepareStatement(selectSQL() + WHERE_ROLE_ID);
             stmt.setInt(1, roleId);
             rs = stmt.executeQuery();
-            selectToObject(rs,list);
+            selectToObject(rs, list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<BoRolePermission> select(List<BoUserRole> boUserRoleList) throws Exception {
+        List<BoRolePermission> list = new LinkedList<BoRolePermission>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            String where = "";
+            where = whereInSQL(where, "role_id", boUserRoleList.size());
+            List<String> groupByList = new ArrayList<String>();
+            groupByList.add("permission_id");
+            stmt = conn.prepareStatement(selectSQL(groupByList) + where + groupBySQL(groupByList));
+            int index = 1;
+            for (BoUserRole boUserRole : boUserRoleList) {
+                stmt.setInt(index++, boUserRole.getRoleId());
+            }
+
+            rs = stmt.executeQuery();
+            selectToObject(rs, list);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -59,14 +102,14 @@ public class BoRolePermissionDaoImpl extends BaseDao implements BoRolePermission
 
     @Override
     public void insert(Connection conn, BoRolePermission object) throws Exception {
-        insertByObject(conn,object);
+        insertByObject(conn, object);
     }
 
     @Override
     public void delete(Connection conn, int roleId) throws Exception {
         PreparedStatement stmt = null;
         try {
-            stmt = conn.prepareStatement(deleteTable()+WHERE_ROLE_ID);
+            stmt = conn.prepareStatement(deleteTable() + WHERE_ROLE_ID);
 
             stmt.setInt(1, roleId);
             stmt.executeUpdate();

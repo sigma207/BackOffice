@@ -21,17 +21,30 @@ backendApp.factory('SymbolTradableDailyService', ['$resource', function ($resour
 }]);
 
 backendApp.constant("HostUrl", "http://localhost:8080/BackOffice/api");
-backendApp.config(function (RestangularProvider) {
-    RestangularProvider.setBaseUrl("/BackOffice/api");
-    RestangularProvider.setDefaultHeaders({'Content-Type': 'application/json'});
-    RestangularProvider.setErrorInterceptor(function(resp) {
-        //$log.info(resp);
+//backendApp.config(function (RestangularProvider) {
+//    RestangularProvider.setBaseUrl("/BackOffice/api");
+//    RestangularProvider.setDefaultHeaders({'Content-Type': 'application/json'});
+//    RestangularProvider.setErrorInterceptor(function(resp) {
+//        var status = resp.status;
+//        var errorJson = resp.data;
+//        console.log(resp);
+//        return true; // 停止promise链
+//    });
+//});
+backendApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
+    Restangular.setBaseUrl("/BackOffice/api");
+    Restangular.setDefaultHeaders({'Content-Type': 'application/json'});
+    //var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
+    Restangular.setErrorInterceptor(function(resp) {
         var status = resp.status;
         var errorJson = resp.data;
-        console.log(resp);
-        var $alert =  angular.injector(['ng']).get('$alert');
-        var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
-        myAlert.show();
+        //myAlert.show();
+        $log.info(resp);
+        if(resp.data.message){
+            $rootScope.$broadcast("alert",resp.data.message);
+        } else{
+            $rootScope.$broadcast("alert",resp.statusText);
+        }
         return true; // 停止promise链
     });
 });
@@ -131,6 +144,9 @@ backendApp.config(["$routeProvider", function ($routeProvider) {
         when("/C2", {
             templateUrl: "userManage/organization/Organization.html"
         }).
+        when("/C3", {
+            templateUrl: "userManage/account/Account.html"
+        }).
         when("/D1", {
             templateUrl: "systemManage/houseRule/HouseRule.html"
         }).
@@ -216,7 +232,7 @@ backendApp.directive('datePickerOpen', DatePickerOpen);
 //backendApp.directive('dateGreaterThan', DateGreaterThan);
 
 backendApp.controller("BackendController", BackendController);
-function BackendController($scope, $translate, $location, $log, PermissionService, HostUrl, request, locale) {
+function BackendController($scope, $translate, $location, $log, $modal, PermissionService, HostUrl, request, locale) {
     $log.info("BackendController!!");
     request.changeHostUrl(HostUrl);
     locale.changeLang(locale.zh_TW);
@@ -237,7 +253,32 @@ function BackendController($scope, $translate, $location, $log, PermissionServic
         }
     };
 
+    function AlertModalController($scope){
 
+    }
+
+    var alertModal = $modal({
+        scope: $scope,
+        controller: AlertModalController,
+        //templateUrl:"roleEdit.html",
+        show:false
+    });
+
+    $scope.showAlertModal = function() {
+        alertModal.$promise.then(alertModal.show);
+    };
+    $scope.hideAlertModal = function() {
+        alertModal.$promise.then(alertModal.hide);
+    };
+
+    $scope.$on("alert", function (e, d) {
+        $scope.alert(d);
+    });
+
+    $scope.alert = function (msg) {
+        $scope.content = $translate.instant(msg);
+        $scope.showAlertModal();
+    };
 
     $scope.initMenuTree = function () {
         $.fn.zTree.init(tree, treeSetting, $scope.menuList);
@@ -258,7 +299,8 @@ function BackendController($scope, $translate, $location, $log, PermissionServic
     $scope.onLogin = function (user) {
         $location.path("/");
         $scope.loginUser = user;
-        PermissionService.getList().then(function (data) {
+
+        PermissionService.post($scope.loginUser.boRolePermissionList,{filter:"true"}).then(function (data) {
             $scope.menuList = data;
             locale.formatPermissionList($scope.menuList);
             $scope.initMenuTree();

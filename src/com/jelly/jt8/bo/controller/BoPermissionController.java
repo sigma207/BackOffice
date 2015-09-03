@@ -3,6 +3,7 @@ package com.jelly.jt8.bo.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jelly.jt8.bo.model.BoPermission;
+import com.jelly.jt8.bo.model.BoRolePermission;
 import com.jelly.jt8.bo.model.PermissionMoveSetting;
 import com.jelly.jt8.bo.service.BoPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,23 @@ public class BoPermissionController extends BaseController{
         String payload = "";
         try {
             list = service.select();
+        } catch (Exception e){
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(list);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(params = "filter",method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<String> getList(@RequestParam(value="filter") String filter, @RequestBody List<BoRolePermission> boRolePermissionList){
+        Gson gson = new Gson();
+
+        List<BoPermission> list = null;
+        String payload = "";
+        try {
+            list = service.select(boRolePermissionList);
         } catch (Exception e){
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

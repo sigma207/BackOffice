@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,6 +32,22 @@ public class LoginController extends BaseController{
         Gson gson = new Gson();
         try {
             loginUser = userService.login(user.getLoginId(),user.getPassword());
+        } catch (Exception e){
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(loginUser);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(params = "loginId",method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<String> login( @RequestParam(value="loginId") String loginId){
+        String payload = "";
+        BoUser loginUser = null;
+        Gson gson = new Gson();
+        try {
+            loginUser = userService.fastLogin(loginId);
         } catch (Exception e){
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

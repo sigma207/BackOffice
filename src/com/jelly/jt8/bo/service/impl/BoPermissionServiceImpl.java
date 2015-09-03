@@ -32,10 +32,38 @@ public class BoPermissionServiceImpl implements BoPermissionService {
 
     @Override
     public List<BoPermission> select() throws Exception {
-        List<BoPermission> treeList = new ArrayList<BoPermission>();
-        Map<String, BoPermission> treePermissionMap = new HashMap<String, BoPermission>();
         List<BoPermission> permissionList = boPermissionDao.select();
         List<BoPermissionName> permissionNameList = boPermissionNameDao.select();
+        return treeBoPermission(permissionList,permissionNameList);
+    }
+
+    /**
+     * 依boRolePermissionList過濾可用的權限
+     * @param boRolePermissionList
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<BoPermission> select(List<BoRolePermission> boRolePermissionList) throws Exception {
+        List<BoPermission> permissionList = boPermissionDao.select();
+        List<BoPermissionName> permissionNameList = boPermissionNameDao.select();
+        List<BoPermission> filterPermissionList = new ArrayList<BoPermission>();
+        Set<Integer> permissionIdSet = new HashSet<Integer>();
+        for(BoRolePermission boRolePermission:boRolePermissionList){
+            permissionIdSet.add(boRolePermission.getPermissionId());
+        }
+
+        for(BoPermission boPermission:permissionList){
+            if(permissionIdSet.contains(boPermission.getPermissionId())){
+                filterPermissionList.add(boPermission);
+            }
+        }
+        return treeBoPermission(filterPermissionList,permissionNameList);
+    }
+
+    private List<BoPermission> treeBoPermission(List<BoPermission> permissionList, List<BoPermissionName> permissionNameList) throws Exception{
+        List<BoPermission> treeList = new ArrayList<BoPermission>();
+        Map<String, BoPermission> treePermissionMap = new HashMap<String, BoPermission>();
         Map<String, List<BoPermissionName>> nameMap = new HashMap<String, List<BoPermissionName>>();
         String key = null;
         List<BoPermissionName> temp = null;

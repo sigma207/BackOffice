@@ -10,6 +10,7 @@ import java.util.List;
  */
 public interface BoUserService {
     BoUser login(String login_id, String password) throws Exception;
+    BoUser fastLogin(String login_id) throws Exception;
     List<BoUser> select() throws Exception;
     List<BoUserRole> selectUserRole(int user_id) throws Exception;
     void insert(BoUser object) throws Exception;

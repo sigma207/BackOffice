@@ -1,7 +1,9 @@
 package com.jelly.jt8.bo.service.impl;
 
+import com.jelly.jt8.bo.dao.BoRolePermissionDao;
 import com.jelly.jt8.bo.dao.BoUserDao;
 import com.jelly.jt8.bo.dao.BoUserRoleDao;
+import com.jelly.jt8.bo.model.BoRolePermission;
 import com.jelly.jt8.bo.model.BoUser;
 import com.jelly.jt8.bo.model.BoUserRole;
 import com.jelly.jt8.bo.service.BoUserService;
@@ -31,6 +33,10 @@ public class BoUserServiceImpl implements BoUserService {
     private BoUserRoleDao boUserRoleDao;
 
     @Autowired
+    @Qualifier("BoRolePermissionDao")
+    private BoRolePermissionDao boRolePermissionDao;
+
+    @Autowired
     @Qualifier("jt8Ds")
     private DataSource jt8Ds;
 
@@ -44,8 +50,31 @@ public class BoUserServiceImpl implements BoUserService {
             if(Password.authenticatePassword(checkUser.getPassword(), password)){
                 loginUser = checkUser;
                 loginUser.setPassword(null);
+                List<BoUserRole> boUserRoleList = boUserRoleDao.select(loginUser.getUserId());
+                List<BoRolePermission> boRolePermissionList = boRolePermissionDao.select(boUserRoleList);
+                loginUser.setBoRolePermissionList(boRolePermissionList);
             }else {
                 throw new Exception(ErrorMsg.LOGIN_PASSWORD);
+            }
+        }
+        return loginUser;
+    }
+
+    @Override
+    public BoUser fastLogin(String login_id) throws Exception {
+        BoUser checkUser =  boUserDao.login(login_id);
+        BoUser loginUser = null;
+        if(checkUser==null){
+            throw new Exception(ErrorMsg.LOGIN_ACCOUNT);
+        }else {
+            loginUser = checkUser;
+            loginUser.setPassword(null);
+            List<BoUserRole> boUserRoleList = boUserRoleDao.select(loginUser.getUserId());
+            if(boUserRoleList.size()>0){
+                List<BoRolePermission> boRolePermissionList = boRolePermissionDao.select(boUserRoleList);
+                loginUser.setBoRolePermissionList(boRolePermissionList);
+            }else{
+                //沒有角色.就沒有任何權限.
             }
         }
         return loginUser;

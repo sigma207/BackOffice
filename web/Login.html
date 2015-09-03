@@ -29,7 +29,11 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="login()">login</button>
+        <select ng-model="selectedUser"
+                ng-options="user.loginId for user in userList">
+        </select>
+        <button class="btn-xs btn-warning" ng-disabled="selectedUser == undefined " ng-click="onFastLoginClick()">快速登入(開發人員測試用)</button>
+        <button class="btn-xs btn-success" ng-disabled="editForm.$invalid" ng-click="login()">登入</button>
     </div>
 </div>
 </body>

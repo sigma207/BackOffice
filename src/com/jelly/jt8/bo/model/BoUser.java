@@ -261,6 +261,17 @@ public class BoUser extends BaseModel{
         this.boOrganization = boOrganization;
     }
 
+    private List<BoRolePermission> boRolePermissionList;
+
+    @Transient
+    public List<BoRolePermission> getBoRolePermissionList() {
+        return boRolePermissionList;
+    }
+
+    public void setBoRolePermissionList(List<BoRolePermission> boRolePermissionList) {
+        this.boRolePermissionList = boRolePermissionList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

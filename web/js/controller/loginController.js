@@ -3,24 +3,42 @@
  */
 
 backendApp.controller("LoginController", LoginController);
-function LoginController($scope, $translatePartialLoader, $translate, $log, LoginService, OrganizationService) {
-    $scope.loginUser = {
-        loginId:"superAdmin",
-        password:"123"
-    };
-    $scope.login = function () {
-        LoginService.post($scope.loginUser).then(function (user) {
-            if(user.organizationId){
-                OrganizationService.one(user.organizationId).get().then(function (organization) {
-                    user.organization = organization;
-                    $scope.onLogin(user);
-                });
-            }else{
-                $log.info("onLogin!!");
-                $scope.onLogin(user);
-            }
+function LoginController($scope, $translatePartialLoader, $translate, $log, LoginService, UserService, OrganizationService) {
+    //$scope.loginUser = {
+    //    loginId:"superAdmin",
+    //    password:"123"
+    //};
+
+    $scope.getUserList = function () {
+        UserService.getList().then(function (data) {
+            $scope.userList = data;
         });
     };
+
+    $scope.onFastLoginClick = function () {
+        $scope.fastLogin();
+    };
+
+    $scope.fastLogin = function () {
+        LoginService.post("abc",{loginId:$scope.selectedUser.loginId}).then($scope.loginSuccess);
+    };
+
+    $scope.login = function () {
+        LoginService.post($scope.loginUser).then($scope.loginSuccess);
+    };
+
+    $scope.loginSuccess = function (user) {
+        if(user.organizationId){
+            OrganizationService.one(user.organizationId).get().then(function (organization) {
+                user.organization = organization;
+                $scope.onLogin(user);
+            });
+        }else{
+            $log.info("onLogin!!");
+            $scope.onLogin(user);
+        }
+    };
     //login auto for test
-    $scope.login();
+    $scope.getUserList();
+    //$scope.login();
 }
