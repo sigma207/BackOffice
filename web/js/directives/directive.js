@@ -156,6 +156,14 @@ function ModalClose(){
     }
 }
 
+function CommonButton(){
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<button type="button" class="btn-xs btn-primary"></button>'
+    }
+}
+
 function NumbersOnly(){
     return {
         require: 'ngModel',

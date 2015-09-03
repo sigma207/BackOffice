@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/22.
  */
-backendApp.controller("OrganizationController", OrganizationController);
+backOfficeApp.controller("OrganizationController", OrganizationController);
 function OrganizationController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, OrganizationService, OrganizationMoveService) {
     $translatePartialLoader.addPart("organization");
     $translate.refresh();
@@ -245,79 +245,4 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
         editModal.$promise.then(editModal.hide);
     };
 
-    $scope.open = function () {
-        //$scope.editSize = "sm";
-        var modalInstance = $modal.open({
-            animation: true,
-            templateUrl: 'organizationEdit.html',
-            controller: 'organizationEditCtrl',
-            size: $scope.editSize,
-            resolve: {
-                editNode: function () {
-                    return $scope.editNode;
-                },
-                title: function () {
-                    return $scope.editTitle;
-                },
-                currentAction: function () {
-                    return $scope.currentAction;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (editNode) {
-
-            var selectedNode = undefined;
-            $scope.editNode = editNode;
-            switch ($scope.currentAction) {
-                case Action.NewNode:
-                    if ($scope.editNode.parentOrganizationId) {
-                        var parent_node = zTreeObj.getNodeByParam("organizationId", $scope.editNode.parentOrganizationId);
-                        zTreeObj.addNodes(parent_node, $scope.editNode, true);
-                    } else {
-                        zTreeObj.addNodes(null, $scope.editNode, true);
-                    }
-                    break;
-                case Action.NewChildNode:
-                    selectedNode = zTreeObj.getSelectedNodes()[0];
-                    zTreeObj.addNodes(selectedNode, $scope.editNode, true);
-                    zTreeObj.expandNode(selectedNode, true);
-                    break;
-                case Action.Edit:
-                    selectedNode = zTreeObj.getSelectedNodes()[0];
-                    selectedNode.organization_code = $scope.editNode.organization_code;
-                    selectedNode.organization_name = $scope.editNode.organization_name;
-                    zTreeObj.updateNode(selectedNode);
-                    break;
-            }
-        }, function () {
-            //$log.info('Modal dismissed at: ' + new Date());
-        });
-    };
-
 }
-
-backendApp.controller('organizationEditCtrl', function ($scope, $modalInstance, $log, OrganizationService, title, editNode, currentAction) {
-    $scope.title = title;
-    $scope.editNode = editNode;
-    $scope.ok = function () {
-        switch (currentAction) {
-            case Action.NewNode:
-            case Action.NewChildNode:
-                OrganizationService.post( $scope.editNode).then(function (data) {
-                    $modalInstance.close(data);
-                });
-                break;
-            case Action.Edit:
-                $scope.editNode.put().then(function (data) {
-                    $modalInstance.close(data);
-                });
-                break;
-        }
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
-
-});

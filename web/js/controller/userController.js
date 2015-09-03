@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/7.
  */
-backendApp.controller("UserController", UserController);
+backOfficeApp.controller("UserController", UserController);
 function UserController($scope, $translatePartialLoader, $translate, $log, $modal, UserService, RoleService, OrganizationService) {
     $translatePartialLoader.addPart("user");
     $translate.refresh();

@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/9.
  */
-backendApp.controller("HolidayController", HolidayController);
+backOfficeApp.controller("HolidayController", HolidayController);
 function HolidayController($scope, $translatePartialLoader, $translate, $log, $modal, ExchangeService, Restangular, SymbolHolidayService, SymbolHolidayExceptionService) {
     $translatePartialLoader.addPart("holiday");
     $translate.refresh();

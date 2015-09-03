@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/17.
  */
-backendApp.controller("DailyTempController", DailyTempController);
+backOfficeApp.controller("DailyTempController", DailyTempController);
 function DailyTempController($scope, $translatePartialLoader, $translate, $log, $filter, SymbolTradableDailyTempService, ExchangeService) {
     $translatePartialLoader.addPart("daily");
     $translate.refresh();

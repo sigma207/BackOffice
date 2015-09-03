@@ -1,9 +1,9 @@
 /**
  * Created by user on 2015/8/27.
  */
-backendApp.controller("AccountGroupController", AccountGroupController);//交易帳號屬性群組
+backOfficeApp.controller("AccountGroupController", AccountGroupController);//交易帳號屬性群組
 function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $translate, $alert, Restangular, SystemCategoryService, TradeHouseRuleService, TradeGroupService) {
-    $translatePartialLoader.addPart("accountGroup");
+    $translatePartialLoader.addPart("group");
     $translate.refresh();
 
     $scope.getTradeHouseRuleList = function () {

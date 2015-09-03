@@ -11,6 +11,7 @@ import java.util.List;
 public interface BoUserDao{
     BoUser login(String loginId) throws Exception;
     List<BoUser> select() throws Exception;
+    List<BoUser> selectChildren(BoUser object) throws Exception;
     void insert(Connection conn, BoUser object) throws Exception;
     void update(Connection conn, BoUser object) throws Exception;
     void delete(Connection conn, BoUser object) throws Exception;

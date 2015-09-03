@@ -1,27 +1,16 @@
 /**
  * Created by user on 2015/8/5.
  */
-    //ui.bootstrap
-var backendApp = angular.module("backendApp", ["pascalprecht.translate", "ngAnimate", "ngSanitize", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
-//backendApp.factory('PermissionService', ['$resource', function ($resource) {
-//    return $resource('api/permission/:permissionId',
-//        {},
-//        {
-//            deletePermission: {method: 'POST', url: 'api/permission/delete'},
-//            move: {method: 'POST', url: 'api/permission/move', isArray: true}
-//        }
-//        //{charge: {method: 'POST'}, params: {charge: true}, isArray: false}
-//    );
-//}]);
-backendApp.factory('SymbolTradableDailyTempService', ['$resource', function ($resource) {
+var backOfficeApp = angular.module("backOfficeApp", ["pascalprecht.translate", "ngAnimate", "ngSanitize", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
+backOfficeApp.factory('SymbolTradableDailyTempService', ['$resource', function ($resource) {
     return $resource('api/symbolTradableDailyTemp/exchange/:exchange_id/mainSymbol/:main_symbol_id');
 }]);
-backendApp.factory('SymbolTradableDailyService', ['$resource', function ($resource) {
+backOfficeApp.factory('SymbolTradableDailyService', ['$resource', function ($resource) {
     return $resource('api/symbolTradableDaily/exchange/:exchange_id/mainSymbol/:main_symbol_id');
 }]);
 
-backendApp.constant("HostUrl", "http://localhost:8080/BackOffice/api");
-//backendApp.config(function (RestangularProvider) {
+backOfficeApp.constant("HostUrl", "http://localhost:8080/BackOffice/api");
+//backOfficeApp.config(function (RestangularProvider) {
 //    RestangularProvider.setBaseUrl("/BackOffice/api");
 //    RestangularProvider.setDefaultHeaders({'Content-Type': 'application/json'});
 //    RestangularProvider.setErrorInterceptor(function(resp) {
@@ -31,7 +20,7 @@ backendApp.constant("HostUrl", "http://localhost:8080/BackOffice/api");
 //        return true; // 停止promise链
 //    });
 //});
-backendApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
+backOfficeApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
     Restangular.setBaseUrl("/BackOffice/api");
     Restangular.setDefaultHeaders({'Content-Type': 'application/json'});
     //var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
@@ -48,12 +37,12 @@ backendApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
         return true; // 停止promise链
     });
 });
-backendApp.config(function($modalProvider) {
+backOfficeApp.config(function($modalProvider) {
     angular.extend($modalProvider.defaults, {
         animation: 'am-flip-x'
     });
 });
-backendApp.config(function($datepickerProvider) {
+backOfficeApp.config(function($datepickerProvider) {
     angular.extend($datepickerProvider.defaults, {
         dateFormat: 'yyyy-MM-dd',
         modelDateFormat: 'yyyyMMdd',
@@ -61,7 +50,7 @@ backendApp.config(function($datepickerProvider) {
         startWeek: 1
     });
 });
-backendApp.config(function($timepickerProvider) {
+backOfficeApp.config(function($timepickerProvider) {
     angular.extend($timepickerProvider.defaults, {
         timeFormat:"HH:mm:ss",
         modelTimeFormat:"HHmmss",
@@ -71,54 +60,54 @@ backendApp.config(function($timepickerProvider) {
     });
 });
 
-backendApp.factory('ExchangeService', function (Restangular) {
+backOfficeApp.factory('ExchangeService', function (Restangular) {
     return Restangular.service('exchange');
 });
 
-backendApp.factory('SystemCategoryService', function (Restangular) {
+backOfficeApp.factory('SystemCategoryService', function (Restangular) {
     return Restangular.service('systemCategories');
 });
 
-backendApp.factory('UserService', function (Restangular) {
+backOfficeApp.factory('UserService', function (Restangular) {
     return Restangular.service('boUsers');
 });
 
-backendApp.factory('LoginService', function (Restangular) {
+backOfficeApp.factory('LoginService', function (Restangular) {
     return Restangular.service('login');
 });
 
-backendApp.factory('RoleService', function (Restangular) {
+backOfficeApp.factory('RoleService', function (Restangular) {
     return Restangular.service('boRole');
 });
-backendApp.factory('OrganizationService', function (Restangular) {
+backOfficeApp.factory('OrganizationService', function (Restangular) {
     return Restangular.service('boOrganization');
 });
 
-backendApp.factory('OrganizationMoveService', function (Restangular) {
+backOfficeApp.factory('OrganizationMoveService', function (Restangular) {
     return Restangular.service('organization/move');
 });
 
-backendApp.factory('PermissionService', function (Restangular) {
+backOfficeApp.factory('PermissionService', function (Restangular) {
     return Restangular.service('boPermission');
 });
 
-backendApp.factory('TradeHouseRuleService', function (Restangular) {
+backOfficeApp.factory('TradeHouseRuleService', function (Restangular) {
     return Restangular.service('tradeHouseRule');
 });
 
-backendApp.factory('TradeGroupService', function (Restangular) {
+backOfficeApp.factory('TradeGroupService', function (Restangular) {
     return Restangular.service('tradeGroup');
 });
 
-backendApp.factory('SymbolHolidayService', function (Restangular) {
+backOfficeApp.factory('SymbolHolidayService', function (Restangular) {
     return Restangular.service('symbolHoliday');
 });
 
-backendApp.factory('SymbolHolidayExceptionService', function (Restangular) {
+backOfficeApp.factory('SymbolHolidayExceptionService', function (Restangular) {
     return Restangular.service('symbolHolidayException');
 });
 
-backendApp.config(["$routeProvider", function ($routeProvider) {
+backOfficeApp.config(["$routeProvider", function ($routeProvider) {
     $routeProvider.
         when("/Login", {
             templateUrl: "Login.html"
@@ -155,7 +144,7 @@ backendApp.config(["$routeProvider", function ($routeProvider) {
         }).
         otherwise({redirectTo: '/'})
 }]);
-backendApp.config(function ($translateProvider, $translatePartialLoaderProvider) {
+backOfficeApp.config(function ($translateProvider, $translatePartialLoaderProvider) {
     $translatePartialLoaderProvider.addPart('main');
     $translatePartialLoaderProvider.addPart('common');
     $translateProvider.useLoader('$translatePartialLoader', {
@@ -165,14 +154,14 @@ backendApp.config(function ($translateProvider, $translatePartialLoaderProvider)
 });
 
 
-backendApp.run(function ($rootScope, $translate, $log) {
+backOfficeApp.run(function ($rootScope, $translate, $log) {
     $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
         $rootScope.dateDisplayFormat = $translate.instant("format.display.date");
         $rootScope.dateInputFormat = $translate.instant("format.input.date");
         $translate.refresh();
     });
 });
-backendApp.filter("customFilter", ['$filter', function ($filter) {
+backOfficeApp.filter("customFilter", ['$filter', function ($filter) {
     var filterFilter = $filter('filter');
     var standardComparator = function standardComparator(obj, text) {
         text = ('' + text).toLowerCase();
@@ -211,106 +200,27 @@ backendApp.filter("customFilter", ['$filter', function ($filter) {
         return filterFilter(array, expression, customComparator);
     }
 }]);
-backendApp.directive("tableSelectCheckbox", TableSelectCheckbox);
-backendApp.directive("rowSelectCheckbox", RowSelectCheckbox);
-backendApp.directive("headCheckbox", HeadCheckbox);
-backendApp.directive("rowCheckbox", RowCheckbox);
-backendApp.directive("rowReadonlyCheckbox", RowReadonlyCheckbox);
-backendApp.directive("checkboxFilter", CheckboxFilter);
-backendApp.directive("textStartWith", TextStartWith);
+backOfficeApp.directive("tableSelectCheckbox", TableSelectCheckbox);
+backOfficeApp.directive("rowSelectCheckbox", RowSelectCheckbox);
+backOfficeApp.directive("headCheckbox", HeadCheckbox);
+backOfficeApp.directive("rowCheckbox", RowCheckbox);
+backOfficeApp.directive("rowReadonlyCheckbox", RowReadonlyCheckbox);
+backOfficeApp.directive("checkboxFilter", CheckboxFilter);
+backOfficeApp.directive("textStartWith", TextStartWith);
 // Common directive for Focus
-backendApp.directive('focus', Focus);
-backendApp.directive('parseInt', ParseInt);
-backendApp.directive('numbersOnly', NumbersOnly);
-backendApp.directive('textInput', TextInput);
-backendApp.directive('numberInput', NumberInput);
-backendApp.directive('dateInput', DateInput);
-backendApp.directive('timeInput', TimeInput);
-backendApp.directive('modalClose', ModalClose);
-backendApp.directive('datePickerOpen', DatePickerOpen);
-//backendApp.directive('dateLowerThan',DateLowerThan);
-//backendApp.directive('dateGreaterThan', DateGreaterThan);
+backOfficeApp.directive('focus', Focus);
+backOfficeApp.directive('parseInt', ParseInt);
+backOfficeApp.directive('numbersOnly', NumbersOnly);
+backOfficeApp.directive('textInput', TextInput);
+backOfficeApp.directive('numberInput', NumberInput);
+backOfficeApp.directive('dateInput', DateInput);
+backOfficeApp.directive('timeInput', TimeInput);
+backOfficeApp.directive('modalClose', ModalClose);
+backOfficeApp.directive('commonButton', CommonButton);
+backOfficeApp.directive('datePickerOpen', DatePickerOpen);
+//backOfficeApp.directive('dateLowerThan',DateLowerThan);
+//backOfficeApp.directive('dateGreaterThan', DateGreaterThan);
 
-backendApp.controller("BackendController", BackendController);
-function BackendController($scope, $translate, $location, $log, $modal, PermissionService, HostUrl, request, locale) {
-    $log.info("BackendController!!");
-    request.changeHostUrl(HostUrl);
-    locale.changeLang(locale.zh_TW);
-    var tree = $("#menuTree");
-    var zTreeObj;
-    var treeSetting = {
-        data: {
-            simpleData: {
-                enable: true
-            }
-        },
-        callback: {
-            onClick: function (event, treeId, treeNode) {
-                $scope.$apply(function () {
-                    $location.path("/" + treeNode.permissionCode);
-                });
-            }
-        }
-    };
-
-    function AlertModalController($scope){
-
-    }
-
-    var alertModal = $modal({
-        scope: $scope,
-        controller: AlertModalController,
-        //templateUrl:"roleEdit.html",
-        show:false
-    });
-
-    $scope.showAlertModal = function() {
-        alertModal.$promise.then(alertModal.show);
-    };
-    $scope.hideAlertModal = function() {
-        alertModal.$promise.then(alertModal.hide);
-    };
-
-    $scope.$on("alert", function (e, d) {
-        $scope.alert(d);
-    });
-
-    $scope.alert = function (msg) {
-        $scope.content = $translate.instant(msg);
-        $scope.showAlertModal();
-    };
-
-    $scope.initMenuTree = function () {
-        $.fn.zTree.init(tree, treeSetting, $scope.menuList);
-        zTreeObj = $.fn.zTree.getZTreeObj("menuTree");
-        zTreeObj.expandAll(true);
-    };
-
-    $scope.changeLanguage = function (langKey) {
-        $translate.use(langKey);
-        // TRANSLATION
-        //datepickerPopupConfig.currentText = $translate.instant("datePicker.currentText");
-        //datepickerPopupConfig.clearText = $translate.instant("datePicker.clearText");
-        //datepickerPopupConfig.closeText = $translate.instant("datePicker.closeText");
-    };
-
-    $location.path("/Login");
-
-    $scope.onLogin = function (user) {
-        $location.path("/");
-        $scope.loginUser = user;
-
-        PermissionService.post($scope.loginUser.boRolePermissionList,{filter:"true"}).then(function (data) {
-            $scope.menuList = data;
-            locale.formatPermissionList($scope.menuList);
-            $scope.initMenuTree();
-        });
-    };
-
-    $scope.getLoginId = function () {
-        return $scope.loginUser.loginId;
-    }
-}
 
 var Action = {
     NewNode: "newNode",

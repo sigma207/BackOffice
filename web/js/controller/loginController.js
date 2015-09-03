@@ -2,7 +2,7 @@
  * Created by user on 2015/8/24.
  */
 
-backendApp.controller("LoginController", LoginController);
+backOfficeApp.controller("LoginController", LoginController);
 function LoginController($scope, $translatePartialLoader, $translate, $log, LoginService, UserService, OrganizationService) {
     //$scope.loginUser = {
     //    loginId:"superAdmin",

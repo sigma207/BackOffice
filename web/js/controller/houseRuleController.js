@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/27.
  */
-backendApp.controller("HouseRuleController", HouseRuleController);
+backOfficeApp.controller("HouseRuleController", HouseRuleController);
 function HouseRuleController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, SystemCategoryService, TradeHouseRuleService, TradeGroupService) {
     $translatePartialLoader.addPart("houseRule");
     $translate.refresh();

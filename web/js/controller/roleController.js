@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/6.
  */
-backendApp.controller("RoleController", RoleController);
+backOfficeApp.controller("RoleController", RoleController);
 function RoleController($scope, $translatePartialLoader, $translate, $log, $modal, $timeout, Restangular, RoleService, PermissionService, locale) {
     $translatePartialLoader.addPart("role");
     $translate.refresh();

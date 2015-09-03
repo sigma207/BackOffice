@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/6.
  */
-backendApp.controller("PermissionController", PermissionController);
+backOfficeApp.controller("PermissionController", PermissionController);
 function PermissionController($scope, $modal, $log, Restangular, PermissionService, locale) {
     $log.info("PermissionController!!");
     var tree = $("#permissionTree");

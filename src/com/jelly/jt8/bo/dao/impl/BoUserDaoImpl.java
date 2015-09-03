@@ -22,6 +22,7 @@ import java.util.List;
 @Repository("BoUserDao")
 public class BoUserDaoImpl extends BaseDao implements BoUserDao {
     private final static String WHERE_LOGIN_ID = " WHERE login_id = ? ";
+    private final static String WHERE_PARENT_USER_ID = " WHERE parent_user_id = ? ";
     public BoUserDaoImpl() {
         super(BoUser.class);
     }
@@ -66,6 +67,38 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
     public List<BoUser> select() throws Exception {
         List<BoUser> list =  new LinkedList<BoUser>();
         selectByObject(jt8Ds.getConnection(),list);
+        return list;
+    }
+
+    @Override
+    public List<BoUser> selectChildren(BoUser object) throws Exception {
+        List<BoUser> list = new LinkedList<BoUser>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectSQL() + WHERE_PARENT_USER_ID);
+            stmt.setInt(1, object.getParentUserId());
+            rs = stmt.executeQuery();
+            selectToObject(rs,list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return list;
     }
 
