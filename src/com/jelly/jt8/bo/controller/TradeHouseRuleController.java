@@ -59,14 +59,32 @@ public class TradeHouseRuleController extends BaseController {
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping( params = "userId", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> add(@RequestBody TradeHouseRule object) {
+    ResponseEntity<String> getListByUserId(@RequestParam(value="userId") int userId) {
+        Gson gson = new Gson();
+        List<TradeHouseRule> list = null;
+        String payload = "";
+        try {
+            list = service.select4HouseRule(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(list);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(params = "userId",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ResponseEntity<String> add(@RequestParam(value="userId") int userId, @RequestBody TradeHouseRule object) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.insert(object);
+            service.insert(object,userId);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
@@ -75,14 +93,14 @@ public class TradeHouseRuleController extends BaseController {
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @RequestMapping(params = "userId",value = "{id}", method = RequestMethod.PUT)
     public
     @ResponseBody
-    ResponseEntity<String> update(@PathVariable("id") int id, @RequestBody TradeHouseRule object) {
+    ResponseEntity<String> update(@RequestParam(value="userId") int userId,@PathVariable("id") int id, @RequestBody TradeHouseRule object) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.update(object);
+            service.update(object,userId);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
@@ -91,14 +109,14 @@ public class TradeHouseRuleController extends BaseController {
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(params = "userId",value = "{id}", method = RequestMethod.DELETE)
     public
     @ResponseBody
-    ResponseEntity<String> delete(@PathVariable("id") int id, @RequestBody TradeHouseRule object) {
+    ResponseEntity<String> delete(@RequestParam(value="userId") int userId,@PathVariable("id") int id, @RequestBody TradeHouseRule object) {
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.delete(object);
+            service.delete(object,userId);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

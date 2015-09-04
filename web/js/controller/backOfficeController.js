@@ -79,5 +79,9 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
 
     $scope.getLoginId = function () {
         return $scope.loginUser.loginId;
+    };
+
+    $scope.getUserId = function () {
+        return $scope.loginUser.userId;
     }
 }

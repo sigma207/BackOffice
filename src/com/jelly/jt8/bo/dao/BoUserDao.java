@@ -9,9 +9,10 @@ import java.util.List;
  * Created by user on 2015/8/31.
  */
 public interface BoUserDao{
-    BoUser login(String loginId) throws Exception;
+    BoUser select(String loginId) throws Exception;
+    BoUser select(int userId) throws Exception;
     List<BoUser> select() throws Exception;
-    List<BoUser> selectChildren(BoUser object) throws Exception;
+    List<BoUser> selectChildren(int parentUserId) throws Exception;
     void insert(Connection conn, BoUser object) throws Exception;
     void update(Connection conn, BoUser object) throws Exception;
     void delete(Connection conn, BoUser object) throws Exception;

@@ -12,6 +12,11 @@ function LoginController($scope, $translatePartialLoader, $translate, $log, Logi
     $scope.getUserList = function () {
         UserService.getList().then(function (data) {
             $scope.userList = data;
+            angular.forEach($scope.userList, function(value) {
+                if(value.loginId=="H001"){
+                    $scope.selectedUser = value;
+                }
+            });
         });
     };
 

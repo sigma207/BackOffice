@@ -26,7 +26,7 @@ public class BoUserController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<String> selectUser() {
+    ResponseEntity<String> getList() {
         Gson gson = new Gson();
         List<BoUser> list = null;
         String payload = "";
@@ -37,6 +37,23 @@ public class BoUserController extends BaseController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
+
+        payload = gson.toJson(list);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(params = "parentUserId",method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<String> getList(@RequestParam(value="parentUserId") int parentUserId) {
+        Gson gson = new Gson();
+        List<BoUser> list = null;
+        String payload = "";
+        try {
+            list = service.selectChildren(parentUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+        }
 
         payload = gson.toJson(list);
         return getResponseEntity(payload);

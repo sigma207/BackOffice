@@ -55,7 +55,8 @@ public class TradeHouseRule extends BaseModel{
     private BigDecimal liquidationRate;
     private BigDecimal marginCallRate;
     private String category;
-    private List<TradeHouseRuleGroup> tradeHouseRuleGroupList;
+    private List<TradeIbGroup> tradeIbGroupList;
+    private List<TradeGroup> tradeGroupList;
 
     @Id
     @Column(name = "house_id")
@@ -498,12 +499,21 @@ public class TradeHouseRule extends BaseModel{
     }
 
     @Transient
-    public List<TradeHouseRuleGroup> getTradeHouseRuleGroupList() {
-        return tradeHouseRuleGroupList;
+    public List<TradeIbGroup> getTradeIbGroupList() {
+        return tradeIbGroupList;
     }
 
-    public void setTradeHouseRuleGroupList(List<TradeHouseRuleGroup> tradeHouseRuleGroupList) {
-        this.tradeHouseRuleGroupList = tradeHouseRuleGroupList;
+    public void setTradeIbGroupList(List<TradeIbGroup> tradeIbGroupList) {
+        this.tradeIbGroupList = tradeIbGroupList;
+    }
+
+    @Transient
+    public List<TradeGroup> getTradeGroupList() {
+        return tradeGroupList;
+    }
+
+    public void setTradeGroupList(List<TradeGroup> tradeGroupList) {
+        this.tradeGroupList = tradeGroupList;
     }
 
     @Override

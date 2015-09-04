@@ -6,11 +6,11 @@ function HouseRuleController($scope, $modal, $log, $translatePartialLoader, $tra
     $translatePartialLoader.addPart("houseRule");
     $translate.refresh();
     $log.info("HouseRuleController");
+    var userIdParams = {
+        userId:$scope.getUserId()
+    };
     $scope.getTradeHouseRuleList = function () {
-        var params = {
-            houseId:$scope.getLoginId()
-        };
-        TradeHouseRuleService.getList(params).then(function (data) {
+        TradeHouseRuleService.getList(userIdParams).then(function (data) {
             $scope.rowCollection = data;
         });
     };
@@ -37,7 +37,7 @@ function HouseRuleController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     $scope.deleteClick = function (row) {
-        row.remove().then(function () {
+        row.remove(userIdParams).then(function () {
             $scope.getTradeHouseRuleList();
         });
     };
@@ -45,9 +45,9 @@ function HouseRuleController($scope, $modal, $log, $translatePartialLoader, $tra
     function ModalController($scope){
         var i,count;
         var groupMap = {};
-        if($scope.editObj.tradeHouseRuleGroupList){
-            for(i= 0,count=$scope.editObj.tradeHouseRuleGroupList.length;i<count;i++){
-                groupMap[$scope.editObj.tradeHouseRuleGroupList[i].groupId] = 0;
+        if($scope.editObj.tradeIbGroupList){
+            for(i= 0,count=$scope.editObj.tradeIbGroupList.length;i<count;i++){
+                groupMap[$scope.editObj.tradeIbGroupList[i].groupId] = 0;
             }
         }
 
@@ -100,9 +100,9 @@ function HouseRuleController($scope, $modal, $log, $translatePartialLoader, $tra
         };
 
         $scope.save = function () {
-            $scope.editObj.tradeHouseRuleGroupList = [];
+            $scope.editObj.tradeIbGroupList = [];
             for(var i= 0,count=$scope.editObj.selectedTradeGroup.length;i<count;i++){
-                $scope.editObj.tradeHouseRuleGroupList.push({
+                $scope.editObj.tradeIbGroupList.push({
                     houseId:$scope.editObj.houseId,
                     category:$scope.editObj.category,
                     exchangeId:$scope.editObj.exchangeId,
@@ -111,13 +111,13 @@ function HouseRuleController($scope, $modal, $log, $translatePartialLoader, $tra
             }
             switch ($scope.currentAction) {
                 case Action.Add:
-                    TradeHouseRuleService.post( $scope.editObj).then(function (data) {
+                    TradeHouseRuleService.post( $scope.editObj,userIdParams).then(function (data) {
                         $scope.getTradeHouseRuleList();
                         $scope.hideModal();
                     });
                     break;
                 case Action.Edit:
-                    $scope.editObj.put().then(function (data) {
+                    $scope.editObj.put(userIdParams).then(function (data) {
                         $scope.getTradeHouseRuleList();
                         $scope.hideModal();
                     });

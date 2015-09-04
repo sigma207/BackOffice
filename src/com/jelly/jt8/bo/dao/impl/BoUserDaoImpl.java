@@ -22,13 +22,14 @@ import java.util.List;
 @Repository("BoUserDao")
 public class BoUserDaoImpl extends BaseDao implements BoUserDao {
     private final static String WHERE_LOGIN_ID = " WHERE login_id = ? ";
+    private final static String WHERE_USER_ID = " WHERE user_id = ? ";
     private final static String WHERE_PARENT_USER_ID = " WHERE parent_user_id = ? ";
     public BoUserDaoImpl() {
         super(BoUser.class);
     }
 
     @Override
-    public BoUser login(String loginId) throws Exception {
+    public BoUser select(String loginId) throws Exception {
         List<BoUser> list = new LinkedList<BoUser>();
         BoUser boUser = null;
         PreparedStatement stmt = null;
@@ -64,6 +65,42 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
     }
 
     @Override
+    public BoUser select(int userId) throws Exception {
+        List<BoUser> list = new LinkedList<BoUser>();
+        BoUser boUser = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectSQL() + WHERE_USER_ID);
+            stmt.setInt(1,userId);
+            rs = stmt.executeQuery();
+            selectToObject(rs,list);
+            if(list.size()>0){
+                boUser = list.get(0);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return boUser;
+    }
+
+    @Override
     public List<BoUser> select() throws Exception {
         List<BoUser> list =  new LinkedList<BoUser>();
         selectByObject(jt8Ds.getConnection(),list);
@@ -71,7 +108,7 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
     }
 
     @Override
-    public List<BoUser> selectChildren(BoUser object) throws Exception {
+    public List<BoUser> selectChildren(int parentUserId) throws Exception {
         List<BoUser> list = new LinkedList<BoUser>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -79,7 +116,7 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
         try {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(selectSQL() + WHERE_PARENT_USER_ID);
-            stmt.setInt(1, object.getParentUserId());
+            stmt.setInt(1, parentUserId);
             rs = stmt.executeQuery();
             selectToObject(rs,list);
         } catch (Exception e) {

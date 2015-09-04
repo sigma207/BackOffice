@@ -13,6 +13,7 @@ public interface BoUserService {
     BoUser fastLogin(String login_id) throws Exception;
     List<BoUser> select() throws Exception;
     List<BoUserRole> selectUserRole(int user_id) throws Exception;
+    List<BoUser> selectChildren(int parentUserId) throws Exception;
     void insert(BoUser object) throws Exception;
     void update(BoUser object) throws Exception;
     void delete(BoUser object) throws Exception;

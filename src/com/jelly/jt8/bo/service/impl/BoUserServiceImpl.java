@@ -42,7 +42,7 @@ public class BoUserServiceImpl implements BoUserService {
 
     @Override
     public BoUser login(String login_id, String password) throws Exception {
-        BoUser checkUser =  boUserDao.login(login_id);
+        BoUser checkUser =  boUserDao.select(login_id);
         BoUser loginUser = null;
         if(checkUser==null){
             throw new Exception(ErrorMsg.LOGIN_ACCOUNT);
@@ -62,7 +62,7 @@ public class BoUserServiceImpl implements BoUserService {
 
     @Override
     public BoUser fastLogin(String login_id) throws Exception {
-        BoUser checkUser =  boUserDao.login(login_id);
+        BoUser checkUser =  boUserDao.select(login_id);
         BoUser loginUser = null;
         if(checkUser==null){
             throw new Exception(ErrorMsg.LOGIN_ACCOUNT);
@@ -88,6 +88,11 @@ public class BoUserServiceImpl implements BoUserService {
     @Override
     public List<BoUserRole> selectUserRole(int user_id) throws Exception {
         return boUserRoleDao.select(user_id);
+    }
+
+    @Override
+    public List<BoUser> selectChildren(int parentUserId) throws Exception {
+        return boUserDao.selectChildren(parentUserId);
     }
 
     @Override
