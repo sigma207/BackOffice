@@ -56,6 +56,28 @@
 
                             </div>
                         </fieldset>
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">house</legend>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <select ng-model="selectedTradeHouseRule"
+                                            ng-options="tradeHouseRule.houseName for tradeHouseRule in tradeHouseRuleList">
+                                    </select>
+                                    <tabset>
+                                        <tab ng-repeat="tab in selectedTradeHouseRule.tradeGroupList"  active="tab.active" >
+                                            <tab-heading>
+                                                <div >
+                                                    {{tab.groupName}}
+                                                    <input type="checkbox" class="cb"  ng-mode="tab.selected" ng-click="stopPropagation($event)" />
+                                                </div>
+
+                                            </tab-heading>
+                                            {{tab.category}}
+                                        </tab>
+                                    </tabset>
+                                </div>
+                            </div>
+                        </fieldset>
                     </form>
                 </div>
                 <div class="modal-footer">

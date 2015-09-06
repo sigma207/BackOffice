@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/5.
  */
-var backOfficeApp = angular.module("backOfficeApp", ["pascalprecht.translate", "ngAnimate", "ngSanitize", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
+var backOfficeApp = angular.module("backOfficeApp", ["pascalprecht.translate", "ngAnimate", "ngSanitize", "ui.bootstrap", "ui.bootstrap.tpls", "ui.bootstrap.tabs", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
 backOfficeApp.factory('SymbolTradableDailyTempService', ['$resource', function ($resource) {
     return $resource('api/symbolTradableDailyTemp/exchange/:exchange_id/mainSymbol/:main_symbol_id');
 }]);

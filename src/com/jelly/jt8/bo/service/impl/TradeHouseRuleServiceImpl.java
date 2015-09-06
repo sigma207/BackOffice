@@ -44,33 +44,9 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
     }
 
     @Override
-    public List<TradeHouseRule> select(String houseId) throws Exception {
-        List<TradeHouseRule> list = tradeHouseRuleDao.select(houseId);
-//        List<TradeHouseRuleGroup> groupList = tradeHouseRuleGroupDao.select();
-//        Map<String,List<TradeHouseRuleGroup>> groupMap = new HashMap<String, List<TradeHouseRuleGroup>>();
-//        String key = null;
-//        List<TradeHouseRuleGroup> mapList = null;
-//        for(TradeHouseRuleGroup tradeHouseRuleGroup:groupList){
-//            key = tradeHouseRuleGroup.getHouseId()+tradeHouseRuleGroup.getCategory()+tradeHouseRuleGroup.getExchangeId();
-//            mapList = groupMap.get(key);
-//            if(mapList==null){
-//                mapList = new ArrayList<TradeHouseRuleGroup>();
-//                groupMap.put(key,mapList);
-//            }
-//            mapList.add(tradeHouseRuleGroup);
-//        }
-//        for(TradeHouseRule tradeHouseRule:list){
-//            key = tradeHouseRule.getHouseId()+tradeHouseRule.getCategory()+tradeHouseRule.getExchangeId();
-//            mapList = groupMap.get(key);
-//            tradeHouseRule.setTradeHouseRuleGroupList(mapList);
-//        }
-        return list;
-    }
-
-    @Override
     public List<TradeHouseRule> select4HouseRule(int userId) throws Exception {
         BoUser loginUser = boUserDao.select(userId);
-        List<TradeHouseRule> tradeHouseRuleList = select(loginUser.getLoginId());
+        List<TradeHouseRule> tradeHouseRuleList = tradeHouseRuleDao.select(loginUser.getLoginId());
         List<TradeIbGroup> tradeIbGroupList = tradeIbGroupDao.select(userId);//拿到此user的所有group了,要依houseRule的category去分,但不知TradeIbGroup的category是什麼,只有group_id
         List<TradeGroup> tradeGroupList = tradeGroupDao.select();//先拿出所有tradeGroup
 
@@ -80,6 +56,63 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
         TradeHouseRule rule = null;
         TradeGroup group = null;
         List<TradeIbGroup> ibGroupList = null;
+        for (TradeHouseRule tradeHouseRule : tradeHouseRuleList) {
+            key = tradeHouseRule.getCategory() + tradeHouseRule.getExchangeId();
+            tradeHouseRuleMap.put(key, tradeHouseRule);
+            ibGroupList = new ArrayList<TradeIbGroup>();
+            ibGroupList.addAll(tradeIbGroupList);
+            tradeHouseRule.setUserOtherIbGroupList(ibGroupList);
+        }
+
+        for (TradeGroup tradeGroup : tradeGroupList) {
+            tradeGroupMap.put(tradeGroup.getGroupId(), tradeGroup);
+        }
+
+        for (TradeIbGroup tradeIbGroup : tradeIbGroupList) {
+            group = tradeGroupMap.get(tradeIbGroup.getGroupId());
+            key = group.getCategory() + group.getExchangeId();
+            rule = tradeHouseRuleMap.get(key);
+            ibGroupList = rule.getTradeIbGroupList();
+            if (ibGroupList == null) {
+                ibGroupList = new ArrayList<TradeIbGroup>();
+                rule.setTradeIbGroupList(ibGroupList);
+            }
+            ibGroupList.add(tradeIbGroup);
+        }
+
+        for (TradeHouseRule tradeHouseRule : tradeHouseRuleList) {
+            if(tradeHouseRule.getTradeIbGroupList()!=null){
+                for(TradeIbGroup tradeIbGroup:tradeHouseRule.getTradeIbGroupList()){
+                    tradeHouseRule.getUserOtherIbGroupList().remove(tradeIbGroup);
+                }
+            }
+        }
+
+        return tradeHouseRuleList;
+    }
+
+    @Override
+    public List<TradeHouseRule> select4Ib(int userId) throws Exception {
+        BoUser loginUser = boUserDao.select(userId);
+        List<TradeHouseRule> tradeHouseRuleList = null;
+        if(loginUser.getHouseId()!=null){
+            tradeHouseRuleList = tradeHouseRuleDao.select(loginUser.getHouseId());
+        } else{
+            tradeHouseRuleList = tradeHouseRuleDao.select(loginUser.getLoginId());
+        }
+        if(tradeHouseRuleList.size()==0){
+            //throw exception
+        }
+        List<TradeIbGroup> tradeIbGroupList = tradeIbGroupDao.select(userId);//拿到此user的所有group了,要依houseRule的category去分,但不知TradeIbGroup的category是什麼,只有group_id
+        List<TradeGroup> tradeGroupList = tradeGroupDao.select();//先拿出所有tradeGroup
+
+        Map<String, TradeHouseRule> tradeHouseRuleMap = new HashMap<String, TradeHouseRule>();
+        Map<Integer, TradeGroup> tradeGroupMap = new HashMap<Integer, TradeGroup>();
+        String key = null;
+        TradeHouseRule rule = null;
+        TradeGroup group = null;
+        List<TradeIbGroup> ibGroupList = null;
+        List<TradeGroup> ruleTradeGroupList = null;
         for (TradeHouseRule tradeHouseRule : tradeHouseRuleList) {
             key = tradeHouseRule.getCategory() + tradeHouseRule.getExchangeId();
             tradeHouseRuleMap.put(key, tradeHouseRule);
@@ -99,33 +132,13 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
                 rule.setTradeIbGroupList(ibGroupList);
             }
             ibGroupList.add(tradeIbGroup);
+            ruleTradeGroupList = rule.getTradeGroupList();
+            if(ruleTradeGroupList==null){
+                ruleTradeGroupList = new ArrayList<TradeGroup>();
+                rule.setTradeGroupList(ruleTradeGroupList);
+            }
+            ruleTradeGroupList.add(group);
         }
-
-        return tradeHouseRuleList;
-    }
-
-    @Override
-    public List<TradeHouseRule> select(int userId) throws Exception {
-        BoUser loginUser = boUserDao.select(userId);
-        List<TradeHouseRule> tradeHouseRuleList = select(loginUser.getLoginId());
-//        List<TradeGroup> tradeGroupList = tradeGroupDao.select();
-//        Map<Integer,TradeGroup> tradeGroupMap = new HashMap<Integer, TradeGroup>();
-//        for(TradeGroup tradeGroup:tradeGroupList){
-//            tradeGroupMap.put(tradeGroup.getGroupId(),tradeGroup);
-//        }
-//        List<TradeGroup> temp = null;
-//        for(TradeHouseRule tradeHouseRule:tradeHouseRuleList){
-//            temp = new ArrayList<TradeGroup>();
-//            if(tradeHouseRule.getTradeHouseRuleGroupList()!=null){
-//                for(TradeHouseRuleGroup tradeHouseRuleGroup:tradeHouseRule.getTradeHouseRuleGroupList()){
-//                    temp.add(tradeGroupMap.get(tradeHouseRuleGroup.getGroupId()));
-//                }
-//            }
-//            tradeHouseRule.setTradeGroupList(temp);
-//        }
-//        if(tradeHouseRuleList.size()==0){
-//
-//        }
         return tradeHouseRuleList;
     }
 
@@ -138,12 +151,15 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
             conn.setAutoCommit(false);
             tradeHouseRuleDao.insert(conn, object);
             StringBuffer groupIds = new StringBuffer();
+            if(object.getUserOtherIbGroupList()!=null &&object.getUserOtherIbGroupList().size()>0){
+                for (TradeIbGroup tradeIbGroup : object.getUserOtherIbGroupList()) {
+                    SqlTool.append(groupIds, String.valueOf(tradeIbGroup.getGroupId()));
+                }
+            }
             if (object.getTradeIbGroupList() != null && object.getTradeIbGroupList().size() > 0) {
-//                SqlTool.appendStart(groupIds);
                 for (TradeIbGroup tradeIbGroup : object.getTradeIbGroupList()) {
                     SqlTool.append(groupIds, String.valueOf(tradeIbGroup.getGroupId()));
                 }
-//                SqlTool.appendEnd(groupIds);
             }
             tradeIbGroupDao.update(conn, userId, groupIds.toString());
             conn.commit();
@@ -169,7 +185,13 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
         try {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
-            tradeIbGroupDao.update(conn, userId, "");
+            StringBuffer groupIds = new StringBuffer();
+            if(object.getUserOtherIbGroupList()!=null &&object.getUserOtherIbGroupList().size()>0){
+                for (TradeIbGroup tradeIbGroup : object.getUserOtherIbGroupList()) {
+                    SqlTool.append(groupIds, String.valueOf(tradeIbGroup.getGroupId()));
+                }
+            }
+            tradeIbGroupDao.update(conn, userId, groupIds.toString());
             tradeHouseRuleDao.delete(conn, object);
             conn.commit();
         } catch (Exception e) {
@@ -196,12 +218,15 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
             conn.setAutoCommit(false);
             tradeHouseRuleDao.update(conn, object);
             StringBuffer groupIds = new StringBuffer();
+            if(object.getUserOtherIbGroupList()!=null &&object.getUserOtherIbGroupList().size()>0){
+                for (TradeIbGroup tradeIbGroup : object.getUserOtherIbGroupList()) {
+                    SqlTool.append(groupIds, String.valueOf(tradeIbGroup.getGroupId()));
+                }
+            }
             if (object.getTradeIbGroupList() != null && object.getTradeIbGroupList().size() > 0) {
-//                SqlTool.appendStart(groupIds);
                 for (TradeIbGroup tradeIbGroup : object.getTradeIbGroupList()) {
                     SqlTool.append(groupIds, String.valueOf(tradeIbGroup.getGroupId()));
                 }
-//                SqlTool.appendEnd(groupIds);
             }
             tradeIbGroupDao.update(conn, userId, groupIds.toString());
             conn.commit();

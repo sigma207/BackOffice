@@ -9,9 +9,8 @@ import java.util.List;
  */
 public interface TradeHouseRuleService {
     List<TradeHouseRule> select() throws Exception;
-    List<TradeHouseRule> select(String houseId) throws Exception;
     List<TradeHouseRule> select4HouseRule(int userId) throws Exception;
-    List<TradeHouseRule> select(int userId) throws Exception;
+    List<TradeHouseRule> select4Ib(int userId) throws Exception;
     void insert(TradeHouseRule object,int userId) throws Exception;
     void delete(TradeHouseRule object,int userId) throws Exception;
     void update(TradeHouseRule object,int userId) throws Exception;

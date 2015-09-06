@@ -56,6 +56,7 @@ public class TradeHouseRule extends BaseModel{
     private BigDecimal marginCallRate;
     private String category;
     private List<TradeIbGroup> tradeIbGroupList;
+    private List<TradeIbGroup> userOtherIbGroupList;
     private List<TradeGroup> tradeGroupList;
 
     @Id
@@ -505,6 +506,15 @@ public class TradeHouseRule extends BaseModel{
 
     public void setTradeIbGroupList(List<TradeIbGroup> tradeIbGroupList) {
         this.tradeIbGroupList = tradeIbGroupList;
+    }
+
+    @Transient
+    public List<TradeIbGroup> getUserOtherIbGroupList() {
+        return userOtherIbGroupList;
+    }
+
+    public void setUserOtherIbGroupList(List<TradeIbGroup> userOtherIbGroupList) {
+        this.userOtherIbGroupList = userOtherIbGroupList;
     }
 
     @Transient

@@ -16,7 +16,8 @@ import java.util.List;
  */
 @Repository("TradeGroupDao")
 public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
-    private final static String WHERE_CATEGORY = " WHERE category = ? ";
+    private final static String WHERE_CATEGORY_AND_OWNER_ID = " WHERE category = ? AND owner_id = ? ";
+    private final static String WHERE_OWNER_ID = " WHERE owner_id = ? ";
     public TradeGroupDaoImpl() {
         super(TradeGroup.class);
     }
@@ -24,20 +25,53 @@ public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
     @Override
     public List<TradeGroup> select() throws Exception {
         List<TradeGroup> list =  new LinkedList<TradeGroup>();
-        selectByObject(jt8Ds.getConnection(),list);
+        selectByObject(jt8Ds.getConnection(), list);
         return list;
     }
 
     @Override
-    public List<TradeGroup> select(String category) throws Exception {
+    public List<TradeGroup> select(int ownerId) throws Exception {
         List<TradeGroup> list =  new LinkedList<TradeGroup>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
-            stmt = conn.prepareStatement(selectSQL() + WHERE_CATEGORY);
+            stmt = conn.prepareStatement(selectSQL() + WHERE_OWNER_ID);
+            stmt.setInt(1, ownerId);
+            rs = stmt.executeQuery();
+            selectToObject(rs,list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<TradeGroup> select(String category,int ownerId) throws Exception {
+        List<TradeGroup> list =  new LinkedList<TradeGroup>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectSQL() + WHERE_CATEGORY_AND_OWNER_ID);
             stmt.setString(1, category);
+            stmt.setInt(2, ownerId);
             rs = stmt.executeQuery();
             selectToObject(rs,list);
         } catch (Exception e) {

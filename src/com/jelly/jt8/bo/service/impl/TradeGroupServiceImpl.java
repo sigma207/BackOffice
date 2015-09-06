@@ -39,8 +39,13 @@ public class TradeGroupServiceImpl implements TradeGroupService {
     }
 
     @Override
-    public List<TradeGroup> select(String category) throws Exception {
-        return tradeGroupDao.select(category);
+    public List<TradeGroup> select(int ownerId) throws Exception {
+        return tradeGroupDao.select(ownerId);
+    }
+
+    @Override
+    public List<TradeGroup> select(String category,int ownerId) throws Exception {
+        return tradeGroupDao.select(category,ownerId);
     }
 
     @Override

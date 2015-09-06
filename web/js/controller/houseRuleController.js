@@ -53,7 +53,8 @@ function HouseRuleController($scope, $modal, $log, $translatePartialLoader, $tra
 
         $scope.getTradeGroupList = function () {
             var params = {
-                category:$scope.editObj.category
+                category:$scope.editObj.category,
+                ownerId:$scope.getUserId()
             };
             TradeGroupService.getList(params).then(function (data) {
                 $scope.editObj.selectedTradeGroup = [];

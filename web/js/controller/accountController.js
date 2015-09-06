@@ -14,9 +14,12 @@ function AccountController($scope, $modal, $log, $translatePartialLoader, $trans
     };
 
     $scope.getTradeHouseRuleList = function () {
-        var params = {userId:$scope.getUserId()};
+        var params = {ibUserId:$scope.getUserId()};
         TradeHouseRuleService.getList(params).then(function (data) {
-            $scope.houseRuleList = data;
+            $scope.tradeHouseRuleList = data;
+            if($scope.tradeHouseRuleList.length>0){
+                $scope.selectedTradeHouseRule = $scope.tradeHouseRuleList[0];
+            }
             //console.table($scope.houseRuleList);
         });
     };
@@ -36,7 +39,15 @@ function AccountController($scope, $modal, $log, $translatePartialLoader, $trans
         $scope.hideIbEditModal();
     };
 
+    $scope.stopPropagation = function(e) {
+        // to make sure it is a checkbox
+        if (angular.element(e.currentTarget).prop('tagName') === 'INPUT') {
+            e.stopPropagation();
+        }
+    };
+
     function ibEditModalController($scope){
+
         $scope.save = function () {
         };
     }

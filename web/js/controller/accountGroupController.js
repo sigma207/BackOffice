@@ -16,7 +16,10 @@ function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $
     };
 
     $scope.getTradeAccountGroupList = function () {
-        TradeGroupService.getList().then(function (data) {
+        var params = {
+            ownerId:$scope.getUserId()
+        };
+        TradeGroupService.getList(params).then(function (data) {
             $scope.rowCollection = data;
         })
     };

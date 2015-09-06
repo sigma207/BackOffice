@@ -39,15 +39,32 @@ public class TradeGroupController extends BaseController{
         return getResponseEntity(payload);
     }
 
-    @RequestMapping( params = {"category"},method = RequestMethod.GET)
+    @RequestMapping( params = {"category","ownerId"},method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> getList(@RequestParam(value="category") String category) {
+    ResponseEntity<String> getList(@RequestParam(value="category") String category,@RequestParam(value="ownerId") int ownerId) {
         Gson gson = new Gson();
         List<TradeGroup> list = null;
         String payload = "";
         try {
-            list = service.select(category);
+            list = service.select(category,ownerId);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(list);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping( params = {"ownerId"},method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<String> getList(@RequestParam(value="ownerId") int ownerId) {
+        Gson gson = new Gson();
+        List<TradeGroup> list = null;
+        String payload = "";
+        try {
+            list = service.select(ownerId);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

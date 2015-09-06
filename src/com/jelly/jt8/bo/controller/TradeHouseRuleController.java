@@ -33,25 +33,6 @@ public class TradeHouseRuleController extends BaseController {
         try {
             list = service.select();
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-
-        payload = gson.toJson(list);
-        return getResponseEntity(payload);
-    }
-
-    @RequestMapping( params = "houseId", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    ResponseEntity<String> getListByHouseId(@RequestParam(value="houseId") String houseId) {
-        Gson gson = new Gson();
-        List<TradeHouseRule> list = null;
-        String payload = "";
-        try {
-            list = service.select(houseId);
-        } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
@@ -62,14 +43,30 @@ public class TradeHouseRuleController extends BaseController {
     @RequestMapping( params = "userId", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> getListByUserId(@RequestParam(value="userId") int userId) {
+    ResponseEntity<String> getList(@RequestParam(value="userId") int userId) {
         Gson gson = new Gson();
         List<TradeHouseRule> list = null;
         String payload = "";
         try {
             list = service.select4HouseRule(userId);
         } catch (Exception e) {
-            e.printStackTrace();
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(list);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping( params = "ibUserId", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<String> getList1(@RequestParam(value="ibUserId") int ibUserId) {
+        Gson gson = new Gson();
+        List<TradeHouseRule> list = null;
+        String payload = "";
+        try {
+            list = service.select4Ib(ibUserId);
+        } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 

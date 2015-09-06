@@ -1,21 +1,40 @@
 package com.jelly.jt8.bo.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * Created by user on 2015/8/31.
  */
 @Entity
-@javax.persistence.Table(name = "bo_user", schema = "dbo", catalog = "jt8")
+@Table(name = "bo_user", schema = "dbo", catalog = "jt8")
 public class BoUser extends BaseModel{
     private int userId;
+    private String loginId;
+    private String password;
+    private String createTime;
+    private int permission;
+    private int concurrent;
+    private int retry;
+    private int maxRetry;
+    private String activeDate;
+    private Integer duration;
+    private String expireDate;
+    private String updateTime;
+    private Integer isActive;
+    private String loginTime;
+    private String lastLoginTime;
+    private String orgId;
+    private Integer organizationId;
+    private Integer parentUserId;
+    private List<BoUserRole> boUserRoleList;
+    private BoUser parentBoUser;
+    private BoOrganization boOrganization;
+    private List<BoRolePermission> boRolePermissionList;
+    private String houseId;
 
     @Id
-    @javax.persistence.Column(name = "user_id", insertable = false)
+    @Column(name = "user_id", insertable = false)
     public int getUserId() {
         return userId;
     }
@@ -24,10 +43,8 @@ public class BoUser extends BaseModel{
         this.userId = userId;
     }
 
-    private String loginId;
-
     @Basic
-    @javax.persistence.Column(name = "login_id")
+    @Column(name = "login_id")
     public String getLoginId() {
         return loginId;
     }
@@ -36,10 +53,8 @@ public class BoUser extends BaseModel{
         this.loginId = loginId;
     }
 
-    private String password;
-
     @Basic
-    @javax.persistence.Column(name = "password")
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -48,10 +63,8 @@ public class BoUser extends BaseModel{
         this.password = password;
     }
 
-    private String createTime;
-
     @Basic
-    @javax.persistence.Column(name = "create_time")
+    @Column(name = "create_time")
     public String getCreateTime() {
         return createTime;
     }
@@ -60,10 +73,8 @@ public class BoUser extends BaseModel{
         this.createTime = createTime;
     }
 
-    private int permission;
-
     @Basic
-    @javax.persistence.Column(name = "permission")
+    @Column(name = "permission")
     public int getPermission() {
         return permission;
     }
@@ -72,10 +83,8 @@ public class BoUser extends BaseModel{
         this.permission = permission;
     }
 
-    private int concurrent;
-
     @Basic
-    @javax.persistence.Column(name = "concurrent")
+    @Column(name = "concurrent")
     public int getConcurrent() {
         return concurrent;
     }
@@ -84,10 +93,8 @@ public class BoUser extends BaseModel{
         this.concurrent = concurrent;
     }
 
-    private int retry;
-
     @Basic
-    @javax.persistence.Column(name = "retry")
+    @Column(name = "retry")
     public int getRetry() {
         return retry;
     }
@@ -96,10 +103,8 @@ public class BoUser extends BaseModel{
         this.retry = retry;
     }
 
-    private int maxRetry;
-
     @Basic
-    @javax.persistence.Column(name = "max_retry")
+    @Column(name = "max_retry")
     public int getMaxRetry() {
         return maxRetry;
     }
@@ -108,10 +113,8 @@ public class BoUser extends BaseModel{
         this.maxRetry = maxRetry;
     }
 
-    private String activeDate;
-
     @Basic
-    @javax.persistence.Column(name = "active_date")
+    @Column(name = "active_date")
     public String getActiveDate() {
         return activeDate;
     }
@@ -120,10 +123,8 @@ public class BoUser extends BaseModel{
         this.activeDate = activeDate;
     }
 
-    private Integer duration;
-
     @Basic
-    @javax.persistence.Column(name = "duration")
+    @Column(name = "duration")
     public Integer getDuration() {
         return duration;
     }
@@ -132,10 +133,8 @@ public class BoUser extends BaseModel{
         this.duration = duration;
     }
 
-    private String expireDate;
-
     @Basic
-    @javax.persistence.Column(name = "expire_date")
+    @Column(name = "expire_date")
     public String getExpireDate() {
         return expireDate;
     }
@@ -144,10 +143,8 @@ public class BoUser extends BaseModel{
         this.expireDate = expireDate;
     }
 
-    private String updateTime;
-
     @Basic
-    @javax.persistence.Column(name = "update_time")
+    @Column(name = "update_time")
     public String getUpdateTime() {
         return updateTime;
     }
@@ -156,10 +153,8 @@ public class BoUser extends BaseModel{
         this.updateTime = updateTime;
     }
 
-    private Integer isActive;
-
     @Basic
-    @javax.persistence.Column(name = "is_active")
+    @Column(name = "is_active")
     public Integer getIsActive() {
         return isActive;
     }
@@ -168,10 +163,8 @@ public class BoUser extends BaseModel{
         this.isActive = isActive;
     }
 
-    private String loginTime;
-
     @Basic
-    @javax.persistence.Column(name = "login_time")
+    @Column(name = "login_time")
     public String getLoginTime() {
         return loginTime;
     }
@@ -180,10 +173,8 @@ public class BoUser extends BaseModel{
         this.loginTime = loginTime;
     }
 
-    private String lastLoginTime;
-
     @Basic
-    @javax.persistence.Column(name = "last_login_time")
+    @Column(name = "last_login_time")
     public String getLastLoginTime() {
         return lastLoginTime;
     }
@@ -192,10 +183,8 @@ public class BoUser extends BaseModel{
         this.lastLoginTime = lastLoginTime;
     }
 
-    private String orgId;
-
     @Basic
-    @javax.persistence.Column(name = "org_id")
+    @Column(name = "org_id")
     public String getOrgId() {
         return orgId;
     }
@@ -204,10 +193,8 @@ public class BoUser extends BaseModel{
         this.orgId = orgId;
     }
 
-    private Integer organizationId;
-
     @Basic
-    @javax.persistence.Column(name = "organization_id")
+    @Column(name = "organization_id")
     public Integer getOrganizationId() {
         return organizationId;
     }
@@ -216,10 +203,8 @@ public class BoUser extends BaseModel{
         this.organizationId = organizationId;
     }
 
-    private Integer parentUserId;
-
     @Basic
-    @javax.persistence.Column(name = "parent_user_id")
+    @Column(name = "parent_user_id")
     public Integer getParentUserId() {
         return parentUserId;
     }
@@ -227,8 +212,6 @@ public class BoUser extends BaseModel{
     public void setParentUserId(Integer parentUserId) {
         this.parentUserId = parentUserId;
     }
-
-    private List<BoUserRole> boUserRoleList;
 
     @Transient
     public List<BoUserRole> getBoUserRoleList() {
@@ -239,8 +222,6 @@ public class BoUser extends BaseModel{
         this.boUserRoleList = boUserRoleList;
     }
 
-    private BoUser parentBoUser;
-
     @Transient
     public BoUser getParentBoUser() {
         return parentBoUser;
@@ -250,8 +231,6 @@ public class BoUser extends BaseModel{
         this.parentBoUser = parentBoUser;
     }
 
-    private BoOrganization boOrganization;
-
     @Transient
     public BoOrganization getBoOrganization() {
         return boOrganization;
@@ -260,8 +239,6 @@ public class BoUser extends BaseModel{
     public void setBoOrganization(BoOrganization boOrganization) {
         this.boOrganization = boOrganization;
     }
-
-    private List<BoRolePermission> boRolePermissionList;
 
     @Transient
     public List<BoRolePermission> getBoRolePermissionList() {
@@ -325,5 +302,15 @@ public class BoUser extends BaseModel{
         result = 31 * result + (organizationId != null ? organizationId.hashCode() : 0);
         result = 31 * result + (parentUserId != null ? parentUserId.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "house_id")
+    public String getHouseId() {
+        return houseId;
+    }
+
+    public void setHouseId(String houseId) {
+        this.houseId = houseId;
     }
 }
