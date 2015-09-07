@@ -123,6 +123,14 @@ function TextInput(){
     }
 }
 
+function PasswordInput(){
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<input type="password" class="form-control"/>'
+    }
+}
+
 function NumberInput(){
     return {
         restrict:"E",

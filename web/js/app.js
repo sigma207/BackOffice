@@ -39,7 +39,7 @@ backOfficeApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
 });
 backOfficeApp.config(function($modalProvider) {
     angular.extend($modalProvider.defaults, {
-        animation: 'am-flip-x'
+        //animation: 'am-flip-x'
     });
 });
 backOfficeApp.config(function($datepickerProvider) {
@@ -105,6 +105,10 @@ backOfficeApp.factory('SymbolHolidayService', function (Restangular) {
 
 backOfficeApp.factory('SymbolHolidayExceptionService', function (Restangular) {
     return Restangular.service('symbolHolidayException');
+});
+
+backOfficeApp.factory('IbService', function (Restangular) {
+    return Restangular.service('ibs');
 });
 
 backOfficeApp.config(["$routeProvider", function ($routeProvider) {
@@ -212,6 +216,7 @@ backOfficeApp.directive('focus', Focus);
 backOfficeApp.directive('parseInt', ParseInt);
 backOfficeApp.directive('numbersOnly', NumbersOnly);
 backOfficeApp.directive('textInput', TextInput);
+backOfficeApp.directive('passwordInput', PasswordInput);
 backOfficeApp.directive('numberInput', NumberInput);
 backOfficeApp.directive('dateInput', DateInput);
 backOfficeApp.directive('timeInput', TimeInput);

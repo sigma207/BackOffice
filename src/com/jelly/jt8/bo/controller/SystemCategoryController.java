@@ -34,7 +34,6 @@ public class SystemCategoryController extends BaseController {
         try {
             list = service.selectSystemCategory();
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 

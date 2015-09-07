@@ -11,6 +11,8 @@ import java.util.List;
 public interface BoRoleDao {
     List<BoRole> select() throws Exception;
 
+    BoRole select(String roleCode) throws Exception;
+
     void insert(Connection conn, BoRole object) throws Exception;
 
     void update(Connection conn, BoRole object) throws Exception;

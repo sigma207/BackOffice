@@ -8,6 +8,9 @@
 <div ng-controller="AccountController">
     <common-button translate="addIb" ng-click="addIbClick()"></common-button>
     <common-button translate="addMember" ng-click="addMemberClick()"></common-button>
+    <ol class="breadcrumb">
+        <li ng-repeat="ib in ibList" class="active"><a href="javascript:void(0)" ng-click="backToIb(ib)">{{ib.loginId}}</a></li>
+    </ol>
     <table st-table="rowCollection" class="table table-striped table-condensed table-jt8">
         <thead>
         <tr>
@@ -17,8 +20,10 @@
         </thead>
         <tbody>
         <tr ng-repeat="row in rowCollection">
-            <td>{{row.loginId}}</td>
+            <td><a href="" ng-click="addIb(row)">{{row.loginId}}</a></td>
             <td>
+                <common-button translate="edit" ng-click="editClick(row)"></common-button>
+                <common-button translate="delete" ng-click="removeClick(row)"></common-button>
                 <common-button translate="addIb" ng-click="addIbClick(row)"></common-button>
                 <common-button translate="addMember" ng-click="addMemberClick(row)"></common-button>
             </td>
@@ -38,22 +43,36 @@
                     <form name="editForm" class="form-horizontal" role="form">
                         <fieldset class="well well-xs the-fieldset">
                             <legend class="the-legend">base</legend>
-                            <div class="row">
+                            <div class="row" ng-show="currentAction=='add'">
                                 <div class="col-md-6">
                                     <div class="form-group form-group-xs">
                                         <label for="loginId" class="col-md-5 control-label" translate="loginId"></label>
                                         <div class="col-md-7 valueCol">
-                                            <text-input id="loginId" ng-model="editObj.loginId" focus="true" required></text-input>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">{{editObj.prefixLoginId}}</span>
+                                                <text-input id="loginId" ng-model="editObj.loginId" focus="true" required></text-input>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="password" class="col-md-5 control-label" translate="userPassword"></label>
-                                    <div class="col-md-7 valueCol">
-                                        <input id="password" type="password" ng-model="editObj.password" class="input-sm form-control" required/>
+                                    <div class="form-group form-group-xs">
+                                        <label for="password" class="col-md-5 control-label" translate="userPassword"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <password-input id="password" ng-model="editObj.password" required></password-input>
+                                        </div>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="row" ng-show="currentAction=='edit'">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-2 control-label" translate="loginId"></label>
+                                        <div class="col-md-8 valueCol">
+                                            <p class="form-control-static">{{editObj.loginId}}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </fieldset>
                         <fieldset class="well well-xs the-fieldset">
@@ -64,15 +83,31 @@
                                             ng-options="tradeHouseRule.houseName for tradeHouseRule in tradeHouseRuleList">
                                     </select>
                                     <tabset>
-                                        <tab ng-repeat="tab in selectedTradeHouseRule.tradeGroupList"  active="tab.active" >
+                                        <tab ng-repeat="tradeGroup in selectedTradeHouseRule.tradeGroupList">
                                             <tab-heading>
                                                 <div >
-                                                    {{tab.groupName}}
-                                                    <input type="checkbox" class="cb"  ng-mode="tab.selected" ng-click="stopPropagation($event)" />
+                                                    {{tradeGroup.groupName}}
+                                                    <input type="checkbox" ng-model="tradeGroup.selected"/>
                                                 </div>
-
                                             </tab-heading>
-                                            {{tab.category}}
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-xs">
+                                                        <label class="col-md-5 control-label" translate="initialMargin"></label>
+                                                        <div class="col-md-7 valueCol">
+                                                            <p class="form-control-static">{{tradeGroup.initialMargin}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-xs">
+                                                        <label class="col-md-5 control-label" translate="maintainMargin"></label>
+                                                        <div class="col-md-7 valueCol">
+                                                            <p class="form-control-static">{{tradeGroup.maintainMargin}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </tab>
                                     </tabset>
                                 </div>
@@ -88,5 +123,6 @@
         </div>
     </div>
 </script>
+
 </body>
 </html>

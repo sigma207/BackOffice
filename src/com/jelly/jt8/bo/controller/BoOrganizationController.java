@@ -32,7 +32,6 @@ public class BoOrganizationController extends BaseController{
         try {
             list = service.select();
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
@@ -50,7 +49,6 @@ public class BoOrganizationController extends BaseController{
         try {
             organization = service.select(id);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 
@@ -68,7 +66,6 @@ public class BoOrganizationController extends BaseController{
         try {
             list = service.selectWithChildren(id);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 

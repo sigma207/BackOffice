@@ -2,8 +2,8 @@ package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
 import com.jelly.jt8.bo.model.BoUser;
-import com.jelly.jt8.bo.model.BoUserRole;
 import com.jelly.jt8.bo.service.BoUserService;
+import com.jelly.jt8.bo.service.IbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -14,36 +14,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by user on 2015/8/31.
+ * Created by user on 2015/9/7.
  */
 @Controller
-@RequestMapping("/boUsers")
-public class BoUserController extends BaseController {
-
+@RequestMapping("/ibs")
+public class IbController extends BaseController{
     @Autowired
-    @Qualifier("boUserService")
-    private BoUserService service;
+    @Qualifier("ibService")
+    private IbService service;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(params = "parentUserId",method = RequestMethod.GET)
     public @ResponseBody
-    ResponseEntity<String> getList() {
+    ResponseEntity<String> getList(@RequestParam(value="parentUserId") int parentUserId) {
         Gson gson = new Gson();
         List<BoUser> list = null;
         String payload = "";
         try {
-            list = service.select();
+            list = service.select(parentUserId);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
-
 
         payload = gson.toJson(list);
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping( method = RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity<String> addRole(@RequestBody BoUser object){
+    ResponseEntity<String> add(@RequestBody BoUser object){
         Gson gson = new Gson();
         String payload = "";
         try {
@@ -58,7 +56,7 @@ public class BoUserController extends BaseController {
 
     @RequestMapping(value = "{id}",method = RequestMethod.DELETE)
     public @ResponseBody
-    ResponseEntity<String> deleteRole(@PathVariable("id") String id, @RequestBody BoUser object){
+    ResponseEntity<String> delete(@PathVariable("id") String id, @RequestBody BoUser object){
         Gson gson = new Gson();
         String payload = "";
         try {
@@ -71,29 +69,13 @@ public class BoUserController extends BaseController {
         return getResponseEntity(payload);
     }
 
-    @RequestMapping(value = "{id}/userRoles", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}",method = RequestMethod.PUT)
     public @ResponseBody
-    ResponseEntity<String> selectUserRole(@PathVariable("id") int id) {
-        Gson gson = new Gson();
-        List<BoUserRole> list = null;
-        String payload = "";
-        try {
-            list = service.selectUserRole(id);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
-        }
-
-        payload = gson.toJson(list);
-        return getResponseEntity(payload);
-    }
-
-    @RequestMapping(value="{id}/userRoles",method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<String> allocateUserRole(@PathVariable("id") String id, @RequestBody BoUser object){
+    ResponseEntity<String> update(@PathVariable("id") String id, @RequestBody BoUser object){
         Gson gson = new Gson();
         String payload = "";
         try {
-            service.allocateUserRole(object);
+            service.update(object);
         } catch (Exception e){
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

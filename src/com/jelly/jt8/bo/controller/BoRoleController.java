@@ -33,7 +33,6 @@ public class BoRoleController extends BaseController {
         try {
             list = service.select();
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 

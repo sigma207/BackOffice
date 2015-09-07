@@ -34,7 +34,6 @@ public class ExchangeController extends BaseController {
         try {
             list = service.selectExchange();
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 

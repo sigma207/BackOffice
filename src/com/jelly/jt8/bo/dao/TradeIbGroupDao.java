@@ -10,6 +10,7 @@ import java.util.List;
  */
 public interface TradeIbGroupDao {
     List<TradeIbGroup> select(int userId) throws Exception;
+    List<Integer> selectChildrenGroupId(int parentUserId) throws Exception;
     void update(Connection conn,int userId,String groupIds) throws Exception;
     void insert(int userId,List<TradeIbGroup> list) throws Exception;
     void update(int userId,List<TradeIbGroup> list) throws Exception;

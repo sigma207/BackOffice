@@ -32,6 +32,7 @@ public class BoUser extends BaseModel{
     private BoOrganization boOrganization;
     private List<BoRolePermission> boRolePermissionList;
     private String houseId;
+    private List<Integer> tradeGroupIdList;
 
     @Id
     @Column(name = "user_id", insertable = false)
@@ -247,6 +248,15 @@ public class BoUser extends BaseModel{
 
     public void setBoRolePermissionList(List<BoRolePermission> boRolePermissionList) {
         this.boRolePermissionList = boRolePermissionList;
+    }
+
+    @Transient
+    public List<Integer> getTradeGroupIdList() {
+        return tradeGroupIdList;
+    }
+
+    public void setTradeGroupIdList(List<Integer> tradeGroupIdList) {
+        this.tradeGroupIdList = tradeGroupIdList;
     }
 
     @Override
