@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Account</title>
+</head>
+<body>
+<div ng-controller="IbLoginAccountController">
+    <common-button translate="addIb" ng-click="addIbClick()"></common-button>
+    <common-button translate="addMember" ng-click="addMemberClick()"></common-button>
+    <ol class="breadcrumb">
+        <li ng-repeat="ib in ibList" class="active"><a href="javascript:void(0)" ng-click="backToIb(ib)">{{ib.loginId}}</a></li>
+    </ol>
+    <table st-table="rowCollection" class="table table-striped table-condensed table-jt8">
+        <thead>
+        <tr>
+            <th>{{'loginId'|translate}}</th>
+            <th>{{'operate'|translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in rowCollection">
+            <td><a href="" ng-click="addIb(row)">{{row.loginId}}</a></td>
+            <td>
+                <common-button translate="edit" ng-click="editClick(row)"></common-button>
+                <common-button translate="delete" ng-click="removeClick(row)"></common-button>
+                <common-button translate="addIb" ng-click="addIbClick(row)"></common-button>
+                <common-button translate="addMember" ng-click="addMemberClick(row)"></common-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/ng-template" id="ibEdit.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
+                </div>
+                <div class="modal-body" ng-init="init()">
+                    <form name="editForm" class="form-horizontal" role="form">
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">base</legend>
+                            <div class="row" ng-show="currentAction=='add'">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="loginId" class="col-md-5 control-label" translate="loginId"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">{{editObj.prefixLoginId}}</span>
+                                                <text-input id="loginId" ng-model="editObj.loginId" focus="true" required></text-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label for="password" class="col-md-5 control-label" translate="userPassword"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <password-input id="password" ng-model="editObj.password" required></password-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="currentAction=='edit'">
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-2 control-label" translate="loginId"></label>
+                                        <div class="col-md-8 valueCol">
+                                            <p class="form-control-static">{{editObj.loginId}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend">house</legend>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <select ng-model="selectedTradeHouseRule"
+                                            ng-options="tradeHouseRule.houseName for tradeHouseRule in tradeHouseRuleList">
+                                    </select>
+                                    <tabset>
+                                        <tab ng-repeat="tradeGroup in selectedTradeHouseRule.tradeGroupList">
+                                            <tab-heading>
+                                                <div >
+                                                    {{tradeGroup.groupName}}
+                                                    <input type="checkbox" ng-model="tradeGroup.selected"/>
+                                                </div>
+                                            </tab-heading>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-xs">
+                                                        <label class="col-md-5 control-label" translate="initialMargin"></label>
+                                                        <div class="col-md-7 valueCol">
+                                                            <p class="form-control-static">{{tradeGroup.initialMargin}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-xs">
+                                                        <label class="col-md-5 control-label" translate="maintainMargin"></label>
+                                                        <div class="col-md-7 valueCol">
+                                                            <p class="form-control-static">{{tradeGroup.maintainMargin}}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </tab>
+                                    </tabset>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                    <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+</body>
+</html>

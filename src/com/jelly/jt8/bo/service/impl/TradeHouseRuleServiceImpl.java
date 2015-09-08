@@ -3,6 +3,7 @@ package com.jelly.jt8.bo.service.impl;
 import com.jelly.jt8.bo.dao.*;
 import com.jelly.jt8.bo.model.*;
 import com.jelly.jt8.bo.service.TradeHouseRuleService;
+import com.jelly.jt8.bo.util.ErrorMsg;
 import com.jelly.jt8.bo.util.SqlTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -92,7 +93,7 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
     }
 
     @Override
-    public List<TradeHouseRule> select4Ib(int userId) throws Exception {
+    public List<TradeHouseRule> select4IbInsert(int userId) throws Exception {
         BoUser loginUser = boUserDao.select(userId);
         List<TradeHouseRule> tradeHouseRuleList = null;
         if(loginUser.getHouseId()!=null){
@@ -101,27 +102,19 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
             tradeHouseRuleList = tradeHouseRuleDao.select(loginUser.getLoginId());
         }
         if(tradeHouseRuleList.size()==0){
-            //throw exception
+            throw new Exception(ErrorMsg.TRADE_HOUSE_RULE_NOT_FOUND);
         }
         List<TradeIbGroup> tradeIbGroupList = tradeIbGroupDao.select(userId);//拿到此user的所有group了,要依houseRule的category去分,但不知TradeIbGroup的category是什麼,只有group_id
         List<TradeGroup> tradeGroupList = tradeGroupDao.select();//先拿出所有tradeGroup
 
-        Map<String, TradeHouseRule> tradeHouseRuleMap = new HashMap<String, TradeHouseRule>();
-        Map<Integer, TradeGroup> tradeGroupMap = new HashMap<Integer, TradeGroup>();
+        Map<String, TradeHouseRule> tradeHouseRuleMap = getTradeHouseRuleMap(tradeHouseRuleList);
+        Map<Integer, TradeGroup> tradeGroupMap = getTradeGroupMap(tradeGroupList);
         String key = null;
+
         TradeHouseRule rule = null;
         TradeGroup group = null;
         List<TradeIbGroup> ibGroupList = null;
         List<TradeGroup> ruleTradeGroupList = null;
-        for (TradeHouseRule tradeHouseRule : tradeHouseRuleList) {
-            key = tradeHouseRule.getCategory() + tradeHouseRule.getExchangeId();
-            tradeHouseRuleMap.put(key, tradeHouseRule);
-        }
-
-        for (TradeGroup tradeGroup : tradeGroupList) {
-            tradeGroupMap.put(tradeGroup.getGroupId(), tradeGroup);
-        }
-
         for (TradeIbGroup tradeIbGroup : tradeIbGroupList) {
             group = tradeGroupMap.get(tradeIbGroup.getGroupId());
             key = group.getCategory() + group.getExchangeId();
@@ -140,6 +133,76 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
             ruleTradeGroupList.add(group);
         }
         return tradeHouseRuleList;
+    }
+
+    @Override
+    public List<TradeHouseRule> select4IbUpdate(int userId,int parentIbUserId) throws Exception {
+        BoUser loginUser = boUserDao.select(userId);
+        List<TradeHouseRule> tradeHouseRuleList = null;
+        if(loginUser.getHouseId()!=null){
+            tradeHouseRuleList = tradeHouseRuleDao.select(loginUser.getHouseId());
+        } else{
+            tradeHouseRuleList = tradeHouseRuleDao.select(loginUser.getLoginId());
+        }
+        if(tradeHouseRuleList.size()==0){
+            throw new Exception(ErrorMsg.TRADE_HOUSE_RULE_NOT_FOUND);
+        }
+        List<TradeIbGroup> parentIbTradeIbGroupList = tradeIbGroupDao.select(parentIbUserId);
+        List<TradeIbGroup> tradeIbGroupList = tradeIbGroupDao.select(userId);//拿到此user的所有group了,要依houseRule的category去分,但不知TradeIbGroup的category是什麼,只有group_id
+        List<TradeGroup> tradeGroupList = tradeGroupDao.select();//先拿出所有tradeGroup
+
+        Map<String, TradeHouseRule> tradeHouseRuleMap = getTradeHouseRuleMap(tradeHouseRuleList);
+        Map<Integer, TradeGroup> tradeGroupMap = getTradeGroupMap(tradeGroupList);
+        String key = null;
+
+        TradeHouseRule rule = null;
+        TradeGroup group = null;
+        List<TradeIbGroup> ibGroupList = null;
+        List<TradeGroup> ruleTradeGroupList = null;
+        //UI要顯示的可選group列表是來自parentIbGroup
+        for (TradeIbGroup tradeIbGroup : parentIbTradeIbGroupList) {
+            group = tradeGroupMap.get(tradeIbGroup.getGroupId());
+            key = group.getCategory() + group.getExchangeId();
+            rule = tradeHouseRuleMap.get(key);
+            ruleTradeGroupList = rule.getTradeGroupList();
+            if(ruleTradeGroupList==null){
+                ruleTradeGroupList = new ArrayList<TradeGroup>();
+                rule.setTradeGroupList(ruleTradeGroupList);
+            }
+            ruleTradeGroupList.add(group);
+        }
+        //此ib已選的group
+        for (TradeIbGroup tradeIbGroup : tradeIbGroupList) {
+            group = tradeGroupMap.get(tradeIbGroup.getGroupId());
+            key = group.getCategory() + group.getExchangeId();
+            rule = tradeHouseRuleMap.get(key);
+            ibGroupList = rule.getTradeIbGroupList();
+            if (ibGroupList == null) {
+                ibGroupList = new ArrayList<TradeIbGroup>();
+                rule.setTradeIbGroupList(ibGroupList);
+            }
+            ibGroupList.add(tradeIbGroup);
+        }
+        return tradeHouseRuleList;
+    }
+
+    private Map<String, TradeHouseRule> getTradeHouseRuleMap(List<TradeHouseRule> tradeHouseRuleList)throws Exception{
+        Map<String, TradeHouseRule> tradeHouseRuleMap = new HashMap<String, TradeHouseRule>();
+        String key = null;
+
+        for (TradeHouseRule tradeHouseRule : tradeHouseRuleList) {
+            key = tradeHouseRule.getCategory() + tradeHouseRule.getExchangeId();
+            tradeHouseRuleMap.put(key, tradeHouseRule);
+        }
+        return tradeHouseRuleMap;
+    }
+
+    private Map<Integer, TradeGroup> getTradeGroupMap(List<TradeGroup> tradeGroupList) throws Exception{
+        Map<Integer, TradeGroup> tradeGroupMap = new HashMap<Integer, TradeGroup>();
+        for (TradeGroup tradeGroup : tradeGroupList) {
+            tradeGroupMap.put(tradeGroup.getGroupId(), tradeGroup);
+        }
+        return tradeGroupMap;
     }
 
     @Override

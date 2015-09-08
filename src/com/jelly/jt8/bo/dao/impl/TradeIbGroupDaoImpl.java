@@ -72,7 +72,7 @@ public class TradeIbGroupDaoImpl extends BaseDao implements TradeIbGroupDao {
         Connection conn = null;
         try {
             conn = jt8Ds.getConnection();
-            stmt = conn.prepareStatement(selectSQL() + QUERY_WITH_PARENT_USER_ID);
+            stmt = conn.prepareStatement(QUERY_WITH_PARENT_USER_ID);
             stmt.setInt(1, parentUserId);
             rs = stmt.executeQuery();
             while (rs.next()){

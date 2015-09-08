@@ -33,6 +33,7 @@ public class BoUser extends BaseModel{
     private List<BoRolePermission> boRolePermissionList;
     private String houseId;
     private List<Integer> tradeGroupIdList;
+    private Integer parentIbUserId;
 
     @Id
     @Column(name = "user_id", insertable = false)
@@ -322,5 +323,15 @@ public class BoUser extends BaseModel{
 
     public void setHouseId(String houseId) {
         this.houseId = houseId;
+    }
+
+    @Basic
+    @Column(name = "parent_ib_user_id")
+    public Integer getParentIbUserId() {
+        return parentIbUserId;
+    }
+
+    public void setParentIbUserId(Integer parentIbUserId) {
+        this.parentIbUserId = parentIbUserId;
     }
 }

@@ -1,7 +1,6 @@
 package com.jelly.jt8.bo.controller;
 
 import com.google.gson.Gson;
-import com.jelly.jt8.bo.model.TradeGroup;
 import com.jelly.jt8.bo.model.TradeHouseRule;
 import com.jelly.jt8.bo.service.TradeHouseRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,12 +59,29 @@ public class TradeHouseRuleController extends BaseController {
     @RequestMapping( params = "ibUserId", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<String> getList1(@RequestParam(value="ibUserId") int ibUserId) {
+    ResponseEntity<String> getAddList(@RequestParam(value="ibUserId") int ibUserId) {
         Gson gson = new Gson();
         List<TradeHouseRule> list = null;
         String payload = "";
         try {
-            list = service.select4Ib(ibUserId);
+            list = service.select4IbInsert(ibUserId);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(list);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping( params = {"ibUserId","parentIbUserId"}, method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<String> getEditList(@RequestParam(value="ibUserId") int ibUserId,@RequestParam(value="parentIbUserId") int parentIbUserId) {
+        Gson gson = new Gson();
+        List<TradeHouseRule> list = null;
+        String payload = "";
+        try {
+            list = service.select4IbUpdate(ibUserId, parentIbUserId);
         } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }

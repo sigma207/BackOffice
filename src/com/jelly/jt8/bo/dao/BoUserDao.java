@@ -13,6 +13,7 @@ public interface BoUserDao{
     BoUser select(int userId) throws Exception;
     List<BoUser> select() throws Exception;
     List<BoUser> selectChildren(int parentUserId) throws Exception;
+    List<BoUser> selectIbChildren(int parentIbUserId) throws Exception;
     void insert(Connection conn, BoUser object) throws Exception;
     void update(Connection conn, BoUser object) throws Exception;
     void delete(Connection conn, BoUser object) throws Exception;

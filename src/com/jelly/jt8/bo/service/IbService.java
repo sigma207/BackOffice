@@ -10,6 +10,7 @@ import java.util.List;
  */
 public interface IbService {
     List<BoUser> select(int parentUserId) throws Exception;
+    List<BoUser> selectIbChildren(int parentIbUserId) throws Exception;
     void insert(BoUser object) throws Exception;
     void delete(BoUser object) throws Exception;
     void update(BoUser object) throws Exception;

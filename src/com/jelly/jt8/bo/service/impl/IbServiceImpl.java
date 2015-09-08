@@ -27,7 +27,7 @@ import java.util.Set;
  */
 @Service("ibService")
 public class IbServiceImpl implements IbService {
-    private String eSalesRoleCode = "eSales";
+    private final static String ESalesRoleCode = "eSales";
     @Autowired
     @Qualifier("BoUserDao")
     private BoUserDao boUserDao;
@@ -54,10 +54,15 @@ public class IbServiceImpl implements IbService {
     }
 
     @Override
+    public List<BoUser> selectIbChildren(int parentIbUserId) throws Exception {
+        return boUserDao.selectIbChildren(parentIbUserId);
+    }
+
+    @Override
     public void insert(BoUser object) throws Exception {
         Connection conn = null;
         try {
-            BoRole eSalesRole  = boRoleDao.select(eSalesRoleCode);
+            BoRole eSalesRole  = boRoleDao.select(ESalesRoleCode);
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             object.setPassword(Password.createPassword(object.getPassword()));

@@ -24,6 +24,7 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
     private final static String WHERE_LOGIN_ID = " WHERE login_id = ? ";
     private final static String WHERE_USER_ID = " WHERE user_id = ? ";
     private final static String WHERE_PARENT_USER_ID = " WHERE parent_user_id = ? ";
+    private final static String WHERE_PARENT_IB_USER_ID = " WHERE parent_ib_user_id = ? ";
     public BoUserDaoImpl() {
         super(BoUser.class);
     }
@@ -117,6 +118,38 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(selectSQL() + WHERE_PARENT_USER_ID);
             stmt.setInt(1, parentUserId);
+            rs = stmt.executeQuery();
+            selectToObject(rs,list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<BoUser> selectIbChildren(int parentIbUserId) throws Exception {
+        List<BoUser> list = new LinkedList<BoUser>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectSQL() + WHERE_PARENT_IB_USER_ID);
+            stmt.setInt(1, parentIbUserId);
             rs = stmt.executeQuery();
             selectToObject(rs,list);
         } catch (Exception e) {

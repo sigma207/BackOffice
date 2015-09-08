@@ -1,8 +1,8 @@
 /**
  * Created by user on 2015/9/3.
  */
-backOfficeApp.controller("AccountController", AccountController);
-function AccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, TradeHouseRuleService, IbService) {
+backOfficeApp.controller("IbLoginAccountController", IbLoginAccountController);
+function IbLoginAccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, TradeHouseRuleService, IbService) {
     $translatePartialLoader.addPart("account");
     $translate.refresh();
     $scope.ibList = [];
