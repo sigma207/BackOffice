@@ -17,7 +17,7 @@ import java.util.List;
  * Created by user on 2015/8/31.
  */
 @Controller
-@RequestMapping("/boRole")
+@RequestMapping("/boRoles")
 public class BoRoleController extends BaseController {
     @Autowired
     @Qualifier("boRoleService")

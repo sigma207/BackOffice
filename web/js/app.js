@@ -77,7 +77,7 @@ backOfficeApp.factory('LoginService', function (Restangular) {
 });
 
 backOfficeApp.factory('RoleService', function (Restangular) {
-    return Restangular.service('boRole');
+    return Restangular.service('boRoles');
 });
 backOfficeApp.factory('OrganizationService', function (Restangular) {
     return Restangular.service('boOrganization');
@@ -95,20 +95,24 @@ backOfficeApp.factory('TradeHouseRuleService', function (Restangular) {
     return Restangular.service('tradeHouseRule');
 });
 
+backOfficeApp.factory('SystemTradeRuleService', function (Restangular) {
+    return Restangular.service('systemTradeRules');
+});
+
 backOfficeApp.factory('TradeGroupService', function (Restangular) {
-    return Restangular.service('tradeGroup');
+    return Restangular.service('tradeGroups');
 });
 
 backOfficeApp.factory('SymbolHolidayService', function (Restangular) {
-    return Restangular.service('symbolHoliday');
+    return Restangular.service('symbolHolidays');
 });
 
 backOfficeApp.factory('SymbolHolidayExceptionService', function (Restangular) {
-    return Restangular.service('symbolHolidayException');
+    return Restangular.service('symbolHolidayExceptions');
 });
 
-backOfficeApp.factory('IbService', function (Restangular) {
-    return Restangular.service('ibs');
+backOfficeApp.factory('IbAccountService', function (Restangular) {
+    return Restangular.service('ibAccounts');
 });
 
 backOfficeApp.config(["$routeProvider", function ($routeProvider) {
@@ -138,13 +142,13 @@ backOfficeApp.config(["$routeProvider", function ($routeProvider) {
             templateUrl: "userManage/organization/Organization.html"
         }).
         when("/C3", {
-            templateUrl: "userManage/account/Account.html"
+            templateUrl: "userManage/ibAccount/IbAccount.html"
         }).
         when("/D1", {
-            templateUrl: "systemManage/houseRule/HouseRule.html"
+            templateUrl: "systemManage/tradeRule/TradeRule.html"
         }).
         when("/D2", {
-            templateUrl: "systemManage/accountGroup/AccountGroup.html"
+            templateUrl: "systemManage/tradeGroup/TradeGroup.html"
         }).
         otherwise({redirectTo: '/'})
 }]);

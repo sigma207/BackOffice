@@ -1,88 +1,22 @@
 package com.jelly.jt8.bo.model;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
- * Created by user on 2015/9/1.
+ * Created by user on 2015/9/9.
  */
 @Entity
-@Table(name = "trade_group", schema = "dbo", catalog = "jt8")
-public class TradeGroup extends BaseModel{
-    private int groupId;
-    private String groupName;
-    private String category;
+@javax.persistence.Table(name = "system_trade_rule", schema = "dbo", catalog = "jt8")
+public class SystemTradeRule extends BaseModel{
     private String exchangeId;
-    private int ownerId;
-    private Integer scale;
-    private BigDecimal initialMargin;
-    private BigDecimal maintainMargin;
-    private BigDecimal openCommission;
-    private BigDecimal closeCommission;
-    private BigDecimal buyCommission;
-    private BigDecimal sellCommission;
-    private BigDecimal tax;
-    private BigDecimal fee1;
-    private BigDecimal fee2;
-    private BigDecimal fee3;
-    private BigDecimal fee4;
-    private BigDecimal fee5;
-    private BigDecimal uplimit;
-    private BigDecimal downlimit;
-    private BigDecimal marketUplimit;
-    private BigDecimal marketDownlimit;
-    private BigDecimal marketUpdownlimitCharge;
-    private int specialStockRule;
-    private BigDecimal specialStockCharge;
-    private Long tvolDeltaRule;
-    private Integer tvolDeltaMinute;
-    private BigDecimal tvolDeltaCharge;
-    private String newOrderCloseTimeLimit;
-    private Integer oiDay;
-    private BigDecimal oiCharge;
-    private BigDecimal oiLots;
-    private BigDecimal overWithdrawalCreditPercentage;
-    private BigDecimal overWithdrawalCreditPercentageCharge;
-    private BigDecimal overWithdrawalCreditLimit;
-    private BigDecimal overWithdrawalCreditLimitCharge;
-    private BigDecimal liquidationRate;
-    private BigDecimal marginCallRate;
-    private int marginRate;
-    private BigDecimal maxLots;
-    private Integer isActive;
 
     @Id
-    @Column(name = "group_id", insertable = false)
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
-
-    @Basic
-    @Column(name = "group_name")
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    @Basic
-    @Column(name = "category")
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    @Basic
-    @Column(name = "exchange_id")
+    @javax.persistence.Column(name = "exchange_id")
     public String getExchangeId() {
         return exchangeId;
     }
@@ -91,18 +25,34 @@ public class TradeGroup extends BaseModel{
         this.exchangeId = exchangeId;
     }
 
-    @Basic
-    @Column(name = "owner_id")
-    public int getOwnerId() {
-        return ownerId;
+    private String category;
+
+    @Id
+    @javax.persistence.Column(name = "category")
+    public String getCategory() {
+        return category;
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
+    private String ruleName;
+
     @Basic
-    @Column(name = "scale")
+    @javax.persistence.Column(name = "rule_name")
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    private Integer scale;
+
+    @Basic
+    @javax.persistence.Column(name = "scale")
     public Integer getScale() {
         return scale;
     }
@@ -111,8 +61,10 @@ public class TradeGroup extends BaseModel{
         this.scale = scale;
     }
 
+    private BigDecimal initialMargin;
+
     @Basic
-    @Column(name = "initial_margin")
+    @javax.persistence.Column(name = "initial_margin")
     public BigDecimal getInitialMargin() {
         return initialMargin;
     }
@@ -121,8 +73,10 @@ public class TradeGroup extends BaseModel{
         this.initialMargin = initialMargin;
     }
 
+    private BigDecimal maintainMargin;
+
     @Basic
-    @Column(name = "maintain_margin")
+    @javax.persistence.Column(name = "maintain_margin")
     public BigDecimal getMaintainMargin() {
         return maintainMargin;
     }
@@ -131,8 +85,10 @@ public class TradeGroup extends BaseModel{
         this.maintainMargin = maintainMargin;
     }
 
+    private BigDecimal openCommission;
+
     @Basic
-    @Column(name = "open_commission")
+    @javax.persistence.Column(name = "open_commission")
     public BigDecimal getOpenCommission() {
         return openCommission;
     }
@@ -141,8 +97,10 @@ public class TradeGroup extends BaseModel{
         this.openCommission = openCommission;
     }
 
+    private BigDecimal closeCommission;
+
     @Basic
-    @Column(name = "close_commission")
+    @javax.persistence.Column(name = "close_commission")
     public BigDecimal getCloseCommission() {
         return closeCommission;
     }
@@ -151,28 +109,22 @@ public class TradeGroup extends BaseModel{
         this.closeCommission = closeCommission;
     }
 
-    @Basic
-    @Column(name = "buy_commission")
-    public BigDecimal getBuyCommission() {
-        return buyCommission;
-    }
-
-    public void setBuyCommission(BigDecimal buyCommission) {
-        this.buyCommission = buyCommission;
-    }
+    private BigDecimal overnightCharge;
 
     @Basic
-    @Column(name = "sell_commission")
-    public BigDecimal getSellCommission() {
-        return sellCommission;
+    @javax.persistence.Column(name = "overnight_charge")
+    public BigDecimal getOvernightCharge() {
+        return overnightCharge;
     }
 
-    public void setSellCommission(BigDecimal sellCommission) {
-        this.sellCommission = sellCommission;
+    public void setOvernightCharge(BigDecimal overnightCharge) {
+        this.overnightCharge = overnightCharge;
     }
+
+    private BigDecimal tax;
 
     @Basic
-    @Column(name = "tax")
+    @javax.persistence.Column(name = "tax")
     public BigDecimal getTax() {
         return tax;
     }
@@ -181,8 +133,10 @@ public class TradeGroup extends BaseModel{
         this.tax = tax;
     }
 
+    private BigDecimal fee1;
+
     @Basic
-    @Column(name = "fee1")
+    @javax.persistence.Column(name = "fee1")
     public BigDecimal getFee1() {
         return fee1;
     }
@@ -191,8 +145,10 @@ public class TradeGroup extends BaseModel{
         this.fee1 = fee1;
     }
 
+    private BigDecimal fee2;
+
     @Basic
-    @Column(name = "fee2")
+    @javax.persistence.Column(name = "fee2")
     public BigDecimal getFee2() {
         return fee2;
     }
@@ -201,8 +157,10 @@ public class TradeGroup extends BaseModel{
         this.fee2 = fee2;
     }
 
+    private BigDecimal fee3;
+
     @Basic
-    @Column(name = "fee3")
+    @javax.persistence.Column(name = "fee3")
     public BigDecimal getFee3() {
         return fee3;
     }
@@ -211,8 +169,10 @@ public class TradeGroup extends BaseModel{
         this.fee3 = fee3;
     }
 
+    private BigDecimal fee4;
+
     @Basic
-    @Column(name = "fee4")
+    @javax.persistence.Column(name = "fee4")
     public BigDecimal getFee4() {
         return fee4;
     }
@@ -221,8 +181,10 @@ public class TradeGroup extends BaseModel{
         this.fee4 = fee4;
     }
 
+    private BigDecimal fee5;
+
     @Basic
-    @Column(name = "fee5")
+    @javax.persistence.Column(name = "fee5")
     public BigDecimal getFee5() {
         return fee5;
     }
@@ -231,8 +193,130 @@ public class TradeGroup extends BaseModel{
         this.fee5 = fee5;
     }
 
+    private String openTime1;
+
     @Basic
-    @Column(name = "uplimit")
+    @javax.persistence.Column(name = "open_time1")
+    public String getOpenTime1() {
+        return openTime1;
+    }
+
+    public void setOpenTime1(String openTime1) {
+        this.openTime1 = openTime1;
+    }
+
+    private String closeTime1;
+
+    @Basic
+    @javax.persistence.Column(name = "close_time1")
+    public String getCloseTime1() {
+        return closeTime1;
+    }
+
+    public void setCloseTime1(String closeTime1) {
+        this.closeTime1 = closeTime1;
+    }
+
+    private String resetTime1;
+
+    @Basic
+    @javax.persistence.Column(name = "reset_time1")
+    public String getResetTime1() {
+        return resetTime1;
+    }
+
+    public void setResetTime1(String resetTime1) {
+        this.resetTime1 = resetTime1;
+    }
+
+    private String openTime2;
+
+    @Basic
+    @javax.persistence.Column(name = "open_time2")
+    public String getOpenTime2() {
+        return openTime2;
+    }
+
+    public void setOpenTime2(String openTime2) {
+        this.openTime2 = openTime2;
+    }
+
+    private String closeTime2;
+
+    @Basic
+    @javax.persistence.Column(name = "close_time2")
+    public String getCloseTime2() {
+        return closeTime2;
+    }
+
+    public void setCloseTime2(String closeTime2) {
+        this.closeTime2 = closeTime2;
+    }
+
+    private String resetTime2;
+
+    @Basic
+    @javax.persistence.Column(name = "reset_time2")
+    public String getResetTime2() {
+        return resetTime2;
+    }
+
+    public void setResetTime2(String resetTime2) {
+        this.resetTime2 = resetTime2;
+    }
+
+    private String rolloverTime;
+
+    @Basic
+    @javax.persistence.Column(name = "rollover_time")
+    public String getRolloverTime() {
+        return rolloverTime;
+    }
+
+    public void setRolloverTime(String rolloverTime) {
+        this.rolloverTime = rolloverTime;
+    }
+
+    private String settlementTime;
+
+    @Basic
+    @javax.persistence.Column(name = "settlement_time")
+    public String getSettlementTime() {
+        return settlementTime;
+    }
+
+    public void setSettlementTime(String settlementTime) {
+        this.settlementTime = settlementTime;
+    }
+
+    private String newOrderTime;
+
+    @Basic
+    @javax.persistence.Column(name = "new_order_time")
+    public String getNewOrderTime() {
+        return newOrderTime;
+    }
+
+    public void setNewOrderTime(String newOrderTime) {
+        this.newOrderTime = newOrderTime;
+    }
+
+    private String lastOrderTime;
+
+    @Basic
+    @javax.persistence.Column(name = "last_order_time")
+    public String getLastOrderTime() {
+        return lastOrderTime;
+    }
+
+    public void setLastOrderTime(String lastOrderTime) {
+        this.lastOrderTime = lastOrderTime;
+    }
+
+    private BigDecimal uplimit;
+
+    @Basic
+    @javax.persistence.Column(name = "uplimit")
     public BigDecimal getUplimit() {
         return uplimit;
     }
@@ -241,8 +325,10 @@ public class TradeGroup extends BaseModel{
         this.uplimit = uplimit;
     }
 
+    private BigDecimal downlimit;
+
     @Basic
-    @Column(name = "downlimit")
+    @javax.persistence.Column(name = "downlimit")
     public BigDecimal getDownlimit() {
         return downlimit;
     }
@@ -251,8 +337,10 @@ public class TradeGroup extends BaseModel{
         this.downlimit = downlimit;
     }
 
+    private BigDecimal marketUplimit;
+
     @Basic
-    @Column(name = "market_uplimit")
+    @javax.persistence.Column(name = "market_uplimit")
     public BigDecimal getMarketUplimit() {
         return marketUplimit;
     }
@@ -261,8 +349,10 @@ public class TradeGroup extends BaseModel{
         this.marketUplimit = marketUplimit;
     }
 
+    private BigDecimal marketDownlimit;
+
     @Basic
-    @Column(name = "market_downlimit")
+    @javax.persistence.Column(name = "market_downlimit")
     public BigDecimal getMarketDownlimit() {
         return marketDownlimit;
     }
@@ -271,8 +361,10 @@ public class TradeGroup extends BaseModel{
         this.marketDownlimit = marketDownlimit;
     }
 
+    private BigDecimal marketUpdownlimitCharge;
+
     @Basic
-    @Column(name = "market_updownlimit_charge")
+    @javax.persistence.Column(name = "market_updownlimit_charge")
     public BigDecimal getMarketUpdownlimitCharge() {
         return marketUpdownlimitCharge;
     }
@@ -281,18 +373,22 @@ public class TradeGroup extends BaseModel{
         this.marketUpdownlimitCharge = marketUpdownlimitCharge;
     }
 
+    private BigDecimal specialStockRule;
+
     @Basic
-    @Column(name = "special_stock_rule")
-    public int getSpecialStockRule() {
+    @javax.persistence.Column(name = "special_stock_rule")
+    public BigDecimal getSpecialStockRule() {
         return specialStockRule;
     }
 
-    public void setSpecialStockRule(int specialStockRule) {
+    public void setSpecialStockRule(BigDecimal specialStockRule) {
         this.specialStockRule = specialStockRule;
     }
 
+    private BigDecimal specialStockCharge;
+
     @Basic
-    @Column(name = "special_stock_charge")
+    @javax.persistence.Column(name = "special_stock_charge")
     public BigDecimal getSpecialStockCharge() {
         return specialStockCharge;
     }
@@ -301,8 +397,10 @@ public class TradeGroup extends BaseModel{
         this.specialStockCharge = specialStockCharge;
     }
 
+    private Long tvolDeltaRule;
+
     @Basic
-    @Column(name = "tvol_delta_rule")
+    @javax.persistence.Column(name = "tvol_delta_rule")
     public Long getTvolDeltaRule() {
         return tvolDeltaRule;
     }
@@ -311,8 +409,10 @@ public class TradeGroup extends BaseModel{
         this.tvolDeltaRule = tvolDeltaRule;
     }
 
+    private Integer tvolDeltaMinute;
+
     @Basic
-    @Column(name = "tvol_delta_minute")
+    @javax.persistence.Column(name = "tvol_delta_minute")
     public Integer getTvolDeltaMinute() {
         return tvolDeltaMinute;
     }
@@ -321,8 +421,10 @@ public class TradeGroup extends BaseModel{
         this.tvolDeltaMinute = tvolDeltaMinute;
     }
 
+    private BigDecimal tvolDeltaCharge;
+
     @Basic
-    @Column(name = "tvol_delta_charge")
+    @javax.persistence.Column(name = "tvol_delta_charge")
     public BigDecimal getTvolDeltaCharge() {
         return tvolDeltaCharge;
     }
@@ -331,8 +433,10 @@ public class TradeGroup extends BaseModel{
         this.tvolDeltaCharge = tvolDeltaCharge;
     }
 
+    private String newOrderCloseTimeLimit;
+
     @Basic
-    @Column(name = "new_order_close_time_limit")
+    @javax.persistence.Column(name = "new_order_close_time_limit")
     public String getNewOrderCloseTimeLimit() {
         return newOrderCloseTimeLimit;
     }
@@ -341,8 +445,10 @@ public class TradeGroup extends BaseModel{
         this.newOrderCloseTimeLimit = newOrderCloseTimeLimit;
     }
 
+    private Integer oiDay;
+
     @Basic
-    @Column(name = "oi_day")
+    @javax.persistence.Column(name = "oi_day")
     public Integer getOiDay() {
         return oiDay;
     }
@@ -351,28 +457,10 @@ public class TradeGroup extends BaseModel{
         this.oiDay = oiDay;
     }
 
-    @Basic
-    @Column(name = "oi_charge")
-    public BigDecimal getOiCharge() {
-        return oiCharge;
-    }
-
-    public void setOiCharge(BigDecimal oiCharge) {
-        this.oiCharge = oiCharge;
-    }
+    private BigDecimal overWithdrawalCreditPercentage;
 
     @Basic
-    @Column(name = "oi_lots")
-    public BigDecimal getOiLots() {
-        return oiLots;
-    }
-
-    public void setOiLots(BigDecimal oiLots) {
-        this.oiLots = oiLots;
-    }
-
-    @Basic
-    @Column(name = "over_withdrawal_credit_percentage")
+    @javax.persistence.Column(name = "over_withdrawal_credit_percentage")
     public BigDecimal getOverWithdrawalCreditPercentage() {
         return overWithdrawalCreditPercentage;
     }
@@ -381,8 +469,10 @@ public class TradeGroup extends BaseModel{
         this.overWithdrawalCreditPercentage = overWithdrawalCreditPercentage;
     }
 
+    private BigDecimal overWithdrawalCreditPercentageCharge;
+
     @Basic
-    @Column(name = "over_withdrawal_credit_percentage_charge")
+    @javax.persistence.Column(name = "over_withdrawal_credit_percentage_charge")
     public BigDecimal getOverWithdrawalCreditPercentageCharge() {
         return overWithdrawalCreditPercentageCharge;
     }
@@ -391,8 +481,10 @@ public class TradeGroup extends BaseModel{
         this.overWithdrawalCreditPercentageCharge = overWithdrawalCreditPercentageCharge;
     }
 
+    private BigDecimal overWithdrawalCreditLimit;
+
     @Basic
-    @Column(name = "over_withdrawal_credit_limit")
+    @javax.persistence.Column(name = "over_withdrawal_credit_limit")
     public BigDecimal getOverWithdrawalCreditLimit() {
         return overWithdrawalCreditLimit;
     }
@@ -401,8 +493,10 @@ public class TradeGroup extends BaseModel{
         this.overWithdrawalCreditLimit = overWithdrawalCreditLimit;
     }
 
+    private BigDecimal overWithdrawalCreditLimitCharge;
+
     @Basic
-    @Column(name = "over_withdrawal_credit_limit_charge")
+    @javax.persistence.Column(name = "over_withdrawal_credit_limit_charge")
     public BigDecimal getOverWithdrawalCreditLimitCharge() {
         return overWithdrawalCreditLimitCharge;
     }
@@ -411,8 +505,10 @@ public class TradeGroup extends BaseModel{
         this.overWithdrawalCreditLimitCharge = overWithdrawalCreditLimitCharge;
     }
 
+    private BigDecimal liquidationRate;
+
     @Basic
-    @Column(name = "liquidation_rate")
+    @javax.persistence.Column(name = "liquidation_rate")
     public BigDecimal getLiquidationRate() {
         return liquidationRate;
     }
@@ -421,8 +517,10 @@ public class TradeGroup extends BaseModel{
         this.liquidationRate = liquidationRate;
     }
 
+    private BigDecimal marginCallRate;
+
     @Basic
-    @Column(name = "margin_call_rate")
+    @javax.persistence.Column(name = "margin_call_rate")
     public BigDecimal getMarginCallRate() {
         return marginCallRate;
     }
@@ -431,24 +529,15 @@ public class TradeGroup extends BaseModel{
         this.marginCallRate = marginCallRate;
     }
 
-    @Basic
-    @Column(name = "margin_rate")
-    public int getMarginRate() {
-        return marginRate;
+    private List<TradeGroup> tradeGroupList;
+
+    @Transient
+    public List<TradeGroup> getTradeGroupList() {
+        return tradeGroupList;
     }
 
-    public void setMarginRate(int marginRate) {
-        this.marginRate = marginRate;
-    }
-
-    @Basic
-    @Column(name = "max_lots")
-    public BigDecimal getMaxLots() {
-        return maxLots;
-    }
-
-    public void setMaxLots(BigDecimal maxLots) {
-        this.maxLots = maxLots;
+    public void setTradeGroupList(List<TradeGroup> tradeGroupList) {
+        this.tradeGroupList = tradeGroupList;
     }
 
     @Override
@@ -456,15 +545,11 @@ public class TradeGroup extends BaseModel{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TradeGroup that = (TradeGroup) o;
+        SystemTradeRule that = (SystemTradeRule) o;
 
-        if (groupId != that.groupId) return false;
-        if (ownerId != that.ownerId) return false;
-        if (specialStockRule != that.specialStockRule) return false;
-        if (marginRate != that.marginRate) return false;
-        if (groupName != null ? !groupName.equals(that.groupName) : that.groupName != null) return false;
-        if (category != null ? !category.equals(that.category) : that.category != null) return false;
         if (exchangeId != null ? !exchangeId.equals(that.exchangeId) : that.exchangeId != null) return false;
+        if (category != null ? !category.equals(that.category) : that.category != null) return false;
+        if (ruleName != null ? !ruleName.equals(that.ruleName) : that.ruleName != null) return false;
         if (scale != null ? !scale.equals(that.scale) : that.scale != null) return false;
         if (initialMargin != null ? !initialMargin.equals(that.initialMargin) : that.initialMargin != null)
             return false;
@@ -474,9 +559,7 @@ public class TradeGroup extends BaseModel{
             return false;
         if (closeCommission != null ? !closeCommission.equals(that.closeCommission) : that.closeCommission != null)
             return false;
-        if (buyCommission != null ? !buyCommission.equals(that.buyCommission) : that.buyCommission != null)
-            return false;
-        if (sellCommission != null ? !sellCommission.equals(that.sellCommission) : that.sellCommission != null)
+        if (overnightCharge != null ? !overnightCharge.equals(that.overnightCharge) : that.overnightCharge != null)
             return false;
         if (tax != null ? !tax.equals(that.tax) : that.tax != null) return false;
         if (fee1 != null ? !fee1.equals(that.fee1) : that.fee1 != null) return false;
@@ -484,6 +567,18 @@ public class TradeGroup extends BaseModel{
         if (fee3 != null ? !fee3.equals(that.fee3) : that.fee3 != null) return false;
         if (fee4 != null ? !fee4.equals(that.fee4) : that.fee4 != null) return false;
         if (fee5 != null ? !fee5.equals(that.fee5) : that.fee5 != null) return false;
+        if (openTime1 != null ? !openTime1.equals(that.openTime1) : that.openTime1 != null) return false;
+        if (closeTime1 != null ? !closeTime1.equals(that.closeTime1) : that.closeTime1 != null) return false;
+        if (resetTime1 != null ? !resetTime1.equals(that.resetTime1) : that.resetTime1 != null) return false;
+        if (openTime2 != null ? !openTime2.equals(that.openTime2) : that.openTime2 != null) return false;
+        if (closeTime2 != null ? !closeTime2.equals(that.closeTime2) : that.closeTime2 != null) return false;
+        if (resetTime2 != null ? !resetTime2.equals(that.resetTime2) : that.resetTime2 != null) return false;
+        if (rolloverTime != null ? !rolloverTime.equals(that.rolloverTime) : that.rolloverTime != null) return false;
+        if (settlementTime != null ? !settlementTime.equals(that.settlementTime) : that.settlementTime != null)
+            return false;
+        if (newOrderTime != null ? !newOrderTime.equals(that.newOrderTime) : that.newOrderTime != null) return false;
+        if (lastOrderTime != null ? !lastOrderTime.equals(that.lastOrderTime) : that.lastOrderTime != null)
+            return false;
         if (uplimit != null ? !uplimit.equals(that.uplimit) : that.uplimit != null) return false;
         if (downlimit != null ? !downlimit.equals(that.downlimit) : that.downlimit != null) return false;
         if (marketUplimit != null ? !marketUplimit.equals(that.marketUplimit) : that.marketUplimit != null)
@@ -491,6 +586,8 @@ public class TradeGroup extends BaseModel{
         if (marketDownlimit != null ? !marketDownlimit.equals(that.marketDownlimit) : that.marketDownlimit != null)
             return false;
         if (marketUpdownlimitCharge != null ? !marketUpdownlimitCharge.equals(that.marketUpdownlimitCharge) : that.marketUpdownlimitCharge != null)
+            return false;
+        if (specialStockRule != null ? !specialStockRule.equals(that.specialStockRule) : that.specialStockRule != null)
             return false;
         if (specialStockCharge != null ? !specialStockCharge.equals(that.specialStockCharge) : that.specialStockCharge != null)
             return false;
@@ -503,8 +600,6 @@ public class TradeGroup extends BaseModel{
         if (newOrderCloseTimeLimit != null ? !newOrderCloseTimeLimit.equals(that.newOrderCloseTimeLimit) : that.newOrderCloseTimeLimit != null)
             return false;
         if (oiDay != null ? !oiDay.equals(that.oiDay) : that.oiDay != null) return false;
-        if (oiCharge != null ? !oiCharge.equals(that.oiCharge) : that.oiCharge != null) return false;
-        if (oiLots != null ? !oiLots.equals(that.oiLots) : that.oiLots != null) return false;
         if (overWithdrawalCreditPercentage != null ? !overWithdrawalCreditPercentage.equals(that.overWithdrawalCreditPercentage) : that.overWithdrawalCreditPercentage != null)
             return false;
         if (overWithdrawalCreditPercentageCharge != null ? !overWithdrawalCreditPercentageCharge.equals(that.overWithdrawalCreditPercentageCharge) : that.overWithdrawalCreditPercentageCharge != null)
@@ -517,63 +612,55 @@ public class TradeGroup extends BaseModel{
             return false;
         if (marginCallRate != null ? !marginCallRate.equals(that.marginCallRate) : that.marginCallRate != null)
             return false;
-        if (maxLots != null ? !maxLots.equals(that.maxLots) : that.maxLots != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = groupId;
-        result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
+        int result = exchangeId != null ? exchangeId.hashCode() : 0;
         result = 31 * result + (category != null ? category.hashCode() : 0);
-        result = 31 * result + (exchangeId != null ? exchangeId.hashCode() : 0);
-        result = 31 * result + ownerId;
+        result = 31 * result + (ruleName != null ? ruleName.hashCode() : 0);
         result = 31 * result + (scale != null ? scale.hashCode() : 0);
         result = 31 * result + (initialMargin != null ? initialMargin.hashCode() : 0);
         result = 31 * result + (maintainMargin != null ? maintainMargin.hashCode() : 0);
         result = 31 * result + (openCommission != null ? openCommission.hashCode() : 0);
         result = 31 * result + (closeCommission != null ? closeCommission.hashCode() : 0);
-        result = 31 * result + (buyCommission != null ? buyCommission.hashCode() : 0);
-        result = 31 * result + (sellCommission != null ? sellCommission.hashCode() : 0);
+        result = 31 * result + (overnightCharge != null ? overnightCharge.hashCode() : 0);
         result = 31 * result + (tax != null ? tax.hashCode() : 0);
         result = 31 * result + (fee1 != null ? fee1.hashCode() : 0);
         result = 31 * result + (fee2 != null ? fee2.hashCode() : 0);
         result = 31 * result + (fee3 != null ? fee3.hashCode() : 0);
         result = 31 * result + (fee4 != null ? fee4.hashCode() : 0);
         result = 31 * result + (fee5 != null ? fee5.hashCode() : 0);
+        result = 31 * result + (openTime1 != null ? openTime1.hashCode() : 0);
+        result = 31 * result + (closeTime1 != null ? closeTime1.hashCode() : 0);
+        result = 31 * result + (resetTime1 != null ? resetTime1.hashCode() : 0);
+        result = 31 * result + (openTime2 != null ? openTime2.hashCode() : 0);
+        result = 31 * result + (closeTime2 != null ? closeTime2.hashCode() : 0);
+        result = 31 * result + (resetTime2 != null ? resetTime2.hashCode() : 0);
+        result = 31 * result + (rolloverTime != null ? rolloverTime.hashCode() : 0);
+        result = 31 * result + (settlementTime != null ? settlementTime.hashCode() : 0);
+        result = 31 * result + (newOrderTime != null ? newOrderTime.hashCode() : 0);
+        result = 31 * result + (lastOrderTime != null ? lastOrderTime.hashCode() : 0);
         result = 31 * result + (uplimit != null ? uplimit.hashCode() : 0);
         result = 31 * result + (downlimit != null ? downlimit.hashCode() : 0);
         result = 31 * result + (marketUplimit != null ? marketUplimit.hashCode() : 0);
         result = 31 * result + (marketDownlimit != null ? marketDownlimit.hashCode() : 0);
         result = 31 * result + (marketUpdownlimitCharge != null ? marketUpdownlimitCharge.hashCode() : 0);
-        result = 31 * result + specialStockRule;
+        result = 31 * result + (specialStockRule != null ? specialStockRule.hashCode() : 0);
         result = 31 * result + (specialStockCharge != null ? specialStockCharge.hashCode() : 0);
         result = 31 * result + (tvolDeltaRule != null ? tvolDeltaRule.hashCode() : 0);
         result = 31 * result + (tvolDeltaMinute != null ? tvolDeltaMinute.hashCode() : 0);
         result = 31 * result + (tvolDeltaCharge != null ? tvolDeltaCharge.hashCode() : 0);
         result = 31 * result + (newOrderCloseTimeLimit != null ? newOrderCloseTimeLimit.hashCode() : 0);
         result = 31 * result + (oiDay != null ? oiDay.hashCode() : 0);
-        result = 31 * result + (oiCharge != null ? oiCharge.hashCode() : 0);
-        result = 31 * result + (oiLots != null ? oiLots.hashCode() : 0);
         result = 31 * result + (overWithdrawalCreditPercentage != null ? overWithdrawalCreditPercentage.hashCode() : 0);
         result = 31 * result + (overWithdrawalCreditPercentageCharge != null ? overWithdrawalCreditPercentageCharge.hashCode() : 0);
         result = 31 * result + (overWithdrawalCreditLimit != null ? overWithdrawalCreditLimit.hashCode() : 0);
         result = 31 * result + (overWithdrawalCreditLimitCharge != null ? overWithdrawalCreditLimitCharge.hashCode() : 0);
         result = 31 * result + (liquidationRate != null ? liquidationRate.hashCode() : 0);
         result = 31 * result + (marginCallRate != null ? marginCallRate.hashCode() : 0);
-        result = 31 * result + marginRate;
-        result = 31 * result + (maxLots != null ? maxLots.hashCode() : 0);
         return result;
-    }
-
-    @Basic
-    @Column(name = "is_active")
-    public Integer getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Integer isActive) {
-        this.isActive = isActive;
     }
 }

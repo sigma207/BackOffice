@@ -1,7 +1,9 @@
 package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.dao.TradeGroupDao;
+import com.jelly.jt8.bo.model.SymbolTradableDaily;
 import com.jelly.jt8.bo.model.TradeGroup;
+import com.jelly.jt8.common.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -17,7 +19,11 @@ import java.util.List;
 @Repository("TradeGroupDao")
 public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
     private final static String WHERE_CATEGORY_AND_OWNER_ID = " WHERE category = ? AND owner_id = ? ";
+    private final static String WHERE_CATEGORY = " WHERE category = ? ";
     private final static String WHERE_OWNER_ID = " WHERE owner_id = ? ";
+    private final static String UPDATE_IS_ACTIVE = "UPDATE trade_group SET is_active = ? WHERE group_id = ? ";
+    private final static String UPDATE_IS_ACTIVE_OFF = "UPDATE trade_group SET is_active = ? ";
+    private final static String WHERE_CATEGORY_AND_EXCHANGE_ID = " WHERE category = ? AND exchange_id = ? ";
     public TradeGroupDaoImpl() {
         super(TradeGroup.class);
     }
@@ -95,6 +101,38 @@ public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
     }
 
     @Override
+    public List<TradeGroup> select(String category) throws Exception {
+        List<TradeGroup> list =  new LinkedList<TradeGroup>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectSQL() + WHERE_CATEGORY);
+            stmt.setString(1, category);
+            rs = stmt.executeQuery();
+            selectToObject(rs,list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    @Override
     public void insert(Connection conn, TradeGroup object) throws Exception {
         int lastKey = insertByObject(conn, object);
         object.setGroupId(lastKey);
@@ -108,5 +146,55 @@ public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
     @Override
     public void delete(Connection conn, TradeGroup object) throws Exception {
         deleteByObject(conn, object);
+    }
+
+    @Override
+    public void updateIsActive(Connection conn, List<TradeGroup> list) throws Exception {
+        PreparedStatement stmt = null;
+        try {
+            int count = 0;
+            stmt = conn.prepareStatement(UPDATE_IS_ACTIVE);
+            for (TradeGroup model : list) {
+                stmt.setInt(1, model.getIsActive());
+                stmt.setInt(2, model.getGroupId());
+                stmt.addBatch();
+                if(++count % batchSize == 0) {
+                    stmt.executeBatch();
+                }
+            }
+            stmt.executeBatch();
+        } catch (Exception e){
+            throw e;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void updateIsActiveOff(Connection conn, String category, String exchangeId) throws Exception {
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement(UPDATE_IS_ACTIVE_OFF+WHERE_CATEGORY_AND_EXCHANGE_ID);
+
+            stmt.setString(1, category);
+            stmt.setString(2, exchangeId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

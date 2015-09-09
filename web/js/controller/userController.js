@@ -45,7 +45,7 @@ function UserController($scope, $translatePartialLoader, $translate, $log, $moda
     $scope.addUserClick = function () {
         $scope.currentAction = Action.Add;
         $scope.editObj = {};
-        $scope.editObj.parentBoUser = $scope.loginUser;
+        //$scope.editObj.parentBoUser = $scope.loginUser;
         $scope.modalTitle = $translate.instant("addUser");
         $scope.showEditModal();
     };

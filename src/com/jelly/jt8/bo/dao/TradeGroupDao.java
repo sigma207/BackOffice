@@ -11,8 +11,11 @@ import java.util.List;
 public interface TradeGroupDao {
     List<TradeGroup> select() throws Exception;
     List<TradeGroup> select(int ownerId) throws Exception;
+    List<TradeGroup> select(String category) throws Exception;
     List<TradeGroup> select(String category,int ownerId) throws Exception;
     void insert(Connection conn, TradeGroup object) throws Exception;
     void update(Connection conn, TradeGroup object) throws Exception;
     void delete(Connection conn, TradeGroup object) throws Exception;
+    void updateIsActive(Connection conn, List<TradeGroup> list) throws Exception;
+    void updateIsActiveOff(Connection conn, String category, String exchangeId) throws Exception;
 }

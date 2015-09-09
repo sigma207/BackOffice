@@ -1,8 +1,8 @@
 {
   "useTradeGroup":"使用群組",
-  "houseRule":"交易規則",
-  "houseManage":"交易規則管理",
-  "houseName":"交易規則名稱",
+  "tradeRule":"交易規則",
+  "tradeRuleManage":"交易規則管理",
+  "ruleName":"交易規則名稱",
   "scale":"小數點",
   "initialMargin":"原始保證金",
   "maintainMargin":"維持保證金",

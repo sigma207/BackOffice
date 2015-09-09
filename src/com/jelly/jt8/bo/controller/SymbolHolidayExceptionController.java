@@ -17,7 +17,7 @@ import java.util.List;
  * Created by user on 2015/8/31.
  */
 @Controller
-@RequestMapping("/symbolHolidayException")
+@RequestMapping("/symbolHolidayExceptions")
 public class SymbolHolidayExceptionController extends BaseController{
     @Autowired
     @Qualifier("holidayExceptionService")

@@ -44,6 +44,11 @@ public class TradeGroupServiceImpl implements TradeGroupService {
     }
 
     @Override
+    public List<TradeGroup> select(String category) throws Exception {
+        return tradeGroupDao.select(category);
+    }
+
+    @Override
     public List<TradeGroup> select(String category,int ownerId) throws Exception {
         return tradeGroupDao.select(category,ownerId);
     }
@@ -103,10 +108,12 @@ public class TradeGroupServiceImpl implements TradeGroupService {
         Connection conn = null;
 
         try {
-            List<TradeHouseRuleGroup> list = tradeHouseRuleGroupDao.select(object);
-            if(list.size()>0){
-                throw new Exception(ErrorMsg.TRADE_GROUP_HAS_USED);
-            }
+            //現在group是否啟用是直接寫在trade_group.is_active
+            //group不會被重覆使用
+//            List<TradeHouseRuleGroup> list = tradeHouseRuleGroupDao.select(object);
+//            if(list.size()>0){
+//                throw new Exception(ErrorMsg.TRADE_GROUP_HAS_USED);
+//            }
             conn = jt8Ds.getConnection();
 
             conn.setAutoCommit(false);
