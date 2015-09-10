@@ -2,6 +2,7 @@ package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.util.DBUtils;
 import com.jelly.jt8.bo.util.ErrorMsg;
+import com.jelly.jt8.bo.util.Join;
 import com.jelly.jt8.bo.util.RsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,41 +40,8 @@ public class BaseDao {
 //                System.out.println("BaseDao "+tableClass.getName());
                 Table table = (Table)tableClass.getAnnotation(javax.persistence.Table.class);
                 tableName = table.name();
+                DBUtils.loadTable(tableClass,columnKeyMap,columnMap,idColumnMap);
 
-                Map<String,PropertyDescriptor> readMap = new HashMap<String,PropertyDescriptor>();
-                Map<String,PropertyDescriptor> writeMap = new HashMap<String,PropertyDescriptor>();
-                BeanInfo info = Introspector.getBeanInfo(tableClass);
-                PropertyDescriptor[] props = info.getPropertyDescriptors(); //Gets all the properties for the class.
-                for (PropertyDescriptor pd : props){
-//                    System.out.println(pd.getName()+":"+pd.getPropertyType().getName());
-                    if(pd.getReadMethod()!=null){
-//                        System.out.println(pd.getReadMethod().getName());
-                        readMap.put(pd.getReadMethod().getName(), pd);
-                    }
-                    if(pd.getWriteMethod()!=null){
-//                        System.out.println(pd.getWriteMethod().getName());
-                        writeMap.put(pd.getWriteMethod().getName(), pd);
-                    }
-                }
-
-                for(Method method:tableClass.getDeclaredMethods()){
-                    Transient t = method.getAnnotation(javax.persistence.Transient.class);
-                    if(t!=null){
-                        continue;
-                    }
-                    Column column = method.getAnnotation(javax.persistence.Column.class);
-                    if(column!=null && readMap.containsKey(method.getName())){
-                        PropertyDescriptor pd = readMap.get(method.getName());
-//                        System.out.println(method.getName() + ":" + column.name() + "=" + pd.getReadMethod().invoke(object));
-                        columnKeyMap.put(column.name(), pd);
-                        columnMap.put(column.name(),column);
-                    }
-                    Id id =  method.getAnnotation(javax.persistence.Id.class);
-                    if(id!=null){
-//                        System.out.println("id="+column.name());
-                        idColumnMap.put(column.name(),column);
-                    }
-                }
 //                System.out.println("BaseDao");
             } catch (Exception e){
                 e.printStackTrace();
@@ -359,6 +327,41 @@ public class BaseDao {
 
     protected String selectSQL() throws Exception{
         return selectSQL(null);
+    }
+
+    protected String selectSQL(String fromAlias,List<Join> joins) throws Exception{
+        BeanInfo info = Introspector.getBeanInfo(tableClass);
+        PropertyDescriptor[] props = info.getPropertyDescriptors(); //Gets all the properties for the class.
+        Map<String,Class> classMap = new HashMap<String, Class>();
+        for (PropertyDescriptor pd : props){
+            classMap.put(pd.getName(),pd.getPropertyType());
+        }
+
+        StringBuffer columnNames = new StringBuffer();
+        StringBuffer fromJoin = new StringBuffer();
+        Set<String> keys = columnKeyMap.keySet();
+        for(String key:keys){
+            columnNames.append(fromAlias + "." + key + ",");
+        }
+
+        fromJoin.append(" FROM "+tableName +" "+fromAlias);
+
+        for(Join join:joins){
+            Class joinClass =  classMap.get(join.getProperty());
+            Table table = (Table)joinClass.getAnnotation(javax.persistence.Table.class);
+            String joinTableName = table.name();
+            Map<String,PropertyDescriptor> joinColumnKeyMap = new HashMap<String, PropertyDescriptor>();
+            DBUtils.loadTable(joinClass, joinColumnKeyMap, null, null);
+            keys = joinColumnKeyMap.keySet();
+            for(String key:keys){
+                columnNames.append(join.getAlias() + "." + key + ",");
+            }
+            fromJoin.append(" "+join.getJoinType()+" JOIN "+joinTableName +" "+join.getAlias()+" ON "+fromAlias+"."+join.getColumnA()+" = "+join.getAlias()+"."+join.getColumnB());
+        }
+        if(columnNames.length()>0)columnNames.deleteCharAt(columnNames.length() - 1);
+        String sql = "SELECT "+columnNames.toString()+fromJoin.toString();
+        System.out.println(sql);
+        return sql;
     }
 
     protected String selectSQL(List<String> groupByList) throws Exception{

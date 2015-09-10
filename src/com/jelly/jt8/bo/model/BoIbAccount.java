@@ -1,6 +1,7 @@
 package com.jelly.jt8.bo.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Created by user on 2015/9/9.
@@ -8,24 +9,25 @@ import javax.persistence.*;
 @Entity
 @Table(name = "bo_ib_account", schema = "dbo", catalog = "jt8")
 public class BoIbAccount extends BaseModel{
-    private int userId;
+    private int ibUserId;
     private int isRoot;
     private int levelNo;
     private String lineage;
-    private Integer parentUserId;
     private String updateTime;
     private Long treeIndex;
     private String modifiedBy;
     private String createTime;
+    private Integer parentIbUserId;
+    private BigDecimal commission;
 
     @Id
-    @Column(name = "user_id")
-    public int getUserId() {
-        return userId;
+    @Column(name = "ib_user_id")
+    public int getIbUserId() {
+        return ibUserId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setIbUserId(int ibUserId) {
+        this.ibUserId = ibUserId;
     }
 
     @Basic
@@ -56,16 +58,6 @@ public class BoIbAccount extends BaseModel{
 
     public void setLineage(String lineage) {
         this.lineage = lineage;
-    }
-
-    @Basic
-    @Column(name = "parent_user_id")
-    public Integer getParentUserId() {
-        return parentUserId;
-    }
-
-    public void setParentUserId(Integer parentUserId) {
-        this.parentUserId = parentUserId;
     }
 
     @Basic
@@ -108,6 +100,26 @@ public class BoIbAccount extends BaseModel{
         this.createTime = createTime;
     }
 
+    @Basic
+    @Column(name = "parent_ib_user_id")
+    public Integer getParentIbUserId() {
+        return parentIbUserId;
+    }
+
+    public void setParentIbUserId(Integer parentIbUserId) {
+        this.parentIbUserId = parentIbUserId;
+    }
+
+    @Basic
+    @Column(name = "commission")
+    public BigDecimal getCommission() {
+        return commission;
+    }
+
+    public void setCommission(BigDecimal commission) {
+        this.commission = commission;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -115,30 +127,33 @@ public class BoIbAccount extends BaseModel{
 
         BoIbAccount that = (BoIbAccount) o;
 
-        if (userId != that.userId) return false;
+        if (ibUserId != that.ibUserId) return false;
         if (isRoot != that.isRoot) return false;
         if (levelNo != that.levelNo) return false;
         if (lineage != null ? !lineage.equals(that.lineage) : that.lineage != null) return false;
-        if (parentUserId != null ? !parentUserId.equals(that.parentUserId) : that.parentUserId != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
         if (treeIndex != null ? !treeIndex.equals(that.treeIndex) : that.treeIndex != null) return false;
         if (modifiedBy != null ? !modifiedBy.equals(that.modifiedBy) : that.modifiedBy != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
+        if (parentIbUserId != null ? !parentIbUserId.equals(that.parentIbUserId) : that.parentIbUserId != null)
+            return false;
+        if (commission != null ? !commission.equals(that.commission) : that.commission != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = userId;
+        int result = ibUserId;
         result = 31 * result + isRoot;
         result = 31 * result + levelNo;
         result = 31 * result + (lineage != null ? lineage.hashCode() : 0);
-        result = 31 * result + (parentUserId != null ? parentUserId.hashCode() : 0);
+        result = 31 * result + (parentIbUserId != null ? parentIbUserId.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         result = 31 * result + (treeIndex != null ? treeIndex.hashCode() : 0);
         result = 31 * result + (modifiedBy != null ? modifiedBy.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (commission != null ? commission.hashCode() : 0);
         return result;
     }
 }

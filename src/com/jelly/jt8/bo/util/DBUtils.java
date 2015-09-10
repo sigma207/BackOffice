@@ -5,6 +5,9 @@ import com.jelly.jt8.common.Utils;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.beans.BeanInfo;
 import java.beans.IndexedPropertyDescriptor;
 import java.beans.Introspector;
@@ -40,6 +43,48 @@ public class DBUtils {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    public static void loadTable(Class tableClass,Map<String,PropertyDescriptor> columnKeyMap,Map<String,Column> columnMap,Map<String,Column> idColumnMap) throws Exception{
+
+        Map<String,PropertyDescriptor> readMap = new HashMap<String,PropertyDescriptor>();
+        Map<String,PropertyDescriptor> writeMap = new HashMap<String,PropertyDescriptor>();
+        BeanInfo info = Introspector.getBeanInfo(tableClass);
+        PropertyDescriptor[] props = info.getPropertyDescriptors(); //Gets all the properties for the class.
+        for (PropertyDescriptor pd : props){
+//                    System.out.println(pd.getName()+":"+pd.getPropertyType().getName());
+            if(pd.getReadMethod()!=null){
+//                        System.out.println(pd.getReadMethod().getName());
+                readMap.put(pd.getReadMethod().getName(), pd);
+            }
+            if(pd.getWriteMethod()!=null){
+//                        System.out.println(pd.getWriteMethod().getName());
+                writeMap.put(pd.getWriteMethod().getName(), pd);
+            }
+        }
+
+        for(Method method:tableClass.getDeclaredMethods()){
+            Transient t = method.getAnnotation(javax.persistence.Transient.class);
+            if(t!=null){
+                continue;
+            }
+            Column column = method.getAnnotation(javax.persistence.Column.class);
+            if(column!=null && readMap.containsKey(method.getName())){
+                PropertyDescriptor pd = readMap.get(method.getName());
+//                        System.out.println(method.getName() + ":" + column.name() + "=" + pd.getReadMethod().invoke(object));
+                columnKeyMap.put(column.name(), pd);
+                if(columnMap!=null){
+                    columnMap.put(column.name(),column);
+                }
+
+            }
+            if(idColumnMap!=null){
+                Id id =  method.getAnnotation(javax.persistence.Id.class);
+                if(id!=null){
+                    idColumnMap.put(column.name(),column);
+                }
+            }
         }
     }
 

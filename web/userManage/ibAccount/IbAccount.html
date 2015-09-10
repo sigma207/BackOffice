@@ -5,7 +5,7 @@
     <title>Account</title>
 </head>
 <body>
-<div ng-controller="IbAccountController">
+<div ng-controller="IbAccountController" ng-init="init()">
     <common-button translate="addIb" ng-click="addIbClick()"></common-button>
     <common-button translate="addMember" ng-click="addMemberClick()"></common-button>
     <ol class="breadcrumb">
@@ -49,7 +49,7 @@
                                         <label for="loginId" class="col-md-5 control-label" translate="loginId"></label>
                                         <div class="col-md-7 valueCol">
                                             <div class="input-group">
-                                                <span class="input-group-addon">{{editObj.prefixLoginId}}</span>
+                                                <span class="input-group-addon" ng-show="showPrefixLoginId">{{editObj.prefixLoginId}}</span>
                                                 <text-input id="loginId" ng-model="editObj.loginId" focus="true" required></text-input>
                                             </div>
                                         </div>
@@ -76,40 +76,17 @@
                             </div>
                         </fieldset>
                         <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">house</legend>
-                            <div class="row">
+                            <legend class="the-legend">base</legend>
+                            <div class="row" ng-show="currentAction=='edit'">
                                 <div class="col-md-12">
-                                    <select ng-model="selectedTradeHouseRule"
-                                            ng-options="tradeHouseRule.houseName for tradeHouseRule in tradeHouseRuleList">
-                                    </select>
-                                    <tabset>
-                                        <tab ng-repeat="tradeGroup in selectedTradeHouseRule.tradeGroupList">
-                                            <tab-heading>
-                                                <div >
-                                                    {{tradeGroup.groupName}}
-                                                    <input type="checkbox" ng-model="tradeGroup.selected"/>
-                                                </div>
-                                            </tab-heading>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group form-group-xs">
-                                                        <label class="col-md-5 control-label" translate="initialMargin"></label>
-                                                        <div class="col-md-7 valueCol">
-                                                            <p class="form-control-static">{{tradeGroup.initialMargin}}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group form-group-xs">
-                                                        <label class="col-md-5 control-label" translate="maintainMargin"></label>
-                                                        <div class="col-md-7 valueCol">
-                                                            <p class="form-control-static">{{tradeGroup.maintainMargin}}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                    <div class="form-group form-group-xs">
+                                        <label for="commission" class="col-md-5 control-label" translate="commission"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <number-input id="loginId" ng-model="editObj.boIbAccount.commission" required></number-input>
                                             </div>
-                                        </tab>
-                                    </tabset>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>

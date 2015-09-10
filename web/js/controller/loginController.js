@@ -13,7 +13,7 @@ function LoginController($scope, $translatePartialLoader, $translate, $log, Logi
         UserService.getList().then(function (data) {
             $scope.userList = data;
             angular.forEach($scope.userList, function(value) {
-                if(value.loginId=="H001"){
+                if(value.loginId=="superAdmin"){
                     $scope.selectedUser = value;
                 }
             });

@@ -6,6 +6,13 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     $translatePartialLoader.addPart("account");
     $translate.refresh();
     $scope.ibList = [];
+    $scope.ibRootLoginId = "ibRoot";
+
+    $scope.init = function () {
+        IbAccountService.one($scope.loginUser.userId).get().then(function (ibUser) {
+            $scope.addIb(ibUser);
+        });
+    };
 
     $scope.backToIb = function (ib) {
         for (var i = $scope.ibList.length - 1; i >= 0; i--) {
@@ -28,7 +35,8 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     $scope.getChildren = function () {
-        IbService.getList({parentUserId: $scope.currentIb.userId}).then(function (data) {
+        IbAccountService.getList({userId:$scope.currentIb.userId}).then(function (data) {
+            $log.info(data);
             $scope.rowCollection = data;
         });
     };
@@ -55,14 +63,17 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.operatingIb = (typeof ib === typeof undefined) ? $scope.currentIb : ib;
         $scope.modalTitle = $scope.operatingIb.loginId + ":" + $translate.instant("addIb");
         $scope.editObj = {};
-        $scope.editObj.prefixLoginId = $scope.operatingIb.loginId;
-        $scope.editObj.userId = $scope.operatingIb.userId;
-        $scope.editObj.parentUserId = $scope.operatingIb.userId;//指定新增的代理上層
-        if ($scope.operatingIb.houseId) {
-            $scope.editObj.houseId = $scope.operatingIb.houseId;
-        } else {
-            $scope.editObj.houseId = $scope.operatingIb.loginId;
+        $scope.showPrefixLoginId = $scope.operatingIb.loginId!=$scope.ibRootLoginId;
+        if($scope.showPrefixLoginId){
+            $scope.editObj.prefixLoginId = $scope.operatingIb.loginId;
         }
+
+        //$scope.editObj.userId = $scope.operatingIb.userId;
+        $scope.editObj.boIbAccount = {};
+        $scope.editObj.boIbAccount.parentIbUserId = $scope.operatingIb.userId;//指定新增的代理上層
+        $scope.editObj.boIbAccount.isRoot = 0;
+        $scope.editObj.boIbAccount.levelNo = $scope.operatingIb.boIbAccount.levelNo+1;
+
         $scope.showIbEditModal();
     };
 
@@ -75,57 +86,16 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     function ibEditModalController($scope) {
 
         $scope.init = function () {
-            $scope.getTradeHouseRuleList();
-        };
-
-        $scope.getTradeHouseRuleList = function () {
-            var params;
-            switch ($scope.currentAction) {
-                case Action.Add:
-                    params = {ibUserId: $scope.editObj.userId};
-                    break;
-                case Action.Edit:
-                    params = {ibUserId: $scope.editObj.userId,parentIbUserId: $scope.editObj.parentUserId};
-                    break;
-            }
-            TradeHouseRuleService.getList(params).then($scope.onTradeHouseRuleData);
-        };
-
-        $scope.onTradeHouseRuleData = function (data) {
-            $scope.tradeHouseRuleList = data;
-            if ( $scope.tradeHouseRuleList.length > 0) {
-                var i, j,tradeHouseRule,selectedGroupIdList;
-                for (i = 0; i < data.length; i++) {
-                    tradeHouseRule = data[i];
-                    selectedGroupIdList = [];
-                    for (j = 0; j < tradeHouseRule.tradeIbGroupList.length; j++) {
-                        selectedGroupIdList.push(tradeHouseRule.tradeIbGroupList[j].groupId);
-                    }
-                    for (j = 0; j < tradeHouseRule.tradeGroupList.length; j++) {
-                        if(selectedGroupIdList.indexOf(tradeHouseRule.tradeGroupList[j].groupId)!=-1){
-                            tradeHouseRule.tradeGroupList[j].selected = true;
-                        }
-                    }
-                }
-                $scope.selectedTradeHouseRule =  $scope.tradeHouseRuleList[0];
-            }
         };
 
         $scope.save = function () {
-            $scope.editObj.tradeGroupIdList = [];
-            var data = $scope.tradeHouseRuleList;
-            for (var i = 0; i < data.length; i++) {
-                for (var j = 0; j < data[i].tradeGroupList.length; j++) {
-                    if (data[i].tradeGroupList[j].selected) {
-                        $scope.editObj.tradeGroupIdList.push(data[i].tradeGroupList[j].groupId);
-                    }
-                }
-            }
 
             switch ($scope.currentAction) {
                 case Action.Add:
-                    $scope.editObj.loginId = $scope.editObj.prefixLoginId + $scope.editObj.loginId;
-                    IbService.post($scope.editObj).then(function (data) {
+                    if($scope.showPrefixLoginId){
+                        $scope.editObj.loginId = $scope.editObj.prefixLoginId + $scope.editObj.loginId;
+                    }
+                    IbAccountService.post($scope.editObj).then(function (data) {
                         $scope.ibEditModalClose();
                     });
                     break;
@@ -153,5 +123,5 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         ibEditModal.$promise.then(ibEditModal.hide);
     };
 
-    $scope.addIb($scope.loginUser);
+
 }

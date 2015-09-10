@@ -14,6 +14,7 @@ public interface BoUserDao{
     List<BoUser> select() throws Exception;
     List<BoUser> selectChildren(int parentUserId) throws Exception;
     List<BoUser> selectIbChildren(int parentIbUserId) throws Exception;
+    List<BoUser> selectIbAccountChildren(int userId) throws Exception;
     void insert(Connection conn, BoUser object) throws Exception;
     void update(Connection conn, BoUser object) throws Exception;
     void delete(Connection conn, BoUser object) throws Exception;
