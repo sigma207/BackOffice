@@ -16,8 +16,8 @@ import java.util.List;
  * Created by user on 2015/9/9.
  */
 @Controller
-@RequestMapping("/ibAccounts")
-public class IbAccountController extends BaseController {
+@RequestMapping("/boIbAccounts")
+public class BoIbAccountController extends BaseController {
     @Autowired
     @Qualifier("ibAccountService")
     private IbAccountService service;

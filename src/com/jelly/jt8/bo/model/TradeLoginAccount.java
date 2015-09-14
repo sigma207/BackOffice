@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "trade_login_account", schema = "dbo", catalog = "jt8")
-public class TradeLoginAccount {
+public class TradeLoginAccount extends BaseModel{
     private String loginId;
     private String password;
     private String createTime;
@@ -23,6 +23,7 @@ public class TradeLoginAccount {
     private String loginTime;
     private String lastLoginTime;
     private int userId;
+    private String displayId;
 
     @Id
     @Column(name = "login_id")
@@ -219,5 +220,15 @@ public class TradeLoginAccount {
         result = 31 * result + (lastLoginTime != null ? lastLoginTime.hashCode() : 0);
         result = 31 * result + userId;
         return result;
+    }
+
+    @Basic
+    @Column(name = "display_id")
+    public String getDisplayId() {
+        return displayId;
+    }
+
+    public void setDisplayId(String displayId) {
+        this.displayId = displayId;
     }
 }

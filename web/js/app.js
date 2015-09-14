@@ -112,7 +112,11 @@ backOfficeApp.factory('SymbolHolidayExceptionService', function (Restangular) {
 });
 
 backOfficeApp.factory('IbAccountService', function (Restangular) {
-    return Restangular.service('ibAccounts');
+    return Restangular.service('boIbAccounts');
+});
+
+backOfficeApp.factory('LoginAccountService', function (Restangular) {
+    return Restangular.service('tradeLoginInAccounts');
 });
 
 backOfficeApp.config(["$routeProvider", function ($routeProvider) {
@@ -143,6 +147,9 @@ backOfficeApp.config(["$routeProvider", function ($routeProvider) {
         }).
         when("/C3", {
             templateUrl: "userManage/ibAccount/IbAccount.html"
+        }).
+        when("/C4", {
+            templateUrl: "userManage/loginAccount/LoginAccount.html"
         }).
         when("/D1", {
             templateUrl: "systemManage/tradeRule/TradeRule.html"

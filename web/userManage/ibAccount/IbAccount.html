@@ -7,7 +7,8 @@
 <body>
 <div ng-controller="IbAccountController" ng-init="init()">
     <common-button translate="addIb" ng-click="addIbClick()"></common-button>
-    <common-button translate="addMember" ng-click="addMemberClick()"></common-button>
+    <common-button translate="addLoginAccount" ng-click="addLoginAccountClick()"></common-button>
+    <common-button translate="query" ng-click="queryClick()"></common-button>
     <ol class="breadcrumb">
         <li ng-repeat="ib in ibList" class="active"><a href="javascript:void(0)" ng-click="backToIb(ib)">{{ib.loginId}}</a></li>
     </ol>
@@ -15,17 +16,26 @@
         <thead>
         <tr>
             <th>{{'loginId'|translate}}</th>
+            <th>{{'displayId'|translate}}</th>
+            <th>{{'type'|translate}}</th>
+            <th>{{'status'|translate}}</th>
             <th>{{'operate'|translate}}</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="row in rowCollection">
-            <td><a href="" ng-click="addIb(row)">{{row.loginId}}</a></td>
+            <td>
+                <a href="" ng-click="addIb(row)" ng-show="isIb(row)">{{row.loginId}}</a>
+                <div ng-show="!isIb(row)">{{row.loginId}}</div>
+            </td>
+            <td><div>{{row.displayId}}</div></td>
+            <td><div>{{isIb(row)?'ib':'loginAccount'|translate}}</div></td>
+            <td><div>{{(row.isActive==0)?'inactive':'active'|translate}}</div></td>
             <td>
                 <common-button translate="edit" ng-click="editClick(row)"></common-button>
                 <common-button translate="delete" ng-click="removeClick(row)"></common-button>
-                <common-button translate="addIb" ng-click="addIbClick(row)"></common-button>
-                <common-button translate="addMember" ng-click="addMemberClick(row)"></common-button>
+                <common-button translate="addIb" ng-click="addIbClick(row)" ng-show="isIb(row)"></common-button>
+                <common-button translate="addLoginAccount" ng-click="addLoginAccountClick(row)" ng-show="isIb(row)"></common-button>
             </td>
         </tr>
         </tbody>
@@ -33,7 +43,7 @@
 </div>
 <script type="text/ng-template" id="ibEdit.html">
     <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <modal-close></modal-close>
@@ -42,7 +52,7 @@
                 <div class="modal-body" ng-init="init()">
                     <form name="editForm" class="form-horizontal" role="form">
                         <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">base</legend>
+                            <legend class="the-legend" translate="accountSetting"></legend>
                             <div class="row" ng-show="currentAction=='add'">
                                 <div class="col-md-6">
                                     <div class="form-group form-group-xs">
@@ -68,7 +78,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group form-group-xs">
                                         <label class="col-md-2 control-label" translate="loginId"></label>
-                                        <div class="col-md-8 valueCol">
+                                        <div class="col-md-10 valueCol">
                                             <p class="form-control-static">{{editObj.loginId}}</p>
                                         </div>
                                     </div>
@@ -76,15 +86,86 @@
                             </div>
                         </fieldset>
                         <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">base</legend>
-                            <div class="row" ng-show="currentAction=='edit'">
+                            <legend class="the-legend" translate="transactionSetting"></legend>
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group form-group-xs">
-                                        <label for="commission" class="col-md-5 control-label" translate="commission"></label>
-                                        <div class="col-md-7 valueCol">
+                                        <label for="commission" class="col-md-2 control-label" translate="commission"></label>
+                                        <div class="col-md-10 valueCol">
                                             <div class="input-group">
                                                 <number-input id="loginId" ng-model="editObj.boIbAccount.commission" required></number-input>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                    <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="loginAccountEdit.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
+                </div>
+                <div class="modal-body" ng-init="init()">
+                    <form name="editForm" class="form-horizontal" role="form">
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend" translate="accountSetting"></legend>
+                            <div class="row" ng-show="currentAction=='add'">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="loginId" class="col-md-5 control-label" translate="loginId"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" ng-show="showPrefixLoginId">{{editObj.prefixLoginId}}</span>
+                                                <text-input id="loginId" ng-model="editObj.loginId" focus="true" required></text-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="password" class="col-md-5 control-label" translate="userPassword"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <password-input id="password" ng-model="editObj.password" required></password-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label for="displayId" class="col-md-5 control-label" translate="displayId"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <text-input id="displayId" ng-model="editObj.displayId"></text-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="currentAction=='edit'">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-5 control-label" translate="loginId"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <p class="form-control-static">{{editObj.loginId}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-5 control-label" translate="displayId"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <text-input id="displayId" ng-model="editObj.displayId"></text-input>
                                         </div>
                                     </div>
                                 </div>

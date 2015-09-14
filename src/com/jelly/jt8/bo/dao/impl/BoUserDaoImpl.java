@@ -184,7 +184,7 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
         try {
             conn = jt8Ds.getConnection();
             List<Join> joinList = new ArrayList<Join>();
-            joinList.add(new Join("boIbAccount",Join.INNER,"bia","user_id","ib_user_id"));
+            joinList.add(new Join(tableClass,"boIbAccount",Join.INNER,"bia","user_id","ib_user_id"));
             stmt = conn.prepareStatement(selectSQL("bu",joinList) + WHERE_PARENT_IB_USER_ID,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, userId);
             rs = stmt.executeQuery();

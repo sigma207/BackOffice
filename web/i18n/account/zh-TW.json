@@ -1,5 +1,12 @@
 {
+  "ib":"代理",
+  "loginAccount":"會員",
   "addIb":"新增代理",
   "editIb":"編輯代理",
-  "addMember":"新增會員"
+  "commission":"佣金",
+  "addLoginAccount":"新增會員",
+  "editLoginAccount":"編輯會員",
+  "displayId":"名稱",
+  "accountSetting":"帳戶設定",
+  "transactionSetting":"交易設定"
 }

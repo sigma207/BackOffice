@@ -6,9 +6,6 @@ function TradeRuleController($scope, $modal, $log, $translatePartialLoader, $tra
     $translatePartialLoader.addPart("tradeRule");
     $translate.refresh();
 
-    var userIdParams = {
-        userId:$scope.getUserId()
-    };
     $scope.getTradeRuleList = function () {
         SystemTradeRuleService.getList().then(function (data) {
             $scope.rowCollection = data;
@@ -36,7 +33,7 @@ function TradeRuleController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     $scope.deleteClick = function (row) {
-        row.remove(userIdParams).then(function () {
+        row.remove().then(function () {
             $scope.getTradeRuleList();
         });
     };

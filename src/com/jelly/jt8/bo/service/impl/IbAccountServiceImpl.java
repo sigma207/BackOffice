@@ -1,13 +1,7 @@
 package com.jelly.jt8.bo.service.impl;
 
-import com.jelly.jt8.bo.dao.BoIbAccountDao;
-import com.jelly.jt8.bo.dao.BoRoleDao;
-import com.jelly.jt8.bo.dao.BoUserDao;
-import com.jelly.jt8.bo.dao.BoUserRoleDao;
-import com.jelly.jt8.bo.model.BoIbAccount;
-import com.jelly.jt8.bo.model.BoRole;
-import com.jelly.jt8.bo.model.BoUser;
-import com.jelly.jt8.bo.model.BoUserRole;
+import com.jelly.jt8.bo.dao.*;
+import com.jelly.jt8.bo.model.*;
 import com.jelly.jt8.bo.service.IbAccountService;
 import com.jelly.jt8.bo.util.ErrorMsg;
 import com.jelly.jt8.bo.util.Password;
@@ -50,6 +44,10 @@ public class IbAccountServiceImpl implements IbAccountService {
     @Qualifier("BoUserRoleDao")
     private BoUserRoleDao boUserRoleDao;
 
+    @Autowired
+    @Qualifier("TradeLoginAccountDao")
+    private TradeLoginAccountDao tradeLoginAccountDao;
+
     @Override
     public BoUser selectIb(int userId) throws Exception {
         //登入的userId 可能不是代理
@@ -67,7 +65,7 @@ public class IbAccountServiceImpl implements IbAccountService {
 
     @Override
     public List<BoUser> selectIbChildren(int userId) throws Exception {
-        List<BoUser> children = boUserDao.selectIbAccountChildren(userId);
+        List<BoUser> children = boUserDao.selectIbAccountChildren(userId);//BoUser已經設定好boIbAccount
         return children;
     }
 
@@ -123,6 +121,10 @@ public class IbAccountServiceImpl implements IbAccountService {
             List<BoIbAccount> children = boIbAccountDao.selectChildren(boIbAccount.getIbUserId());
             if(children.size()>0){
                 throw new Exception(ErrorMsg.TRADE_IB_HAS_CHILDREN);
+            }
+            List<TradeLoginAccount> tradeLoginAccountList = tradeLoginAccountDao.select(boIbAccount.getIbUserId());
+            if(tradeLoginAccountList.size()>0){
+                throw new Exception(ErrorMsg.TRADE_IB_HAS_LOGIN_ACCOUNT);
             }
 
             conn = jt8Ds.getConnection();

@@ -8,10 +8,15 @@
       "date": "yyyy-MM-dd"
     }
   },
+  "loginId": "用戶代碼",
   "loginUser":"登入帳號",
   "yes":"是",
   "no":"否",
   "category":"種類別",
+  "type":"類型",
+  "status":"狀態",
+  "active":"啟用",
+  "inactive":"停用",
   "exchangeId":"交易所",
   "mainSymbolId":"主商品",
   "symbolId":"商品",

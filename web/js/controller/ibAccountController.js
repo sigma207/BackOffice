@@ -2,8 +2,9 @@
  * Created by user on 2015/9/9.
  */
 backOfficeApp.controller("IbAccountController", IbAccountController);
-function IbAccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, IbAccountService) {
+function IbAccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, IbAccountService, LoginAccountService) {
     $translatePartialLoader.addPart("account");
+    $translatePartialLoader.addPart("user");
     $translate.refresh();
     $scope.ibList = [];
     $scope.ibRootLoginId = "ibRoot";
@@ -34,24 +35,52 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.getChildren();
     };
 
+    $scope.queryClick = function () {
+        $scope.getChildren();
+    };
+
     $scope.getChildren = function () {
+        $scope.getChildrenIb();
+    };
+
+    $scope.getChildrenIb = function() {
         IbAccountService.getList({userId:$scope.currentIb.userId}).then(function (data) {
             $log.info(data);
             $scope.rowCollection = data;
+            $scope.getLoginAccounts();
         });
     };
 
-    $scope.editClick = function (ib) {
-        $scope.currentAction = Action.Edit;
-        $scope.operatingIb = ib;
-        $scope.modalTitle = ib.loginId + ":" + $translate.instant("editIb");
-        $scope.editObj = Restangular.copy(ib);
-        //$scope.editObj.userId = $scope.editObj.userId;
-        $scope.showIbEditModal();
+    $scope.getLoginAccounts = function () {
+        LoginAccountService.getList({userId:$scope.currentIb.userId}).then(function (data) {
+            $scope.rowCollection.push.apply($scope.rowCollection,data);
+            $log.info($scope.rowCollection);
+        });
     };
 
-    $scope.removeClick = function (ib) {
-        ib.remove().then(function () {
+    $scope.isIb = function (row) {
+        return (row.boIbAccount);
+    };
+
+    $scope.removeClick = function (row) {
+        if( $scope.isIb(row)){
+            $scope.removeIbClick(row);
+        } else {
+            $scope.removeLoginAccountClick(row);
+        }
+    };
+
+    $scope.editClick = function (row) {
+        if( $scope.isIb(row)){
+            $scope.editIbClick(row);
+        } else {
+            $scope.editLoginAccountClick(row);
+        }
+    };
+
+    //IbEdit
+    $scope.removeIbClick = function (row) {
+        row.remove().then(function () {
             $scope.getChildren();
         });
     };
@@ -77,19 +106,24 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.showIbEditModal();
     };
 
+    $scope.editIbClick = function (ib) {
+        $scope.currentAction = Action.Edit;
+        $scope.operatingIb = ib;
+        $scope.modalTitle = ib.loginId + ":" + $translate.instant("editIb");
+        $scope.editObj = Restangular.copy(ib);
+        //$scope.editObj.userId = $scope.editObj.userId;
+        $scope.showIbEditModal();
+    };
+
     //editModal
     $scope.ibEditModalClose = function () {
         $scope.getChildren();
         $scope.hideIbEditModal();
     };
 
-    function ibEditModalController($scope) {
-
-        $scope.init = function () {
-        };
-
+    function IbEditModalController($scope) {
+        $scope.init = function () {};
         $scope.save = function () {
-
             switch ($scope.currentAction) {
                 case Action.Add:
                     if($scope.showPrefixLoginId){
@@ -106,12 +140,11 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
                     break;
             }
         };
-
     }
 
     var ibEditModal = $modal({
         scope: $scope,
-        controller: ibEditModalController,
+        controller: IbEditModalController,
         templateUrl: "ibEdit.html",
         show: false
     });
@@ -123,5 +156,72 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         ibEditModal.$promise.then(ibEditModal.hide);
     };
 
+    //LoginAccountEdit
+    $scope.removeLoginAccountClick = function (row) {
+        row.remove().then(function () {
+            $scope.getChildren();
+        });
+    };
 
+    $scope.addLoginAccountClick = function (row) {
+        $scope.currentAction = Action.Add;
+        $scope.operatingIb = (typeof row === typeof undefined) ? $scope.currentIb : row;
+        $scope.modalTitle = $scope.operatingIb.loginId + ":" + $translate.instant("addLoginAccount");
+        $scope.editObj = {};
+        $scope.editObj.userId = $scope.operatingIb.userId;
+        $scope.editObj.isActive = 0;
+        $scope.showPrefixLoginId = $scope.operatingIb.loginId!=$scope.ibRootLoginId;
+        if($scope.showPrefixLoginId){
+            $scope.editObj.prefixLoginId = $scope.operatingIb.loginId;
+        }
+        $scope.showLoginAccountEditModal();
+    };
+
+    $scope.editLoginAccountClick = function (row) {
+        $scope.currentAction = Action.Edit;
+        $scope.modalTitle = $scope.currentIb.loginId + ":" + $translate.instant("editLoginAccount");
+        $scope.editObj = Restangular.copy(row);
+        $scope.showLoginAccountEditModal();
+    };
+
+    $scope.loginAccountEditModalClose = function () {
+        $scope.getChildren();
+        $scope.hideLoginAccountEditModal();
+    };
+
+    function LoginAccountEditModalController($scope) {
+        $scope.init = function () {};
+        $scope.save = function () {
+            switch ($scope.currentAction) {
+                case Action.Add:
+                    if($scope.showPrefixLoginId){
+                        $scope.editObj.loginId = $scope.editObj.prefixLoginId + $scope.editObj.loginId;
+                    }
+                    LoginAccountService.post($scope.editObj).then(function (data) {
+                        $scope.loginAccountEditModalClose();
+                    });
+                    break;
+                case Action.Edit:
+                    $scope.editObj.put().then(function (data) {
+                        $scope.loginAccountEditModalClose();
+                    });
+                    break;
+            }
+        };
+    }
+
+    var loginAccountEditModal = $modal({
+        scope: $scope,
+        controller: LoginAccountEditModalController,
+        templateUrl: "loginAccountEdit.html",
+        show: false
+    });
+
+    $scope.showLoginAccountEditModal = function () {
+        loginAccountEditModal.$promise.then(loginAccountEditModal.show);
+    };
+
+    $scope.hideLoginAccountEditModal = function () {
+        loginAccountEditModal.$promise.then(loginAccountEditModal.hide);
+    };
 }
