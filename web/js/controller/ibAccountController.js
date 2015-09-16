@@ -92,10 +92,6 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.operatingIb = (typeof ib === typeof undefined) ? $scope.currentIb : ib;
         $scope.modalTitle = $scope.operatingIb.loginId + ":" + $translate.instant("addIb");
         $scope.editObj = {};
-        $scope.showPrefixLoginId = $scope.operatingIb.loginId!=$scope.ibRootLoginId;
-        if($scope.showPrefixLoginId){
-            $scope.editObj.prefixLoginId = $scope.operatingIb.loginId;
-        }
 
         //$scope.editObj.userId = $scope.operatingIb.userId;
         $scope.editObj.boIbAccount = {};
@@ -126,9 +122,6 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.save = function () {
             switch ($scope.currentAction) {
                 case Action.Add:
-                    if($scope.showPrefixLoginId){
-                        $scope.editObj.loginId = $scope.editObj.prefixLoginId + $scope.editObj.loginId;
-                    }
                     IbAccountService.post($scope.editObj).then(function (data) {
                         $scope.ibEditModalClose();
                     });
@@ -169,11 +162,6 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.modalTitle = $scope.operatingIb.loginId + ":" + $translate.instant("addLoginAccount");
         $scope.editObj = {};
         $scope.editObj.userId = $scope.operatingIb.userId;
-        $scope.editObj.isActive = 0;
-        $scope.showPrefixLoginId = $scope.operatingIb.loginId!=$scope.ibRootLoginId;
-        if($scope.showPrefixLoginId){
-            $scope.editObj.prefixLoginId = $scope.operatingIb.loginId;
-        }
         $scope.showLoginAccountEditModal();
     };
 
@@ -194,9 +182,6 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.save = function () {
             switch ($scope.currentAction) {
                 case Action.Add:
-                    if($scope.showPrefixLoginId){
-                        $scope.editObj.loginId = $scope.editObj.prefixLoginId + $scope.editObj.loginId;
-                    }
                     LoginAccountService.post($scope.editObj).then(function (data) {
                         $scope.loginAccountEditModalClose();
                     });

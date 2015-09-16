@@ -19,6 +19,7 @@
             <th>{{'category'|translate}}</th>
             <th>{{'scale'|translate}}</th>
             <th>{{'initialMargin'|translate}}</th>
+            <th>{{'status'|translate}}</th>
             <th>{{'groupManage'|translate}}</th>
         </tr>
         </thead>
@@ -28,9 +29,11 @@
             <td>{{row.category}}</td>
             <td>{{row.scale}}</td>
             <td>{{row.initialMargin}}</td>
+            <td>{{(row.isActive==0)?'inactive':'active'|translate}}</td>
             <td>
-                <button type="button" class="btn-xs btn-primary" translate="delete" ng-click="deleteClick(row)" ></button>
-                <button type="button" class="btn-xs btn-primary" translate="edit" ng-click="editClick(row)" ></button>
+                <button type="button" ng-class="{'btn-xs btn-warning':row.isActive==1,'btn-xs btn-success':row.isActive==0}" translate="{{(row.isActive==1)?'inactive':'active'|translate}}" ng-click="isActiveClick(row)"></button>
+                <common-button translate="delete" ng-click="deleteClick(row)"></common-button>
+                <common-button translate="edit" ng-click="editClick(row)"></common-button>
             </td>
         </tr>
         </tbody>
@@ -49,7 +52,7 @@
                         <fieldset class="well well-xs the-fieldset">
                             <legend class="the-legend">base</legend>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group form-group-xs">
                                         <label for="groupName" class="col-md-5 control-label" translate="groupName"></label>
                                         <div class="col-md-7 valueCol">
@@ -57,7 +60,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-5 control-label" translate="status"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <label>
+                                                <input type="radio" ng-model="editObj.isActive" value="1">
+                                                {{'active'|translate}}
+                                            </label>
+                                            <label>
+                                                <input type="radio" ng-model="editObj.isActive" value="0">
+                                                {{'inactive'|translate}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="form-group form-group-xs">
                                         <label for="systemCategory" class="col-md-5 control-label" translate="category"></label>
                                         <div class="col-md-7 valueCol">
@@ -67,7 +87,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group form-group-xs">
                                         <label for="scale" class="col-md-5 control-label" translate="scale"></label>
                                         <div class="col-md-7 valueCol">

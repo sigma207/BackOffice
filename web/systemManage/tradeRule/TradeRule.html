@@ -62,11 +62,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="useTradeGroup" class="col-md-5 control-label" translate="useTradeGroup"></label>
+                                    <label for="useTradeGroup" class="col-md-5 control-label" translate="defaultTradeGroup"></label>
                                     <div class="col-md-7 valueCol">
-                                        <button type="button" class="btn btn-default btn-sm" id="useTradeGroup" ng-model="editObj.selectedTradeGroup" ng-change="useTradeGroupChange();"
-                                                data-html="1" data-multiple="1" data-all-none-buttons="1"
-                                                bs-options="tradeGroup as tradeGroup.label for tradeGroup in editObj.tradeGroupList" bs-select>
+                                        <button type="button" class="btn btn-default btn-sm" id="useTradeGroup" ng-model="editObj.groupId" ng-change="useTradeGroupChange();"
+                                                data-html="1"
+                                                bs-options="tradeGroup.groupId as tradeGroup.label for tradeGroup in editObj.tradeGroupList" bs-select>
                                             <span class="caret"></span>
                                         </button>
                                     </div>

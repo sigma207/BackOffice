@@ -122,6 +122,23 @@ public class TradeGroupController extends BaseController{
         return getResponseEntity(payload);
     }
 
+    @RequestMapping(params = "isActive",value = "{id}", method = RequestMethod.PUT)
+    public
+    @ResponseBody
+    ResponseEntity<String> update(@PathVariable("id") int id, @RequestParam(value="isActive") int isActive, @RequestBody TradeGroup object) {
+        Gson gson = new Gson();
+        String payload = "";
+        try {
+            object.setIsActive(isActive);
+            service.updateIsActive(object);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(object);
+        return getResponseEntity(payload);
+    }
+
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public
     @ResponseBody

@@ -25,6 +25,14 @@ function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $tr
         $scope.getTradeGroupList();
     };
 
+    $scope.isActiveClick = function (row) {
+        var tradeGroup = Restangular.copy(row);
+        var isActive = (tradeGroup.isActive==1)?0:1;
+        tradeGroup.put({isActive:isActive}).then(function (data) {
+            $scope.getTradeGroupList();
+        });
+    };
+
     $scope.addClick = function () {
         $scope.currentAction = Action.Add;
         $scope.editObj = angular.copy($scope.selectedTradeRule);

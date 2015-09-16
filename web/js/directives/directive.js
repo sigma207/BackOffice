@@ -193,6 +193,54 @@ function NumbersOnly(){
     };
 }
 
+function MatchValidate(){
+    //http://ithelp.ithome.com.tw/question/10158385?tag=rss.qu
+    return {
+        restrict: 'A',
+        // 必須使用 ngModel 取得 input value
+        require: 'ngModel',
+        scope: {
+            // pass 想要比對的值
+            match: '='
+        },
+        link: function (scope, element, attrs, ngModel) {
+            // 假如沒有 ngModel 就不用檢查了..
+            if (!ngModel) return;
+
+            // $parsers 是檢查使用者輸入的 value
+            ngModel.$parsers.unshift(checker);
+
+            // $formatter 是檢查來自程式的改變
+            ngModel.$formatters.unshift(checker);
+
+            // watch 第一個 input value 的改變
+            scope.$watch('match', function () {
+                checker(ngModel.$viewValue);
+            });
+
+            function checker (value) {
+                if (ngModel.$pristine && value) {
+                    // 更新 input $dirty 跟 $pristine
+                    // 因為非使用者變更不會影響到 $dirty 跟 $pristine
+                    ngModel.$pristine = false;
+                    ngModel.$dirty = true;
+                }
+
+                // 測試 value
+                var valid = scope.match === value;
+
+                // 重要：設定 validation 是  true 還是 false
+                ngModel.$setValidity('matchValidate', valid);
+
+                // return value anyway,
+                // 因為我只要確保 input validation, 不會真正取用 input value
+                return value;
+            }
+
+        }
+    }
+}
+
 function CheckboxFilter(stConfig, $log){
     return {
         require:"^stTable",

@@ -12,6 +12,7 @@
         <tr>
             <th>{{'loginId'|translate}}</th>
             <th>{{'displayId'|translate}}</th>
+            <th>{{'ib'|translate}}</th>
             <th>{{'status'|translate}}</th>
             <th>{{'operate'|translate}}</th>
         </tr>
@@ -20,14 +21,124 @@
         <tr ng-repeat="row in rowCollection">
             <td>{{row.loginId}}</td>
             <td>{{row.displayId}}</td>
+            <td>{{row.boUser.loginId}}</td>
             <td>{{(row.isActive==0)?'inactive':'active'|translate}}</td>
             <td>
+                <button type="button" ng-class="{'btn-xs btn-warning':row.isActive==1,'btn-xs btn-success':row.isActive==0}" translate="{{(row.isActive==1)?'inactive':'active'|translate}}" ng-click="isActiveClick(row)"></button>
                 <common-button translate="edit" ng-click="editClick(row)"></common-button>
-                <common-button translate="delete" ng-click="removeClick(row)"></common-button>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<script type="text/ng-template" id="loginAccountGroupEdit.html">
+    <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <modal-close></modal-close>
+                    <h3 class="modal-title">{{modalTitle}}</h3>
+                </div>
+                <div class="modal-body" ng-init="init()">
+                    <form name="editForm" class="form-horizontal" role="form">
+                        <fieldset class="well well-xs the-fieldset">
+                            <legend class="the-legend" translate="accountSetting"></legend>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-5 control-label" translate="loginId"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <p class="form-control-static">{{editObj.loginId}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-5 control-label" translate="displayId"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <p class="form-control-static">{{editObj.displayId}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-xs">
+                                        <label class="col-md-5 control-label" translate="status"></label>
+                                        <div class="col-md-7 valueCol">
+                                            <label>
+                                                <input type="radio" ng-model="editObj.isActive" value="1">
+                                                {{'active'|translate}}
+                                            </label>
+                                            <label>
+                                                <input type="radio" ng-model="editObj.isActive" value="0">
+                                                {{'inactive'|translate}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset  class="well well-xs the-fieldset">
+                            <legend class="the-legend">{{'tradeAccount'|translate}}</legend>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel-group" role="tablist" aria-multiselectable="true" bs-collapse>
+                                        <div class="panel panel-default" ng-repeat="tradeAccount in editObj.tradeAccountList">
+                                            <div class="panel-heading" role="tab">
+                                                <h4 class="panel-title">
+                                                    <a bs-collapse-toggle>
+                                                        {{ tradeAccount.rule.ruleName }}
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div class="panel-collapse" role="tabpanel" bs-collapse-target>
+                                                <div class="panel-body">
+                                                    <tabset>
+                                                        <tab ng-repeat="tradeGroup in tradeAccount.tradeGroupList">
+                                                            <tab-heading>
+                                                                <div >
+                                                                    {{tradeGroup.groupName}}
+                                                                    <input type="radio" name="trade-account-group-id-{{tradeAccount.accountId}}" ng-model="tradeAccount.groupId" ng-value="tradeGroup.groupId" ng-required="true"/>
+                                                                </div>
+                                                            </tab-heading>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group form-group-xs">
+                                                                        <label class="col-md-5 control-label" translate="scale"></label>
+                                                                        <div class="col-md-7 valueCol">
+                                                                            <p class="form-control-static">{{tradeGroup.scale}}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group form-group-xs">
+                                                                        <label class="col-md-5 control-label" translate="initialMargin"></label>
+                                                                        <div class="col-md-7 valueCol">
+                                                                            <p class="form-control-static">{{tradeGroup.initialMargin}}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </tab>
+                                                    </tabset>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
+                    <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 </body>
 </html>

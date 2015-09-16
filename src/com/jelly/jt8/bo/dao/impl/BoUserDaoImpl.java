@@ -185,30 +185,10 @@ public class BoUserDaoImpl extends BaseDao implements BoUserDao {
             conn = jt8Ds.getConnection();
             List<Join> joinList = new ArrayList<Join>();
             joinList.add(new Join(tableClass,"boIbAccount",Join.INNER,"bia","user_id","ib_user_id"));
-            stmt = conn.prepareStatement(selectSQL("bu",joinList) + WHERE_PARENT_IB_USER_ID,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            stmt = conn.prepareStatement(selectSQL("bu",joinList) + WHERE_PARENT_IB_USER_ID);
             stmt.setInt(1, userId);
             rs = stmt.executeQuery();
-            selectToObject(rs, list);
-            rs.beforeFirst();
-            int index = 0;
-            BoUser boUser = null;
-            BoIbAccount boIbAccount = null;
-            while(rs.next()){//因為做join model的自動set property有點麻煩,只好先用手動set
-                boUser = list.get(index);
-                boIbAccount = new BoIbAccount();
-                boUser.setBoIbAccount(boIbAccount);
-                boIbAccount.setIbUserId(rs.getInt("ib_user_id"));
-                boIbAccount.setIsRoot(rs.getInt("is_root"));
-                boIbAccount.setLevelNo(rs.getInt("level_no"));
-                boIbAccount.setLineage(rs.getString("lineage"));
-                boIbAccount.setParentIbUserId(rs.getInt("parent_ib_user_id"));
-                boIbAccount.setUpdateTime(rs.getString("update_time"));
-                boIbAccount.setTreeIndex(rs.getLong("tree_index"));
-                boIbAccount.setModifiedBy(rs.getString("modified_by"));
-                boIbAccount.setCreateTime(rs.getString("create_time"));
-                boIbAccount.setCommission(rs.getBigDecimal("commission"));
-                index++;
-            }
+            selectToObject(rs, list,joinList);
         } catch (Exception e) {
             throw e;
         } finally {

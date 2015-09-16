@@ -1,9 +1,6 @@
 package com.jelly.jt8.bo.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -11,12 +8,57 @@ import java.util.List;
  * Created by user on 2015/9/9.
  */
 @Entity
-@javax.persistence.Table(name = "system_trade_rule", schema = "dbo", catalog = "jt8")
+@Table(name = "system_trade_rule", schema = "dbo", catalog = "jt8")
+@IdClass(SystemTradeRulePK.class)
 public class SystemTradeRule extends BaseModel{
     private String exchangeId;
+    private String category;
+    private String ruleName;
+    private Integer scale;
+    private BigDecimal initialMargin;
+    private BigDecimal maintainMargin;
+    private BigDecimal openCommission;
+    private BigDecimal closeCommission;
+    private BigDecimal overnightCharge;
+    private BigDecimal tax;
+    private BigDecimal fee1;
+    private BigDecimal fee2;
+    private BigDecimal fee3;
+    private BigDecimal fee4;
+    private BigDecimal fee5;
+    private String openTime1;
+    private String closeTime1;
+    private String resetTime1;
+    private String openTime2;
+    private String closeTime2;
+    private String resetTime2;
+    private String rolloverTime;
+    private String settlementTime;
+    private String newOrderTime;
+    private String lastOrderTime;
+    private BigDecimal uplimit;
+    private BigDecimal downlimit;
+    private BigDecimal marketUplimit;
+    private BigDecimal marketDownlimit;
+    private BigDecimal marketUpdownlimitCharge;
+    private BigDecimal specialStockRule;
+    private BigDecimal specialStockCharge;
+    private Long tvolDeltaRule;
+    private Integer tvolDeltaMinute;
+    private BigDecimal tvolDeltaCharge;
+    private String newOrderCloseTimeLimit;
+    private Integer oiDay;
+    private BigDecimal overWithdrawalCreditPercentage;
+    private BigDecimal overWithdrawalCreditPercentageCharge;
+    private BigDecimal overWithdrawalCreditLimit;
+    private BigDecimal overWithdrawalCreditLimitCharge;
+    private BigDecimal liquidationRate;
+    private BigDecimal marginCallRate;
+    private List<TradeGroup> tradeGroupList;
+    private Integer groupId;
 
     @Id
-    @javax.persistence.Column(name = "exchange_id")
+    @Column(name = "exchange_id")
     public String getExchangeId() {
         return exchangeId;
     }
@@ -25,10 +67,8 @@ public class SystemTradeRule extends BaseModel{
         this.exchangeId = exchangeId;
     }
 
-    private String category;
-
     @Id
-    @javax.persistence.Column(name = "category")
+    @Column(name = "category")
     public String getCategory() {
         return category;
     }
@@ -37,10 +77,8 @@ public class SystemTradeRule extends BaseModel{
         this.category = category;
     }
 
-    private String ruleName;
-
     @Basic
-    @javax.persistence.Column(name = "rule_name")
+    @Column(name = "rule_name")
     public String getRuleName() {
         return ruleName;
     }
@@ -49,10 +87,8 @@ public class SystemTradeRule extends BaseModel{
         this.ruleName = ruleName;
     }
 
-    private Integer scale;
-
     @Basic
-    @javax.persistence.Column(name = "scale")
+    @Column(name = "scale")
     public Integer getScale() {
         return scale;
     }
@@ -61,10 +97,8 @@ public class SystemTradeRule extends BaseModel{
         this.scale = scale;
     }
 
-    private BigDecimal initialMargin;
-
     @Basic
-    @javax.persistence.Column(name = "initial_margin")
+    @Column(name = "initial_margin")
     public BigDecimal getInitialMargin() {
         return initialMargin;
     }
@@ -73,10 +107,8 @@ public class SystemTradeRule extends BaseModel{
         this.initialMargin = initialMargin;
     }
 
-    private BigDecimal maintainMargin;
-
     @Basic
-    @javax.persistence.Column(name = "maintain_margin")
+    @Column(name = "maintain_margin")
     public BigDecimal getMaintainMargin() {
         return maintainMargin;
     }
@@ -85,10 +117,8 @@ public class SystemTradeRule extends BaseModel{
         this.maintainMargin = maintainMargin;
     }
 
-    private BigDecimal openCommission;
-
     @Basic
-    @javax.persistence.Column(name = "open_commission")
+    @Column(name = "open_commission")
     public BigDecimal getOpenCommission() {
         return openCommission;
     }
@@ -97,10 +127,8 @@ public class SystemTradeRule extends BaseModel{
         this.openCommission = openCommission;
     }
 
-    private BigDecimal closeCommission;
-
     @Basic
-    @javax.persistence.Column(name = "close_commission")
+    @Column(name = "close_commission")
     public BigDecimal getCloseCommission() {
         return closeCommission;
     }
@@ -109,10 +137,8 @@ public class SystemTradeRule extends BaseModel{
         this.closeCommission = closeCommission;
     }
 
-    private BigDecimal overnightCharge;
-
     @Basic
-    @javax.persistence.Column(name = "overnight_charge")
+    @Column(name = "overnight_charge")
     public BigDecimal getOvernightCharge() {
         return overnightCharge;
     }
@@ -121,10 +147,8 @@ public class SystemTradeRule extends BaseModel{
         this.overnightCharge = overnightCharge;
     }
 
-    private BigDecimal tax;
-
     @Basic
-    @javax.persistence.Column(name = "tax")
+    @Column(name = "tax")
     public BigDecimal getTax() {
         return tax;
     }
@@ -133,10 +157,8 @@ public class SystemTradeRule extends BaseModel{
         this.tax = tax;
     }
 
-    private BigDecimal fee1;
-
     @Basic
-    @javax.persistence.Column(name = "fee1")
+    @Column(name = "fee1")
     public BigDecimal getFee1() {
         return fee1;
     }
@@ -145,10 +167,8 @@ public class SystemTradeRule extends BaseModel{
         this.fee1 = fee1;
     }
 
-    private BigDecimal fee2;
-
     @Basic
-    @javax.persistence.Column(name = "fee2")
+    @Column(name = "fee2")
     public BigDecimal getFee2() {
         return fee2;
     }
@@ -157,10 +177,8 @@ public class SystemTradeRule extends BaseModel{
         this.fee2 = fee2;
     }
 
-    private BigDecimal fee3;
-
     @Basic
-    @javax.persistence.Column(name = "fee3")
+    @Column(name = "fee3")
     public BigDecimal getFee3() {
         return fee3;
     }
@@ -169,10 +187,8 @@ public class SystemTradeRule extends BaseModel{
         this.fee3 = fee3;
     }
 
-    private BigDecimal fee4;
-
     @Basic
-    @javax.persistence.Column(name = "fee4")
+    @Column(name = "fee4")
     public BigDecimal getFee4() {
         return fee4;
     }
@@ -181,10 +197,8 @@ public class SystemTradeRule extends BaseModel{
         this.fee4 = fee4;
     }
 
-    private BigDecimal fee5;
-
     @Basic
-    @javax.persistence.Column(name = "fee5")
+    @Column(name = "fee5")
     public BigDecimal getFee5() {
         return fee5;
     }
@@ -193,10 +207,8 @@ public class SystemTradeRule extends BaseModel{
         this.fee5 = fee5;
     }
 
-    private String openTime1;
-
     @Basic
-    @javax.persistence.Column(name = "open_time1")
+    @Column(name = "open_time1")
     public String getOpenTime1() {
         return openTime1;
     }
@@ -205,10 +217,8 @@ public class SystemTradeRule extends BaseModel{
         this.openTime1 = openTime1;
     }
 
-    private String closeTime1;
-
     @Basic
-    @javax.persistence.Column(name = "close_time1")
+    @Column(name = "close_time1")
     public String getCloseTime1() {
         return closeTime1;
     }
@@ -217,10 +227,8 @@ public class SystemTradeRule extends BaseModel{
         this.closeTime1 = closeTime1;
     }
 
-    private String resetTime1;
-
     @Basic
-    @javax.persistence.Column(name = "reset_time1")
+    @Column(name = "reset_time1")
     public String getResetTime1() {
         return resetTime1;
     }
@@ -229,10 +237,8 @@ public class SystemTradeRule extends BaseModel{
         this.resetTime1 = resetTime1;
     }
 
-    private String openTime2;
-
     @Basic
-    @javax.persistence.Column(name = "open_time2")
+    @Column(name = "open_time2")
     public String getOpenTime2() {
         return openTime2;
     }
@@ -241,10 +247,8 @@ public class SystemTradeRule extends BaseModel{
         this.openTime2 = openTime2;
     }
 
-    private String closeTime2;
-
     @Basic
-    @javax.persistence.Column(name = "close_time2")
+    @Column(name = "close_time2")
     public String getCloseTime2() {
         return closeTime2;
     }
@@ -253,10 +257,8 @@ public class SystemTradeRule extends BaseModel{
         this.closeTime2 = closeTime2;
     }
 
-    private String resetTime2;
-
     @Basic
-    @javax.persistence.Column(name = "reset_time2")
+    @Column(name = "reset_time2")
     public String getResetTime2() {
         return resetTime2;
     }
@@ -265,10 +267,8 @@ public class SystemTradeRule extends BaseModel{
         this.resetTime2 = resetTime2;
     }
 
-    private String rolloverTime;
-
     @Basic
-    @javax.persistence.Column(name = "rollover_time")
+    @Column(name = "rollover_time")
     public String getRolloverTime() {
         return rolloverTime;
     }
@@ -277,10 +277,8 @@ public class SystemTradeRule extends BaseModel{
         this.rolloverTime = rolloverTime;
     }
 
-    private String settlementTime;
-
     @Basic
-    @javax.persistence.Column(name = "settlement_time")
+    @Column(name = "settlement_time")
     public String getSettlementTime() {
         return settlementTime;
     }
@@ -289,10 +287,8 @@ public class SystemTradeRule extends BaseModel{
         this.settlementTime = settlementTime;
     }
 
-    private String newOrderTime;
-
     @Basic
-    @javax.persistence.Column(name = "new_order_time")
+    @Column(name = "new_order_time")
     public String getNewOrderTime() {
         return newOrderTime;
     }
@@ -301,10 +297,8 @@ public class SystemTradeRule extends BaseModel{
         this.newOrderTime = newOrderTime;
     }
 
-    private String lastOrderTime;
-
     @Basic
-    @javax.persistence.Column(name = "last_order_time")
+    @Column(name = "last_order_time")
     public String getLastOrderTime() {
         return lastOrderTime;
     }
@@ -313,10 +307,8 @@ public class SystemTradeRule extends BaseModel{
         this.lastOrderTime = lastOrderTime;
     }
 
-    private BigDecimal uplimit;
-
     @Basic
-    @javax.persistence.Column(name = "uplimit")
+    @Column(name = "uplimit")
     public BigDecimal getUplimit() {
         return uplimit;
     }
@@ -325,10 +317,8 @@ public class SystemTradeRule extends BaseModel{
         this.uplimit = uplimit;
     }
 
-    private BigDecimal downlimit;
-
     @Basic
-    @javax.persistence.Column(name = "downlimit")
+    @Column(name = "downlimit")
     public BigDecimal getDownlimit() {
         return downlimit;
     }
@@ -337,10 +327,8 @@ public class SystemTradeRule extends BaseModel{
         this.downlimit = downlimit;
     }
 
-    private BigDecimal marketUplimit;
-
     @Basic
-    @javax.persistence.Column(name = "market_uplimit")
+    @Column(name = "market_uplimit")
     public BigDecimal getMarketUplimit() {
         return marketUplimit;
     }
@@ -349,10 +337,8 @@ public class SystemTradeRule extends BaseModel{
         this.marketUplimit = marketUplimit;
     }
 
-    private BigDecimal marketDownlimit;
-
     @Basic
-    @javax.persistence.Column(name = "market_downlimit")
+    @Column(name = "market_downlimit")
     public BigDecimal getMarketDownlimit() {
         return marketDownlimit;
     }
@@ -361,10 +347,8 @@ public class SystemTradeRule extends BaseModel{
         this.marketDownlimit = marketDownlimit;
     }
 
-    private BigDecimal marketUpdownlimitCharge;
-
     @Basic
-    @javax.persistence.Column(name = "market_updownlimit_charge")
+    @Column(name = "market_updownlimit_charge")
     public BigDecimal getMarketUpdownlimitCharge() {
         return marketUpdownlimitCharge;
     }
@@ -373,10 +357,8 @@ public class SystemTradeRule extends BaseModel{
         this.marketUpdownlimitCharge = marketUpdownlimitCharge;
     }
 
-    private BigDecimal specialStockRule;
-
     @Basic
-    @javax.persistence.Column(name = "special_stock_rule")
+    @Column(name = "special_stock_rule")
     public BigDecimal getSpecialStockRule() {
         return specialStockRule;
     }
@@ -385,10 +367,8 @@ public class SystemTradeRule extends BaseModel{
         this.specialStockRule = specialStockRule;
     }
 
-    private BigDecimal specialStockCharge;
-
     @Basic
-    @javax.persistence.Column(name = "special_stock_charge")
+    @Column(name = "special_stock_charge")
     public BigDecimal getSpecialStockCharge() {
         return specialStockCharge;
     }
@@ -397,10 +377,8 @@ public class SystemTradeRule extends BaseModel{
         this.specialStockCharge = specialStockCharge;
     }
 
-    private Long tvolDeltaRule;
-
     @Basic
-    @javax.persistence.Column(name = "tvol_delta_rule")
+    @Column(name = "tvol_delta_rule")
     public Long getTvolDeltaRule() {
         return tvolDeltaRule;
     }
@@ -409,10 +387,8 @@ public class SystemTradeRule extends BaseModel{
         this.tvolDeltaRule = tvolDeltaRule;
     }
 
-    private Integer tvolDeltaMinute;
-
     @Basic
-    @javax.persistence.Column(name = "tvol_delta_minute")
+    @Column(name = "tvol_delta_minute")
     public Integer getTvolDeltaMinute() {
         return tvolDeltaMinute;
     }
@@ -421,10 +397,8 @@ public class SystemTradeRule extends BaseModel{
         this.tvolDeltaMinute = tvolDeltaMinute;
     }
 
-    private BigDecimal tvolDeltaCharge;
-
     @Basic
-    @javax.persistence.Column(name = "tvol_delta_charge")
+    @Column(name = "tvol_delta_charge")
     public BigDecimal getTvolDeltaCharge() {
         return tvolDeltaCharge;
     }
@@ -433,10 +407,8 @@ public class SystemTradeRule extends BaseModel{
         this.tvolDeltaCharge = tvolDeltaCharge;
     }
 
-    private String newOrderCloseTimeLimit;
-
     @Basic
-    @javax.persistence.Column(name = "new_order_close_time_limit")
+    @Column(name = "new_order_close_time_limit")
     public String getNewOrderCloseTimeLimit() {
         return newOrderCloseTimeLimit;
     }
@@ -445,10 +417,8 @@ public class SystemTradeRule extends BaseModel{
         this.newOrderCloseTimeLimit = newOrderCloseTimeLimit;
     }
 
-    private Integer oiDay;
-
     @Basic
-    @javax.persistence.Column(name = "oi_day")
+    @Column(name = "oi_day")
     public Integer getOiDay() {
         return oiDay;
     }
@@ -457,10 +427,8 @@ public class SystemTradeRule extends BaseModel{
         this.oiDay = oiDay;
     }
 
-    private BigDecimal overWithdrawalCreditPercentage;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_percentage")
+    @Column(name = "over_withdrawal_credit_percentage")
     public BigDecimal getOverWithdrawalCreditPercentage() {
         return overWithdrawalCreditPercentage;
     }
@@ -469,10 +437,8 @@ public class SystemTradeRule extends BaseModel{
         this.overWithdrawalCreditPercentage = overWithdrawalCreditPercentage;
     }
 
-    private BigDecimal overWithdrawalCreditPercentageCharge;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_percentage_charge")
+    @Column(name = "over_withdrawal_credit_percentage_charge")
     public BigDecimal getOverWithdrawalCreditPercentageCharge() {
         return overWithdrawalCreditPercentageCharge;
     }
@@ -481,10 +447,8 @@ public class SystemTradeRule extends BaseModel{
         this.overWithdrawalCreditPercentageCharge = overWithdrawalCreditPercentageCharge;
     }
 
-    private BigDecimal overWithdrawalCreditLimit;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_limit")
+    @Column(name = "over_withdrawal_credit_limit")
     public BigDecimal getOverWithdrawalCreditLimit() {
         return overWithdrawalCreditLimit;
     }
@@ -493,10 +457,8 @@ public class SystemTradeRule extends BaseModel{
         this.overWithdrawalCreditLimit = overWithdrawalCreditLimit;
     }
 
-    private BigDecimal overWithdrawalCreditLimitCharge;
-
     @Basic
-    @javax.persistence.Column(name = "over_withdrawal_credit_limit_charge")
+    @Column(name = "over_withdrawal_credit_limit_charge")
     public BigDecimal getOverWithdrawalCreditLimitCharge() {
         return overWithdrawalCreditLimitCharge;
     }
@@ -505,10 +467,8 @@ public class SystemTradeRule extends BaseModel{
         this.overWithdrawalCreditLimitCharge = overWithdrawalCreditLimitCharge;
     }
 
-    private BigDecimal liquidationRate;
-
     @Basic
-    @javax.persistence.Column(name = "liquidation_rate")
+    @Column(name = "liquidation_rate")
     public BigDecimal getLiquidationRate() {
         return liquidationRate;
     }
@@ -517,10 +477,8 @@ public class SystemTradeRule extends BaseModel{
         this.liquidationRate = liquidationRate;
     }
 
-    private BigDecimal marginCallRate;
-
     @Basic
-    @javax.persistence.Column(name = "margin_call_rate")
+    @Column(name = "margin_call_rate")
     public BigDecimal getMarginCallRate() {
         return marginCallRate;
     }
@@ -528,8 +486,6 @@ public class SystemTradeRule extends BaseModel{
     public void setMarginCallRate(BigDecimal marginCallRate) {
         this.marginCallRate = marginCallRate;
     }
-
-    private List<TradeGroup> tradeGroupList;
 
     @Transient
     public List<TradeGroup> getTradeGroupList() {
@@ -662,5 +618,15 @@ public class SystemTradeRule extends BaseModel{
         result = 31 * result + (liquidationRate != null ? liquidationRate.hashCode() : 0);
         result = 31 * result + (marginCallRate != null ? marginCallRate.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "group_id")
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 }

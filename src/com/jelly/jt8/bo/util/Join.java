@@ -1,5 +1,6 @@
 package com.jelly.jt8.bo.util;
 
+import javax.persistence.Column;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -19,7 +20,8 @@ public class Join {
     private String columnA;
     private String columnB;
     private Map<String,PropertyDescriptor> columnKeyMap;
-
+    private Map<String, Column> idColumnMap;
+    private Map<String, PropertyDescriptor> transientMap;
     public Join() {
     }
 
@@ -31,6 +33,8 @@ public class Join {
         this.columnA = columnA;
         this.columnB = columnB;
         columnKeyMap = new HashMap<String, PropertyDescriptor>();
+        idColumnMap = new HashMap<String, Column>();
+        transientMap = new HashMap<String, PropertyDescriptor>();
         BeanInfo info = Introspector.getBeanInfo(originClass);
         PropertyDescriptor[] props = info.getPropertyDescriptors();
         for (PropertyDescriptor pd : props){
@@ -40,7 +44,7 @@ public class Join {
             }
         }
         if(joinClass!=null){
-            DBUtils.loadTable(joinClass, columnKeyMap, null, null);
+            DBUtils.loadTable(joinClass, columnKeyMap, null, idColumnMap,transientMap);
         }
     }
 
@@ -106,5 +110,21 @@ public class Join {
 
     public void setColumnKeyMap(Map<String, PropertyDescriptor> columnKeyMap) {
         this.columnKeyMap = columnKeyMap;
+    }
+
+    public Map<String, Column> getIdColumnMap() {
+        return idColumnMap;
+    }
+
+    public void setIdColumnMap(Map<String, Column> idColumnMap) {
+        this.idColumnMap = idColumnMap;
+    }
+
+    public Map<String, PropertyDescriptor> getTransientMap() {
+        return transientMap;
+    }
+
+    public void setTransientMap(Map<String, PropertyDescriptor> transientMap) {
+        this.transientMap = transientMap;
     }
 }

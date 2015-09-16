@@ -45,7 +45,7 @@ public class SystemTradeRuleServiceImpl implements SystemTradeRuleService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             systemTradeRuleDao.insert(conn, object);
-            tradeGroupDao.updateIsActive(conn, object.getTradeGroupList());
+//            tradeGroupDao.updateIsActive(conn, object.getTradeGroupList());
             conn.commit();
         } catch (Exception e) {
             if (conn != null) {
@@ -71,7 +71,7 @@ public class SystemTradeRuleServiceImpl implements SystemTradeRuleService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             systemTradeRuleDao.update(conn, object);
-            tradeGroupDao.updateIsActive(conn, object.getTradeGroupList());
+//            tradeGroupDao.updateIsActive(conn, object.getTradeGroupList());
             conn.commit();
         } catch (Exception e) {
             if (conn != null) {
@@ -97,7 +97,7 @@ public class SystemTradeRuleServiceImpl implements SystemTradeRuleService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
 
-            tradeGroupDao.updateIsActiveOff(conn, object.getCategory(), object.getExchangeId());
+//            tradeGroupDao.updateIsActiveOff(conn, object.getCategory(), object.getExchangeId());
             systemTradeRuleDao.delete(conn, object);
             conn.commit();
         } catch (Exception e) {

@@ -104,6 +104,31 @@ public class TradeGroupServiceImpl implements TradeGroupService {
     }
 
     @Override
+    public void updateIsActive(TradeGroup object) throws Exception {
+        Connection conn = null;
+
+        try {
+            conn = jt8Ds.getConnection();
+            conn.setAutoCommit(false);
+            tradeGroupDao.updateIsActive(conn, object);
+            conn.commit();
+        }catch (Exception e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        }finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }catch (SQLException se){
+                    se.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
     public void delete(TradeGroup object) throws Exception {
         Connection conn = null;
 

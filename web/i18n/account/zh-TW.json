@@ -1,6 +1,7 @@
 {
   "ib":"代理",
   "loginAccount":"會員",
+  "tradeAccount":"交易帳號",
   "addIb":"新增代理",
   "editIb":"編輯代理",
   "commission":"佣金",

@@ -34,12 +34,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 headerBackgroundImg">
-            <h2 class="headerInfo">{{'loginUser'|translate}}:{{loginUser.loginId}}</h2>
-            <!--<img src="images/logo.png" class="logoImg"/>-->
+            <h5 class="headerInfo" ng-show="isLogin">
+                {{'loginUser'|translate}}:<strong>{{loginUser.loginId}}</strong>
+                <button class="btn-xs btn-success" ng-click="onLogoutClick()" translate="logout"></button>
+            </h5>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2"><ul id="menuTree" class="ztree"></ul></div>
+        <div class="col-md-2" ng-show="isLogin"><ul id="menuTree" class="ztree"></ul></div>
         <div class="col-md-10" ng-view></div>
     </div>
 </div>

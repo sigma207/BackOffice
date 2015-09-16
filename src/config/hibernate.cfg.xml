@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:sqlserver://122.116.99.96:1433;databaseName=jt8</property>
+    <property name="connection.url">jdbc:sqlserver://36.225.233.65:1433;databaseName=jt8</property>
     <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
     <mapping class="com.jelly.jt8.bo.model.TradeHouseRule"/>
       <mapping class="com.jelly.jt8.bo.model.TradeAccountGroup"/>
@@ -27,6 +27,7 @@
     <mapping class="com.jelly.jt8.bo.model.TradeIbGroup"/>
     <mapping class="com.jelly.jt8.bo.model.SystemTradeRule"/>
     <mapping class="com.jelly.jt8.bo.model.BoIbAccount"/>
+    <mapping class="com.jelly.jt8.bo.model.TradeAccount"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

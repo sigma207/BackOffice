@@ -15,4 +15,5 @@ public interface TradeGroupService {
     void insert(TradeGroup object) throws Exception;
     void update(TradeGroup object) throws Exception;
     void delete(TradeGroup object) throws Exception;
+    void updateIsActive(TradeGroup object) throws Exception;
 }

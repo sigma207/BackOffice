@@ -2,12 +2,14 @@ package com.jelly.jt8.bo.dao.impl;
 
 import com.jelly.jt8.bo.dao.TradeLoginAccountDao;
 import com.jelly.jt8.bo.model.TradeLoginAccount;
+import com.jelly.jt8.bo.util.Join;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class TradeLoginAccountDaoImpl extends BaseDao implements TradeLoginAccountDao {
     private final static String WHERE_USER_ID = " WHERE user_id = ? ";
     private final static String WHERE_LOGIN_ID = " WHERE login_id = ? ";
+    private final static String UPDATE_IS_ACTIVE = "UPDATE trade_login_account SET is_active = ? WHERE login_id = ? ";
     public TradeLoginAccountDaoImpl() {
         super(TradeLoginAccount.class);
     }
@@ -25,7 +28,33 @@ public class TradeLoginAccountDaoImpl extends BaseDao implements TradeLoginAccou
     @Override
     public List<TradeLoginAccount> select() throws Exception {
         List<TradeLoginAccount> list = new LinkedList<TradeLoginAccount>();
-        selectByObject(jt8Ds.getConnection(), list);
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            List<Join> joinList = new ArrayList<Join>();
+            joinList.add(new Join(tableClass,"boUser",Join.INNER,"bu","user_id","user_id"));
+            stmt = conn.prepareStatement(selectSQL("tia",joinList));
+            rs = stmt.executeQuery();
+            selectToObject(rs, list,joinList);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return list;
     }
 
@@ -110,5 +139,26 @@ public class TradeLoginAccountDaoImpl extends BaseDao implements TradeLoginAccou
     @Override
     public void delete(Connection conn, TradeLoginAccount object) throws Exception {
         deleteByObject(conn,object);
+    }
+
+    @Override
+    public void updateIsActive(Connection conn, TradeLoginAccount object) throws Exception {
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement(UPDATE_IS_ACTIVE);
+            stmt.setInt(1, object.getIsActive());
+            stmt.setString(2, object.getLoginId());
+            stmt.executeUpdate();
+        } catch (Exception e){
+            throw e;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 {
   "useTradeGroup":"使用群組",
+  "defaultTradeGroup":"預設群組",
   "tradeRule":"交易規則",
   "tradeRuleManage":"交易規則管理",
   "ruleName":"交易規則名稱",

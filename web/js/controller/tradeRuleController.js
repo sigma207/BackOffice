@@ -46,16 +46,13 @@ function TradeRuleController($scope, $modal, $log, $translatePartialLoader, $tra
                 category:$scope.editObj.category
             };
             TradeGroupService.getList(params).then(function (data) {
-                var item;
-                $scope.editObj.selectedTradeGroup = [];
-                for(i= 0,count=data.length;i<count;i++){
-                    item = data[i];
-                    item.label = item.groupName;
+                $scope.editObj.tradeGroupList = [];
+                angular.forEach(data, function (item) {
                     if (item.isActive==1) {
-                        $scope.editObj.selectedTradeGroup.push(item);
+                        item.label = item.groupName;
+                        this.push(item);
                     }
-                }
-                $scope.editObj.tradeGroupList = data;
+                }, $scope.editObj.tradeGroupList);
             })
         };
 
@@ -87,19 +84,19 @@ function TradeRuleController($scope, $modal, $log, $translatePartialLoader, $tra
         };
 
         $scope.useTradeGroupChange = function () {
-            $log.info($scope.editObj.selectedTradeGroup);
+            $log.info($scope.editObj.groupId);
         };
 
         $scope.save = function () {
             $scope.editObj.tradeIbGroupList = [];
             var i,count;
 
-            for(i= 0,count=$scope.editObj.tradeGroupList.length;i<count;i++){
-                $scope.editObj.tradeGroupList[i].isActive = 0;
-            }
-            for(i= 0,count=$scope.editObj.selectedTradeGroup.length;i<count;i++){
-                 $scope.editObj.selectedTradeGroup[i].isActive = 1;
-            }
+            //for(i= 0,count=$scope.editObj.tradeGroupList.length;i<count;i++){
+            //    $scope.editObj.tradeGroupList[i].isActive = 0;
+            //}
+            //for(i= 0,count=$scope.editObj.selectedTradeGroup.length;i<count;i++){
+            //     $scope.editObj.selectedTradeGroup[i].isActive = 1;
+            //}
             switch ($scope.currentAction) {
                 case Action.Add:
                     SystemTradeRuleService.post().then(function (data) {

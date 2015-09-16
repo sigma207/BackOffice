@@ -13,4 +13,6 @@ public interface TradeLoginInAccountService {
     void insert(TradeLoginAccount object) throws Exception;
     void update(TradeLoginAccount object) throws Exception;
     void delete(TradeLoginAccount object) throws Exception;
+    void updateTradeAccounts(TradeLoginAccount object) throws Exception;
+    void updateIsActive(TradeLoginAccount object) throws Exception;
 }

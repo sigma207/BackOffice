@@ -20,4 +20,6 @@ public interface TradeLoginAccountDao {
     void update(Connection conn, TradeLoginAccount object) throws Exception;
 
     void delete(Connection conn, TradeLoginAccount object) throws Exception;
+
+    void updateIsActive(Connection conn, TradeLoginAccount object) throws Exception;
 }

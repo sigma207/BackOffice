@@ -85,13 +85,46 @@ public class TradeLoginAccountController extends BaseController{
     }
 
     @RequestMapping(value = "{id}",method = RequestMethod.PUT)
-    public @ResponseBody
-    ResponseEntity<String> update(@PathVariable("id") String id, @RequestBody TradeLoginAccount object){
+     public @ResponseBody
+     ResponseEntity<String> update(@PathVariable("id") String id, @RequestBody TradeLoginAccount object){
         Gson gson = new Gson();
         String payload = "";
         try {
             service.update(object);
         } catch (Exception e){
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(object);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(params = "tradeAccount", value = "{id}",method = RequestMethod.PUT)
+    public @ResponseBody
+    ResponseEntity<String> update(@PathVariable("id") String id, @RequestParam(value="tradeAccount") String tradeAccount, @RequestBody TradeLoginAccount object){
+        Gson gson = new Gson();
+        String payload = "";
+        try {
+            System.out.println("update tradeAccount");
+            service.updateTradeAccounts(object);
+        } catch (Exception e){
+            return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+        payload = gson.toJson(object);
+        return getResponseEntity(payload);
+    }
+
+    @RequestMapping(params = "isActive",value = "{id}", method = RequestMethod.PUT)
+    public
+    @ResponseBody
+    ResponseEntity<String> update(@PathVariable("id") int id, @RequestParam(value="isActive") int isActive, @RequestBody TradeLoginAccount object) {
+        Gson gson = new Gson();
+        String payload = "";
+        try {
+            object.setIsActive(isActive);
+            service.updateIsActive(object);
+        } catch (Exception e) {
             return new ResponseEntity<String>(gson.toJson(exceptionToJson(e)), HttpStatus.SERVICE_UNAVAILABLE);
         }
 

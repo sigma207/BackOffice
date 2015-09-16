@@ -6,6 +6,7 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
     $log.info("BackendController!!");
     request.changeHostUrl(HostUrl);
     locale.changeLang(locale.zh_TW);
+    $scope.isLogin = false;
     var tree = $("#menuTree");
     var zTreeObj;
     var treeSetting = {
@@ -23,7 +24,7 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
         }
     };
 
-    function AlertModalController($scope){
+    function AlertModalController($scope) {
 
     }
 
@@ -31,13 +32,13 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
         scope: $scope,
         controller: AlertModalController,
         //templateUrl:"roleEdit.html",
-        show:false
+        show: false
     });
 
-    $scope.showAlertModal = function() {
+    $scope.showAlertModal = function () {
         alertModal.$promise.then(alertModal.show);
     };
-    $scope.hideAlertModal = function() {
+    $scope.hideAlertModal = function () {
         alertModal.$promise.then(alertModal.hide);
     };
 
@@ -67,14 +68,25 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
     $location.path("/Login");
 
     $scope.onLogin = function (user) {
+        $scope.isLogin = true;
         $location.path("/");
         $scope.loginUser = user;
 
-        PermissionService.post($scope.loginUser.boRolePermissionList,{filter:"true"}).then(function (data) {
+        PermissionService.post($scope.loginUser.boRolePermissionList, {filter: "true"}).then(function (data) {
             $scope.menuList = data;
             locale.formatPermissionList($scope.menuList);
             $scope.initMenuTree();
         });
+    };
+
+    $scope.onLogoutClick = function () {
+        $scope.logout();
+    };
+
+    $scope.logout = function () {
+        $scope.isLogin = false;
+        $location.path("/Login");
+        $scope.loginUser = undefined;
     };
 
     $scope.getLoginId = function () {

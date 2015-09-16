@@ -22,6 +22,7 @@ backOfficeApp.constant("HostUrl", "http://localhost:8080/BackOffice/api");
 //});
 backOfficeApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
     Restangular.setBaseUrl("/BackOffice/api");
+    //Restangular.setBaseUrl("http://jt8demobo.ja178.com:8080/BackOffice/api/");
     Restangular.setDefaultHeaders({'Content-Type': 'application/json'});
     //var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
     Restangular.setErrorInterceptor(function(resp) {
@@ -117,6 +118,10 @@ backOfficeApp.factory('IbAccountService', function (Restangular) {
 
 backOfficeApp.factory('LoginAccountService', function (Restangular) {
     return Restangular.service('tradeLoginInAccounts');
+});
+
+backOfficeApp.factory('TradeAccountService', function (Restangular) {
+    return Restangular.service('tradeAccounts');
 });
 
 backOfficeApp.config(["$routeProvider", function ($routeProvider) {
@@ -234,6 +239,9 @@ backOfficeApp.directive('timeInput', TimeInput);
 backOfficeApp.directive('modalClose', ModalClose);
 backOfficeApp.directive('commonButton', CommonButton);
 backOfficeApp.directive('datePickerOpen', DatePickerOpen);
+
+//validate
+backOfficeApp.directive('matchValidate', MatchValidate);
 //backOfficeApp.directive('dateLowerThan',DateLowerThan);
 //backOfficeApp.directive('dateGreaterThan', DateGreaterThan);
 

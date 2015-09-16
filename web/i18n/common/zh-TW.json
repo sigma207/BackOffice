@@ -38,6 +38,10 @@
     "select":"選擇組織"
   },
   "login":"登入",
+  "logout":"登出",
+  "validate": {
+    "passwordNotMatch":"密碼不相同"
+  },
   "user":{
     "login":"用戶登入",
     "parent":"組長"

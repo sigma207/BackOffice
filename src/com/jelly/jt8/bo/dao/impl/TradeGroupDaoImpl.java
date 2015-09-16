@@ -149,6 +149,27 @@ public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
     }
 
     @Override
+    public void updateIsActive(Connection conn, TradeGroup object) throws Exception {
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement(UPDATE_IS_ACTIVE);
+            stmt.setInt(1, object.getIsActive());
+            stmt.setInt(2, object.getGroupId());
+            stmt.executeUpdate();
+        } catch (Exception e){
+            throw e;
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
     public void updateIsActive(Connection conn, List<TradeGroup> list) throws Exception {
         PreparedStatement stmt = null;
         try {

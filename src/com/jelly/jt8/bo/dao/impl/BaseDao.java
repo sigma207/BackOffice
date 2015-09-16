@@ -29,6 +29,7 @@ public class BaseDao {
     protected Map<String, PropertyDescriptor> columnKeyMap = new LinkedHashMap<String, PropertyDescriptor>();
     protected Map<String, Column> columnMap = new HashMap<String, Column>();
     protected Map<String, Column> idColumnMap = new HashMap<String, Column>();
+    protected Map<String, PropertyDescriptor> transientMap = new HashMap<String, PropertyDescriptor>();
 
     public BaseDao() {
     }
@@ -40,7 +41,7 @@ public class BaseDao {
 //                System.out.println("BaseDao "+tableClass.getName());
                 Table table = (Table) tableClass.getAnnotation(javax.persistence.Table.class);
                 tableName = table.name();
-                DBUtils.loadTable(tableClass, columnKeyMap, columnMap, idColumnMap);
+                DBUtils.loadTable(tableClass, columnKeyMap, columnMap, idColumnMap, transientMap);
 
 //                System.out.println("BaseDao");
             } catch (Exception e) {
@@ -353,7 +354,7 @@ public class BaseDao {
             Map<String, PropertyDescriptor> joinColumnKeyMap = join.getColumnKeyMap();
             keys = joinColumnKeyMap.keySet();
             for (String key : keys) {
-                columnNames.append(join.getAlias() + "." + key + ",");//bu.ib_user_id
+//                columnNames.append(join.getAlias() + "." + key + ",");//bu.ib_user_id
                 columnNames.append(join.getAlias() + "." + key + " AS "+join.getProperty()+"_"+key+",");//bu.ib_user_id AS boIbAccount_ib_user_id
             }
             fromJoin.append(" " + join.getJoinType() + " JOIN " + joinTableName + " " + join.getAlias() + " ON " + fromAlias + "." + join.getColumnA() + " = " + join.getAlias() + "." + join.getColumnB());
@@ -403,11 +404,11 @@ public class BaseDao {
     }
 
     protected void selectToObject(ResultSet rs, List list, List<Join> joins) throws Exception {
-        DBUtils.selectToObject(columnKeyMap, idColumnMap, rs, list, tableClass, joins);
+        DBUtils.selectToObject(columnKeyMap, idColumnMap,transientMap, rs, list, tableClass, joins);
     }
 
     protected void selectToObject(ResultSet rs, List list) throws Exception {
-        DBUtils.selectToObject(columnKeyMap, idColumnMap, rs, list, tableClass, null);
+        DBUtils.selectToObject(columnKeyMap, idColumnMap, transientMap, rs, list, tableClass, null);
     }
 
     protected void insertStatement(PreparedStatement stmt, Object object) throws Exception {

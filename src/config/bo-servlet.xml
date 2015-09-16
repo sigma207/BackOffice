@@ -23,7 +23,7 @@
     <!-- apache.dbcp -->
     <bean id="jt8Ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
-        <property name="url" value="jdbc:sqlserver://122.116.99.96:1433;DatabaseName=jt8"></property>
+        <property name="url" value="jdbc:sqlserver://36.225.233.65:1433;DatabaseName=jt8"></property>
         <property name="username" value="jt8_web_user"></property>
         <property name="password" value="jt8_web_user123"></property>
         <property name="maxActive" value="100"></property>

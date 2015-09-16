@@ -6,7 +6,6 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.beans.BeanInfo;
 import java.beans.IndexedPropertyDescriptor;
@@ -47,7 +46,7 @@ public class DBUtils {
         }
     }
 
-    public static void loadTable(Class tableClass, Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> columnMap, Map<String, Column> idColumnMap) throws Exception {
+    public static void loadTable(Class tableClass, Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> columnMap, Map<String, Column> idColumnMap, Map<String, PropertyDescriptor> transientMap) throws Exception {
 
         Map<String, PropertyDescriptor> readMap = new HashMap<String, PropertyDescriptor>();
         Map<String, PropertyDescriptor> writeMap = new HashMap<String, PropertyDescriptor>();
@@ -65,31 +64,35 @@ public class DBUtils {
             }
         }
 
+        PropertyDescriptor pd = null;
         for (Method method : tableClass.getDeclaredMethods()) {
-            Transient t = method.getAnnotation(javax.persistence.Transient.class);
-            if (t != null) {
-                continue;
-            }
-            Column column = method.getAnnotation(javax.persistence.Column.class);
-            if (column != null && readMap.containsKey(method.getName())) {
-                PropertyDescriptor pd = readMap.get(method.getName());
-//                        System.out.println(method.getName() + ":" + column.name() + "=" + pd.getReadMethod().invoke(object));
-                columnKeyMap.put(column.name(), pd);
-                if (columnMap != null) {
-                    columnMap.put(column.name(), column);
+            if(readMap.containsKey(method.getName())) {
+                pd = readMap.get(method.getName());
+                Transient t = method.getAnnotation(javax.persistence.Transient.class);
+                if (t != null) {
+                    transientMap.put(pd.getName(),pd);
+                    continue;
                 }
+                Column column = method.getAnnotation(javax.persistence.Column.class);
+                if (column != null && readMap.containsKey(method.getName())) {
+//                    pd = readMap.get(method.getName());
+                    columnKeyMap.put(column.name(), pd);
+                    if (columnMap != null) {
+                        columnMap.put(column.name(), column);
+                    }
 
-            }
-            if (idColumnMap != null) {
-                Id id = method.getAnnotation(javax.persistence.Id.class);
-                if (id != null) {
-                    idColumnMap.put(column.name(), column);
+                }
+                if (idColumnMap != null) {
+                    Id id = method.getAnnotation(javax.persistence.Id.class);
+                    if (id != null) {
+                        idColumnMap.put(column.name(), column);
+                    }
                 }
             }
         }
     }
 
-    public static void selectToObject(Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> idColumnMap, ResultSet rs, List list, Class outputClass, List<Join> joins) throws Exception {
+    public static void selectToObject(Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> idColumnMap, Map<String, PropertyDescriptor> transientMap, ResultSet rs, List list, Class outputClass, List<Join> joins) throws Exception {
         if (rs != null) {
             ResultSetMetaData rsmd = rs.getMetaData();
             Object bean = null;
@@ -98,21 +101,24 @@ public class DBUtils {
             PropertyDescriptor pd = null;
             String idValue = null;
             Map<String, Join> joinMap = new HashMap<String, Join>();
+            Join joinTemp = null;
             if (joins != null) {
                 for (Join join : joins) {
                     joinMap.put(join.getProperty(), join);
                 }
             }
             Set<String> joinsKeys = joinMap.keySet();
+            Map<String,Object> joinInstanceMap = null;
 
             Column column = null;
             while (rs.next()) {
                 bean = outputClass.newInstance();
                 if (joins != null) {
+                    joinInstanceMap = new HashMap<String, Object>();
                     for (Join join : joins) {
-                        pd = columnKeyMap.get(join.getProperty());
-                        pd.getWriteMethod().invoke(bean, join.getJoinClass().newInstance());
-
+                        pd = transientMap.get(join.getProperty());
+                        joinInstanceMap.put(join.getProperty(),join.getJoinClass().newInstance());
+                        pd.getWriteMethod().invoke(bean, joinInstanceMap.get(join.getProperty()));
                     }
                 }
                 idValue = null;
@@ -124,12 +130,16 @@ public class DBUtils {
                         if (pd == null) {
                             for (String joinKey : joinsKeys) {
                                 if (columnName.indexOf(joinKey) == 0) {
-                                    pd = joinMap.get(joinKey).getColumnKeyMap().get(columnName.replaceFirst(joinKey + "_", ""));
+                                    joinTemp = joinMap.get(joinKey);
+                                    columnName = columnName.replaceFirst(joinKey + "_", "");
+                                    pd = joinTemp.getColumnKeyMap().get(columnName);
+                                    setProperty(joinInstanceMap.get(joinKey), columnName, columnValue, pd, joinTemp.getIdColumnMap());
                                     break;
                                 }
                             }
+                        }else{
+                            setProperty(bean, columnName, columnValue, pd, idColumnMap);
                         }
-                        test(bean,columnName,columnValue,pd,idColumnMap);
                     }
                 }
                 list.add(bean);
@@ -137,7 +147,7 @@ public class DBUtils {
         }
     }
 
-    private static void test(Object bean, String columnName , Object columnValue, PropertyDescriptor pd, Map<String, Column> idColumnMap) throws Exception {
+    private static void setProperty(Object bean, String columnName, Object columnValue, PropertyDescriptor pd, Map<String, Column> idColumnMap) throws Exception {
         if (pd != null) {
             BeanUtils.setProperty(bean, pd.getName(), columnValue);
         }

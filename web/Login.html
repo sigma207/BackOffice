@@ -33,7 +33,7 @@
                 ng-options="user.loginId for user in userList">
         </select>
         <button class="btn-xs btn-warning" ng-disabled="selectedUser == undefined " ng-click="onFastLoginClick()">快速登入(開發人員測試用)</button>
-        <button class="btn-xs btn-success" ng-disabled="editForm.$invalid" ng-click="login()">登入</button>
+        <button class="btn-xs btn-success" ng-disabled="editForm.$invalid" ng-click="login()" translate="login"></button>
     </div>
 </div>
 </body>

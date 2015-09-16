@@ -1,6 +1,7 @@
 package com.jelly.jt8.bo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by user on 2015/9/4.
@@ -24,6 +25,8 @@ public class TradeLoginAccount extends BaseModel{
     private String lastLoginTime;
     private int userId;
     private String displayId;
+    private BoUser boUser;
+    private List<TradeAccount> tradeAccountList;
 
     @Id
     @Column(name = "login_id")
@@ -173,6 +176,24 @@ public class TradeLoginAccount extends BaseModel{
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    @Transient
+    public BoUser getBoUser() {
+        return boUser;
+    }
+
+    public void setBoUser(BoUser boUser) {
+        this.boUser = boUser;
+    }
+
+    @Transient
+    public List<TradeAccount> getTradeAccountList() {
+        return tradeAccountList;
+    }
+
+    public void setTradeAccountList(List<TradeAccount> tradeAccountList) {
+        this.tradeAccountList = tradeAccountList;
     }
 
     @Override

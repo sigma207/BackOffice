@@ -17,7 +17,7 @@ public class BaseController {
     protected ResponseEntity<String> getResponseEntity(String payload) {
         MediaType mediaType=new MediaType("text","html", Charset.forName("UTF-8"));
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin", "*");
+//        responseHeaders.set("Access-Control-Allow-Origin", "*");
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
         responseHeaders.setContentType(mediaType);
         return new ResponseEntity<String>(payload, responseHeaders, HttpStatus.OK);
