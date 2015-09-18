@@ -9,5 +9,12 @@
   "editLoginAccount":"編輯會員",
   "displayId":"名稱",
   "accountSetting":"帳戶設定",
-  "transactionSetting":"交易設定"
+  "transactionSetting":"交易設定",
+  "withdrawalDeposit":"出入金",
+  "bankbookNo":"交易編號",
+  "accountId":"帳戶序號",
+  "bankbookType":"交易類型",
+
+  "sourceNo":"來源序號",
+  "sourceType":"來源類型"
 }

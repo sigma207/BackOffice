@@ -1,5 +1,4 @@
 {
-  "tradeGroupHasUsed":"群組已被使用",
   "format": {
     "input": {
       "date": "yyyyMMdd"
@@ -19,6 +18,9 @@
   "inactive":"停用",
   "exchangeId":"交易所",
   "mainSymbolId":"主商品",
+  "tradeDate":"交易日期",
+  "memo": "備註",
+  "amount":"金額",
   "symbolId":"商品",
   "stockName":"股票名稱",
   "query": "查詢",
@@ -47,6 +49,7 @@
     "parent":"組長"
   },
   "error": {
+    "tradeGroupHasUsed":"群組已被使用",
     "dirtyData": "資料已被異動過,請重新查詢後再操作"
   },
   "datePicker": {

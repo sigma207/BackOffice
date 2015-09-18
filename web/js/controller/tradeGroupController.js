@@ -36,6 +36,7 @@ function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $tr
     $scope.addClick = function () {
         $scope.currentAction = Action.Add;
         $scope.editObj = angular.copy($scope.selectedTradeRule);
+        $scope.editObj.isActive = 0;
         //$scope.editObj.exchangeId = "*";
         $scope.modalTitle = $translate.instant("tradeAccountGroup");
         $scope.showModal();
@@ -50,11 +51,9 @@ function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $tr
 
     $scope.deleteClick = function (row) {
         //var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
-        row.remove().then(
-            function () {
-                $scope.getTradeGroupList();
-            }
-        );
+        row.remove().then(function () {
+            $scope.getTradeGroupList();
+        });
     };
 
     function ModalController($scope) {

@@ -31,11 +31,26 @@ backOfficeApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
         //myAlert.show();
         $log.info(resp);
         if(resp.data.message){
-            $rootScope.$broadcast("alert",resp.data.message);
+            $rootScope.$broadcast("error",resp.data.message);
         } else{
             $rootScope.$broadcast("alert",resp.statusText);
         }
         return true; // 停止promise链
+    });
+
+    Restangular.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
+        // .. to look for getList operations
+        if (operation === "getList") {
+            // .. and handle the data and meta data
+            angular.forEach(data, function (item) {
+                if(item.children){
+                    angular.forEach(item.children, function (child) {
+                        child.route = what;
+                    })
+                }
+            });
+        }
+        return data;
     });
 });
 backOfficeApp.config(function($modalProvider) {

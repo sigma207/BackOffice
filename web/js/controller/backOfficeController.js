@@ -46,8 +46,17 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
         $scope.alert(d);
     });
 
+    $scope.$on("error", function (e, d) {
+        $scope.error(d);
+    });
+
     $scope.alert = function (msg) {
         $scope.content = $translate.instant(msg);
+        $scope.showAlertModal();
+    };
+
+    $scope.error = function (code) {
+        $scope.content = $translate.instant("error."+code);
         $scope.showAlertModal();
     };
 
