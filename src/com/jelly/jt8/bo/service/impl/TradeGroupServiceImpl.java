@@ -1,5 +1,7 @@
 package com.jelly.jt8.bo.service.impl;
 
+import com.jelly.jt8.bo.dao.SystemTradeRuleDao;
+import com.jelly.jt8.bo.dao.TradeAccountDao;
 import com.jelly.jt8.bo.dao.TradeGroupDao;
 import com.jelly.jt8.bo.dao.TradeHouseRuleGroupDao;
 import com.jelly.jt8.bo.model.TradeGroup;
@@ -30,8 +32,12 @@ public class TradeGroupServiceImpl implements TradeGroupService {
     private TradeGroupDao tradeGroupDao;
 
     @Autowired
-    @Qualifier("TradeHouseRuleGroupDao")
-    private TradeHouseRuleGroupDao tradeHouseRuleGroupDao;
+    @Qualifier("SystemTradeRuleDao")
+    private SystemTradeRuleDao systemTradeRuleDao;
+
+    @Autowired
+    @Qualifier("TradeAccountDao")
+    private TradeAccountDao tradeAccountDao;
 
     @Override
     public List<TradeGroup> select() throws Exception {
@@ -139,8 +145,10 @@ public class TradeGroupServiceImpl implements TradeGroupService {
 //            if(list.size()>0){
 //                throw new Exception(ErrorMsg.TRADE_GROUP_HAS_USED);
 //            }
+            if(systemTradeRuleDao.hasData(object.getGroupId()) || tradeAccountDao.hasData(object.getGroupId())){
+                throw new Exception(ErrorMsg.TRADE_GROUP_HAS_USED);//已被system_trade_rule或trade_account使用
+            }
             conn = jt8Ds.getConnection();
-
             conn.setAutoCommit(false);
             tradeGroupDao.delete(conn, object);
             conn.commit();

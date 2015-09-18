@@ -9,6 +9,7 @@ import java.util.List;
  * Created by user on 2015/9/9.
  */
 public interface SystemTradeRuleDao {
+    boolean hasData(int groupId) throws Exception;
     List<SystemTradeRule> select() throws Exception;
     void insert(Connection conn, SystemTradeRule object) throws Exception;
     void update(Connection conn, SystemTradeRule object) throws Exception;

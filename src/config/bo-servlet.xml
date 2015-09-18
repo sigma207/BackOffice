@@ -4,13 +4,16 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
        http://www.springframework.org/schema/mvc
 	   http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <context:component-scan base-package="com.jelly.jt8.bo.*"/>
 
@@ -20,12 +23,13 @@
           p:prefix="/"
           p:suffix=".jsp"/>
 
+    <util:properties id="backofficeProperties" location="file:${catalina.home}/conf/backoffice.properties" />
     <!-- apache.dbcp -->
     <bean id="jt8Ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
-        <property name="url" value="jdbc:sqlserver://36.225.233.65:1433;DatabaseName=jt8"></property>
-        <property name="username" value="jt8_web_user"></property>
-        <property name="password" value="jt8_web_user123"></property>
+        <property name="url" value="#{backofficeProperties[jdbc_url]}"></property>
+        <property name="username" value="#{backofficeProperties[jdbc_username]}"></property>
+        <property name="password" value="#{backofficeProperties[jdbc_password]}"></property>
         <property name="maxActive" value="100"></property>
         <property name="maxIdle" value="30"></property>
         <property name="maxWait" value="500"></property>

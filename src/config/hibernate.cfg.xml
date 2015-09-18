@@ -28,6 +28,7 @@
     <mapping class="com.jelly.jt8.bo.model.SystemTradeRule"/>
     <mapping class="com.jelly.jt8.bo.model.BoIbAccount"/>
     <mapping class="com.jelly.jt8.bo.model.TradeAccount"/>
+    <mapping class="com.jelly.jt8.bo.model.TradeBankbook"/>
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>

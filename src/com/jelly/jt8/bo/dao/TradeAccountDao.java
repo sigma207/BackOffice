@@ -9,6 +9,7 @@ import java.util.List;
  * Created by user on 2015/9/15.
  */
 public interface TradeAccountDao {
+    boolean hasData(int groupId) throws Exception;
     List<TradeAccount> select(String loginId) throws Exception;
     String selectMaxAccountId() throws Exception;
     void insert(Connection conn, TradeAccount object) throws Exception;

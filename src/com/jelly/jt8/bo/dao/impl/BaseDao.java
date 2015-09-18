@@ -8,14 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.sql.DataSource;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
 
@@ -128,6 +125,38 @@ public class BaseDao {
                 e.printStackTrace();
             }
         }
+    }
+
+    protected boolean hasData(Connection conn, String condition) throws Exception {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean hasData = false;
+        try {
+            stmt = conn.prepareStatement(selectTop1SQL() + condition);
+            rs = stmt.executeQuery();
+            hasData = rs.next();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return hasData;
+    }
+
+    protected String selectTop1SQL() throws Exception{
+        return "SELECT TOP 1 * FROM " + tableName + " ";
     }
 
     protected void selectByObject(Connection conn, List list) throws Exception {

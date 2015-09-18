@@ -22,8 +22,41 @@ public class TradeAccountDaoImpl extends BaseDao implements TradeAccountDao {
     private final static String DELETE = " DELETE trade_account ";
     private final static String WHERE_LOGIN_ID = " WHERE login_id = ? ";
     private final static String WHERE_ACCOUNT_ID = " WHERE account_id = ? ";
+    private final static String WHERE_GROUP_ID = " WHERE group_id = ? ";
     public TradeAccountDaoImpl() {
         super(TradeAccount.class);
+    }
+
+    @Override
+    public boolean hasData(int groupId) throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean hasData = false;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectTop1SQL() + WHERE_GROUP_ID);
+            stmt.setInt(1,groupId);
+            rs = stmt.executeQuery();
+            hasData = rs.next();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return hasData;
     }
 
     @Override
