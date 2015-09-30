@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "trade_bankbook", schema = "dbo", catalog = "jt8")
 public class TradeBankbook extends BaseModel{
+    public final static String BANKBOOK_TYPE_D = "D";
+    public final static String BANKBOOK_TYPE_W = "W";
+    public final static String SOURCE_TYPE_I = "I";
     private long bankbookNo;
     private String accountId;
     private String tradeDate;
@@ -16,7 +19,7 @@ public class TradeBankbook extends BaseModel{
     private BigDecimal amount;
     private BigDecimal balance;
     private String sourceNo;
-    private Integer sourceType;
+    private String sourceType;
     private String memo;
     private String updateTime;
     private String modifiedBy;
@@ -93,11 +96,11 @@ public class TradeBankbook extends BaseModel{
 
     @Basic
     @Column(name = "source_type")
-    public Integer getSourceType() {
+    public String getSourceType() {
         return sourceType;
     }
 
-    public void setSourceType(Integer sourceType) {
+    public void setSourceType(String sourceType) {
         this.sourceType = sourceType;
     }
 

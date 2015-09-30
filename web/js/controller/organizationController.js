@@ -187,38 +187,13 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
         $scope.showEditModal();
     };
 
-    $scope.editModalClose = function () {
-        var selectedNode = undefined;
-        switch ($scope.currentAction) {
-            case Action.NewNode:
-                if ($scope.editNode.parentOrganizationId) {
-                    var parent_node = zTreeObj.getNodeByParam("organizationId", $scope.editNode.parentOrganizationId);
-                    zTreeObj.addNodes(parent_node, $scope.editNode, true);
-                } else {
-                    zTreeObj.addNodes(null, $scope.editNode, true);
-                }
-                break;
-            case Action.NewChildNode:
-                selectedNode = zTreeObj.getSelectedNodes()[0];
-                zTreeObj.addNodes(selectedNode, $scope.editNode, true);
-                zTreeObj.expandNode(selectedNode, true);
-                break;
-            case Action.Edit:
-                selectedNode = zTreeObj.getSelectedNodes()[0];
-                selectedNode.organization_code = $scope.editNode.organization_code;
-                selectedNode.organization_name = $scope.editNode.organization_name;
-                zTreeObj.updateNode(selectedNode);
-                break;
-        }
-        $scope.hideEditModal();
-    };
-
     function EditModalController($scope){
         $scope.save = function () {
             switch ($scope.currentAction) {
                 case Action.NewNode:
                 case Action.NewChildNode:
                     OrganizationService.post( $scope.editNode).then(function (data) {
+                        $scope.editNode = data;
                         $scope.editModalClose();
                     });
                     break;
@@ -228,6 +203,32 @@ function OrganizationController($scope, $modal, $log, $translatePartialLoader, $
                     });
                     break;
             }
+        };
+
+        $scope.editModalClose = function () {
+            var selectedNode = undefined;
+            switch ($scope.currentAction) {
+                case Action.NewNode:
+                    if ($scope.editNode.parentOrganizationId) {
+                        var parent_node = zTreeObj.getNodeByParam("organizationId", $scope.editNode.parentOrganizationId);
+                        zTreeObj.addNodes(parent_node, $scope.editNode, true);
+                    } else {
+                        zTreeObj.addNodes(null, $scope.editNode, true);
+                    }
+                    break;
+                case Action.NewChildNode:
+                    selectedNode = zTreeObj.getSelectedNodes()[0];
+                    zTreeObj.addNodes(selectedNode, $scope.editNode, true);
+                    zTreeObj.expandNode(selectedNode, true);
+                    break;
+                case Action.Edit:
+                    selectedNode = zTreeObj.getSelectedNodes()[0];
+                    selectedNode.organization_code = $scope.editNode.organization_code;
+                    selectedNode.organization_name = $scope.editNode.organization_name;
+                    zTreeObj.updateNode(selectedNode);
+                    break;
+            }
+            $scope.hideEditModal();
         };
     }
 

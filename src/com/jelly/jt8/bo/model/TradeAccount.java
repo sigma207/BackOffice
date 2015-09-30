@@ -27,6 +27,7 @@ public class TradeAccount {
     private String updateTime;
     private String category;
     private String exchangeId;
+    private TradeBankbook lastTradeBankbook;
 
     @Id
     @Column(name = "account_id")
@@ -186,6 +187,15 @@ public class TradeAccount {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Transient
+    public TradeBankbook getLastTradeBankbook() {
+        return lastTradeBankbook;
+    }
+
+    public void setLastTradeBankbook(TradeBankbook lastTradeBankbook) {
+        this.lastTradeBankbook = lastTradeBankbook;
     }
 
     @Override

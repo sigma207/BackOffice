@@ -13,5 +13,5 @@ public class ErrorMsg {
     public static String TRADE_HOUSE_RULE_NOT_FOUND = "tradeHouseRuleNotFound";
     public static String TRADE_IB_CHILDREN_GROUP_HAS_USED = "tradeIbChildrenGroupHasUsed";
     public static String BALANCE_NOT_ENOUGH = "balanceNotEnough";
-    public static String DB_ERROR = "db_error";
+    public static String DB_ERROR = "dbError";
 }

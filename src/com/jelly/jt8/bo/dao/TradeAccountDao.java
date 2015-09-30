@@ -1,6 +1,7 @@
 package com.jelly.jt8.bo.dao;
 
 import com.jelly.jt8.bo.model.TradeAccount;
+import com.jelly.jt8.bo.model.TradeLoginAccount;
 
 import java.sql.Connection;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public interface TradeAccountDao {
     boolean hasData(int groupId) throws Exception;
     List<TradeAccount> select(String loginId) throws Exception;
+    List<TradeAccount> select(List<TradeLoginAccount> tradeLoginAccountList) throws Exception;
     String selectMaxAccountId() throws Exception;
     void insert(Connection conn, TradeAccount object) throws Exception;
     void update(Connection conn, TradeAccount object) throws Exception;

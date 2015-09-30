@@ -67,8 +67,10 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                     name: "新增子節點",
                     callback: function () {
                         $log.info(Action.NewChildNode);
+                        $log.info(currentNode);
                         $scope.currentAction = Action.NewChildNode;
                         $scope.editNewObject(currentNode);
+                        $log.info($scope.editNode);
                         $scope.modalTitle = currentNode[locale.zh_TW] + ":新增子節點";
                         $scope.showModal();
                     }
@@ -185,34 +187,6 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
         $scope.showModal();
     };
 
-    $scope.modalClose = function () {
-        var selectedNode = undefined;
-        locale.node($scope.editNode, $scope.editNode);
-        switch ($scope.currentAction) {
-            case Action.NewNode:
-                if ($scope.editNode.parentPermissionId) {
-                    var parent_node = zTreeObj.getNodeByParam("permissionId", $scope.editNode.parentPermissionId);
-                    zTreeObj.addNodes(parent_node, $scope.editNode, true);
-                } else {
-                    zTreeObj.addNodes(null, $scope.editNode, true);
-                }
-                break;
-            case Action.NewChildNode:
-                selectedNode = zTreeObj.getSelectedNodes()[0];
-                zTreeObj.addNodes(selectedNode, $scope.editNode, true);
-                zTreeObj.expandNode(selectedNode, true);
-                break;
-            case Action.Edit:
-                selectedNode = zTreeObj.getSelectedNodes()[0];
-                selectedNode.permission_code = $scope.editNode.permission_code;
-                selectedNode.permissionNameMap = $scope.editNode.permissionNameMap;
-                locale.node(selectedNode, $scope.editNode);
-                zTreeObj.updateNode(selectedNode);
-                break;
-        }
-        $scope.hideModal();
-    };
-
     function ModalController($scope){
         $scope.save = function () {
             locale.convertBaseLineToDash($scope.editNode.permissionNameMap);
@@ -220,18 +194,44 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                 case Action.NewNode:
                 case Action.NewChildNode:
                     PermissionService.post( $scope.editNode).then(function (data) {
-                        $log.info(data);
-                        $log.info($scope.editNode);
                         $scope.editNode = data;
-                        $scope.modalClose();
+                        $scope.beforeClose();
                     });
                     break;
                 case Action.Edit:
                     $scope.editNode.put().then(function (data) {
-                        $scope.modalClose();
+                        $scope.beforeClose();
                     });
                     break;
             }
+        };
+
+        $scope.beforeClose = function () {
+            var selectedNode = undefined;
+            locale.node($scope.editNode, $scope.editNode);
+            switch ($scope.currentAction) {
+                case Action.NewNode:
+                    if ($scope.editNode.parentPermissionId) {
+                        var parent_node = zTreeObj.getNodeByParam("permissionId", $scope.editNode.parentPermissionId);
+                        zTreeObj.addNodes(parent_node, $scope.editNode, true);
+                    } else {
+                        zTreeObj.addNodes(null, $scope.editNode, true);
+                    }
+                    break;
+                case Action.NewChildNode:
+                    selectedNode = zTreeObj.getSelectedNodes()[0];
+                    zTreeObj.addNodes(selectedNode, $scope.editNode, true);
+                    zTreeObj.expandNode(selectedNode, true);
+                    break;
+                case Action.Edit:
+                    selectedNode = zTreeObj.getSelectedNodes()[0];
+                    selectedNode.permission_code = $scope.editNode.permission_code;
+                    selectedNode.permissionNameMap = $scope.editNode.permissionNameMap;
+                    locale.node(selectedNode, $scope.editNode);
+                    zTreeObj.updateNode(selectedNode);
+                    break;
+            }
+            $scope.hideModal();
         };
     }
 

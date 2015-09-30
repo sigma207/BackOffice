@@ -21,6 +21,7 @@
   "tradeDate":"交易日期",
   "memo": "備註",
   "amount":"金額",
+  "balance":"帳戶餘額",
   "symbolId":"商品",
   "stockName":"股票名稱",
   "query": "查詢",
@@ -30,10 +31,13 @@
   "add": "新增",
   "delete": "刪除",
   "edit": "編輯",
+  "all":"全部",
   "moveTop":"移到最上",
   "moveUp":"往上移",
   "moveDown":"往下移",
   "moveBottom":"移到最下",
+  "beginDate": "起始日期",
+  "endDate": "結束日期",
   "org": {
     "code":"組織代碼",
     "name":"組織名稱",
@@ -49,6 +53,7 @@
     "parent":"組長"
   },
   "error": {
+    "dbError":"資料庫執行錯誤",
     "tradeGroupHasUsed":"群組已被使用",
     "dirtyData": "資料已被異動過,請重新查詢後再操作"
   },

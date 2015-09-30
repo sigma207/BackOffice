@@ -2,13 +2,12 @@
  * Created by user on 2015/9/9.
  */
 backOfficeApp.controller("IbAccountController", IbAccountController);
-function IbAccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, IbAccountService, LoginAccountService) {
+function IbAccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, IbAccountService, LoginAccountService, TradeAccountService, BankbookService) {
     $translatePartialLoader.addPart("account");
     $translatePartialLoader.addPart("user");
     $translate.refresh();
     $scope.ibList = [];
     $scope.ibRootLoginId = "ibRoot";
-
     $scope.init = function () {
         IbAccountService.one($scope.loginUser.userId).get().then(function (ibUser) {
             $scope.addIb(ibUser);
@@ -43,8 +42,8 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.getChildrenIb();
     };
 
-    $scope.getChildrenIb = function() {
-        IbAccountService.getList({userId:$scope.currentIb.userId}).then(function (data) {
+    $scope.getChildrenIb = function () {
+        IbAccountService.getList({userId: $scope.currentIb.userId}).then(function (data) {
             $log.info(data);
             $scope.rowCollection = data;
             $scope.getLoginAccounts();
@@ -52,8 +51,8 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     $scope.getLoginAccounts = function () {
-        LoginAccountService.getList({userId:$scope.currentIb.userId}).then(function (data) {
-            $scope.rowCollection.push.apply($scope.rowCollection,data);
+        LoginAccountService.getList({userId: $scope.currentIb.userId}).then(function (data) {
+            $scope.rowCollection.push.apply($scope.rowCollection, data);
             $log.info($scope.rowCollection);
         });
     };
@@ -63,7 +62,7 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     $scope.removeClick = function (row) {
-        if( $scope.isIb(row)){
+        if ($scope.isIb(row)) {
             $scope.removeIbClick(row);
         } else {
             $scope.removeLoginAccountClick(row);
@@ -71,7 +70,7 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     $scope.editClick = function (row) {
-        if( $scope.isIb(row)){
+        if ($scope.isIb(row)) {
             $scope.editIbClick(row);
         } else {
             $scope.editLoginAccountClick(row);
@@ -97,7 +96,7 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.editObj.boIbAccount = {};
         $scope.editObj.boIbAccount.parentIbUserId = $scope.operatingIb.userId;//指定新增的代理上層
         $scope.editObj.boIbAccount.isRoot = 0;
-        $scope.editObj.boIbAccount.levelNo = $scope.operatingIb.boIbAccount.levelNo+1;
+        $scope.editObj.boIbAccount.levelNo = $scope.operatingIb.boIbAccount.levelNo + 1;
 
         $scope.showIbEditModal();
     };
@@ -118,7 +117,8 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     function IbEditModalController($scope) {
-        $scope.init = function () {};
+        $scope.init = function () {
+        };
         $scope.save = function () {
             switch ($scope.currentAction) {
                 case Action.Add:
@@ -178,7 +178,8 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     function LoginAccountEditModalController($scope) {
-        $scope.init = function () {};
+        $scope.init = function () {
+        };
         $scope.save = function () {
             switch ($scope.currentAction) {
                 case Action.Add:
@@ -208,5 +209,82 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
 
     $scope.hideLoginAccountEditModal = function () {
         loginAccountEditModal.$promise.then(loginAccountEditModal.hide);
+    };
+
+    //
+    $scope.withdrawalDepositClick = function (tradeLoginAccount,index) {
+        $scope.editObj = tradeLoginAccount.tradeAccountList[index];
+        $scope.modalTitle = $translate.instant("loginId")+ ":" +tradeLoginAccount.loginId+ $translate.instant("tradeAccount") + ":" + $scope.editObj.accountId;
+        $scope.showTradeBankbookModal();
+    };
+
+    //editModal
+    $scope.tradeBankbookModalClose = function () {
+        $scope.hideTradeBankbookModal();
+    };
+
+    function TradeBankbookModalController($scope) {
+        //BankbookService
+        $scope.init = function () {
+            $scope.amount = 0;
+            $scope.condition = {};
+            $scope.condition.begin_date = new Date();
+            $scope.condition.end_date = new Date();
+            $scope.initTradeBankbook();
+        };
+
+        $scope.initTradeBankbook = function () {
+            $scope.tradeBankbook = {};
+            $scope.tradeBankbook.accountId = $scope.editObj.accountId;
+        };
+
+        $scope.getBankbookList = function () {
+            DateTool.dateToYyyyMMdd($scope.condition, "begin_date", "beginDate");
+            DateTool.dateToYyyyMMdd($scope.condition, "end_date", "endDate");
+            var params = {};
+            params.accountId = $scope.editObj.accountId;
+            params.beginDate = $scope.condition.beginDate;
+            params.endDate = $scope.condition.endDate;
+            BankbookService.getList(params).then(function (data) {
+                angular.forEach(data, function (item) {
+                    DateTool.yyyyMMddToDate(item, "tradeDate", "trade_date");
+                });
+                $scope.rowCollection = data;
+            });
+        };
+
+        //更新tradeAccount的帳戶餘額
+        $scope.getLastBankbook = function () {
+            BankbookService.one().get({accountId:$scope.editObj.accountId}).then(function (data) {
+                $scope.editObj.lastTradeBankbook = data;
+            });
+        };
+
+        $scope.queryClick = function () {
+            $scope.getBankbookList();
+        };
+
+        $scope.save = function () {
+            BankbookService.post($scope.tradeBankbook).then(function (data) {
+                $scope.initTradeBankbook();
+                $scope.getLastBankbook();
+                $scope.getBankbookList();
+            });
+        };
+
+    }
+
+    var tradeBankbookModal = $modal({
+        scope: $scope,
+        controller: TradeBankbookModalController,
+        templateUrl: "tradeBankbook.html",
+        show: false
+    });
+
+    $scope.showTradeBankbookModal = function () {
+        tradeBankbookModal.$promise.then(tradeBankbookModal.show);
+    };
+    $scope.hideTradeBankbookModal = function () {
+        tradeBankbookModal.$promise.then(tradeBankbookModal.hide);
     };
 }

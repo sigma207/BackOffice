@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class Join {
     public final static String INNER = "INNER";
+    public final static String LEFT = "LEFT";
     private Class originClass;
     private Class joinClass;
     private String property;

@@ -139,6 +139,14 @@ backOfficeApp.factory('TradeAccountService', function (Restangular) {
     return Restangular.service('tradeAccounts');
 });
 
+backOfficeApp.factory('BankbookService', function (Restangular) {
+    return Restangular.service('tradeBankbooks');
+});
+
+backOfficeApp.factory('IpsTransService', function (Restangular) {
+    return Restangular.service('tradeIpsTrans');
+});
+
 backOfficeApp.config(["$routeProvider", function ($routeProvider) {
     $routeProvider.
         when("/Login", {
@@ -170,6 +178,9 @@ backOfficeApp.config(["$routeProvider", function ($routeProvider) {
         }).
         when("/C4", {
             templateUrl: "userManage/loginAccount/LoginAccount.html"
+        }).
+        when("/C5", {
+            templateUrl: "userManage/ipsTrans/IpsTrans.html"
         }).
         when("/D1", {
             templateUrl: "systemManage/tradeRule/TradeRule.html"

@@ -1,14 +1,18 @@
 package com.jelly.jt8.bo.dao.impl;
 
+import com.jelly.jt8.bo.dao.Jt8DaoConfig;
 import com.jelly.jt8.bo.dao.TradeAccountDao;
 import com.jelly.jt8.bo.model.TradeAccount;
+import com.jelly.jt8.bo.model.TradeLoginAccount;
 import com.jelly.jt8.bo.util.ErrorMsg;
+import com.jelly.jt8.bo.util.Join;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -104,6 +108,45 @@ public class TradeAccountDaoImpl extends BaseDao implements TradeAccountDao {
             stmt.setString(1, loginId);
             rs = stmt.executeQuery();
             selectToObject(rs,list);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<TradeAccount> select(List<TradeLoginAccount> tradeLoginAccountList) throws Exception {
+        List<TradeAccount> list = new LinkedList<TradeAccount>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            String where = "";
+            where = whereInSQL(where, "login_id", tradeLoginAccountList.size());
+            System.out.println(selectSQL() + where);
+            stmt = conn.prepareStatement(selectSQL() + where + Jt8DaoConfig.CATEGORY_EXCHANGE_ID_ORDER_BY);
+            int index = 1;
+            for (TradeLoginAccount tradeLoginAccount : tradeLoginAccountList) {
+                stmt.setString(index++, tradeLoginAccount.getLoginId());
+            }
+
+            rs = stmt.executeQuery();
+            selectToObject(rs, list);
         } catch (Exception e) {
             throw e;
         } finally {

@@ -1,9 +1,6 @@
 package com.jelly.jt8.bo.dao.impl;
 
-import com.jelly.jt8.bo.util.DBUtils;
-import com.jelly.jt8.bo.util.ErrorMsg;
-import com.jelly.jt8.bo.util.Join;
-import com.jelly.jt8.bo.util.RsMapper;
+import com.jelly.jt8.bo.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -356,6 +353,44 @@ public class BaseDao {
         return "DELETE " + tableName;
     }
 
+    protected void addConditionParameter(Where where, String parameter, String value) throws Exception{
+        if(value.length()>0){
+            where.getValues().add(value);
+            if(where.getValues().size()==1){
+                where.getSql().append(" WHERE ");
+            } else{
+                where.getSql().append(" AND ");
+            }
+            where.getSql().append(parameter);
+        }
+    }
+
+    protected void addConditionValue(PreparedStatement stmt,Where where) throws Exception{
+        int index = 1;
+        for(String value:where.getValues()){
+            if(value.length()>0){
+                stmt.setString(index++, value);
+            }
+        }
+    }
+
+    protected void addConditionParameter(StringBuffer sql, String parameter, String value) throws Exception{
+        if(value.length()>0){
+            if(sql.length()==0){
+                sql.append(" WHERE ");
+            } else{
+                sql.append(" AND ");
+            }
+            sql.append(parameter);
+        }
+    }
+
+    protected void addConditionValue(PreparedStatement stmt,int index, String value) throws Exception{
+        if(value.length()>0){
+            stmt.setString(index++, value);
+        }
+    }
+
     protected String selectSQL() throws Exception {
         return selectSQL(null);
     }
@@ -423,6 +458,7 @@ public class BaseDao {
     }
 
     protected String whereInSQL(String sql, String condition, int size) throws Exception {
+        if(size==0) return sql;//0筆就不產生
         sql += (sql.length() == 0) ? " WHERE " : " AND ";
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < size; i++) {

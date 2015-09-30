@@ -1,5 +1,6 @@
 package com.jelly.jt8.bo.dao.impl;
 
+import com.jelly.jt8.bo.dao.Jt8DaoConfig;
 import com.jelly.jt8.bo.dao.SystemTradeRuleDao;
 import com.jelly.jt8.bo.model.SystemTradeRule;
 import org.springframework.stereotype.Repository;
@@ -56,7 +57,7 @@ public class SystemTradeRuleDaoImpl extends BaseDao implements SystemTradeRuleDa
     @Override
     public List<SystemTradeRule> select() throws Exception {
         List<SystemTradeRule> list = new LinkedList<SystemTradeRule>();
-        selectByObject(jt8Ds.getConnection(), list);
+        selectByObject(jt8Ds.getConnection(), list, selectSQL()+ Jt8DaoConfig.CATEGORY_EXCHANGE_ID_ORDER_BY);
         return list;
     }
 

@@ -1,13 +1,7 @@
 package com.jelly.jt8.bo.service.impl;
 
-import com.jelly.jt8.bo.dao.SystemTradeRuleDao;
-import com.jelly.jt8.bo.dao.TradeAccountDao;
-import com.jelly.jt8.bo.dao.TradeHouseRuleDao;
-import com.jelly.jt8.bo.dao.TradeLoginAccountDao;
-import com.jelly.jt8.bo.model.SystemTradeRule;
-import com.jelly.jt8.bo.model.TradeAccount;
-import com.jelly.jt8.bo.model.TradeHouseRule;
-import com.jelly.jt8.bo.model.TradeLoginAccount;
+import com.jelly.jt8.bo.dao.*;
+import com.jelly.jt8.bo.model.*;
 import com.jelly.jt8.bo.service.TradeLoginInAccountService;
 import com.jelly.jt8.bo.util.Password;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +12,9 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user on 2015/9/14.
@@ -38,6 +34,10 @@ public class TradeLoginInAccountServiceImpl implements TradeLoginInAccountServic
     private TradeAccountDao tradeAccountDao;
 
     @Autowired
+    @Qualifier("TradeBankbookDao")
+    private TradeBankbookDao tradeBankbookDao;
+
+    @Autowired
     @Qualifier("SystemTradeRuleDao")
     private SystemTradeRuleDao systemTradeRuleDao;
 
@@ -46,9 +46,38 @@ public class TradeLoginInAccountServiceImpl implements TradeLoginInAccountServic
         return tradeLoginAccountDao.select();
     }
 
+    /**
+     * 每筆TradeLoginAccount包含底下的List<TradeAccount>
+     * TradeAccount又包含最後一筆的TradeBankbook(顯示帳戶餘額)
+     * @param userId
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<TradeLoginAccount> select(int userId) throws Exception {
-        return tradeLoginAccountDao.select(userId);
+        List<TradeLoginAccount> list = tradeLoginAccountDao.select(userId);
+        List<TradeAccount> tradeAccountList = tradeAccountDao.select(list);
+        List<TradeBankbook> tradeBankbookList= tradeBankbookDao.selectLast(tradeAccountList);
+        Map<String,TradeBankbook> tradeBankbookMap = new HashMap<String, TradeBankbook>();
+        Map<String,List<TradeAccount>> tradeAccountMap = new HashMap<String, List<TradeAccount>>();
+        List<TradeAccount> temp = null;
+        for(TradeBankbook tradeBankbook:tradeBankbookList){
+            tradeBankbookMap.put(tradeBankbook.getAccountId(),tradeBankbook);
+        }
+        for(TradeAccount tradeAccount:tradeAccountList){
+            tradeAccount.setLastTradeBankbook(tradeBankbookMap.get(tradeAccount.getAccountId()));
+            temp = tradeAccountMap.get(tradeAccount.getLoginId());
+            if(temp==null){
+                temp = new ArrayList<TradeAccount>();
+                tradeAccountMap.put(tradeAccount.getLoginId(),temp);
+            }
+            temp.add(tradeAccount);
+        }
+        for(TradeLoginAccount tradeLoginAccount:list){
+            tradeLoginAccount.setTradeAccountList(tradeAccountMap.get(tradeLoginAccount.getLoginId()));
+        }
+
+        return list;
     }
 
     private int getMaxAccountId() throws Exception{

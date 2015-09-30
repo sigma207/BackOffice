@@ -2,7 +2,7 @@
  * Created by user on 2015/9/3.
  */
 backOfficeApp.controller("BackOfficeController", BackOfficeController);
-function BackOfficeController($scope, $translate, $location, $log, $modal, PermissionService, HostUrl, request, locale) {
+function BackOfficeController($scope, $translate, $location, $log, $modal, PermissionService, HostUrl, request, locale, SystemTradeRuleService) {
     $log.info("BackendController!!");
     request.changeHostUrl(HostUrl);
     locale.changeLang(locale.zh_TW);
@@ -64,6 +64,7 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
         $.fn.zTree.init(tree, treeSetting, $scope.menuList);
         zTreeObj = $.fn.zTree.getZTreeObj("menuTree");
         zTreeObj.expandAll(true);
+        $scope.initData();
     };
 
     $scope.changeLanguage = function (langKey) {
@@ -104,5 +105,19 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
 
     $scope.getUserId = function () {
         return $scope.loginUser.userId;
-    }
+    };
+
+    $scope.initData = function () {
+        $scope.getTradeRuleList();
+    };
+
+    var ruleMap = {};
+    $scope.getTradeRuleList = function () {
+        SystemTradeRuleService.getList().then(function (data) {
+            angular.forEach(data, function (item) {
+                ruleMap[item.category+item.exchangeId] = item;
+            });
+            $scope.tradeRuleList = data;
+        });
+    };
 }
