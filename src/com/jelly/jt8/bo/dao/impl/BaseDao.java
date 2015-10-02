@@ -18,6 +18,9 @@ import java.util.*;
  */
 
 public class BaseDao {
+    /**
+     * 繼承的class,在construct時指定,用來找出tableName
+     */
     protected Class tableClass;
     protected String tableName;
     protected Map<String, PropertyDescriptor> columnKeyMap = new LinkedHashMap<String, PropertyDescriptor>();
@@ -51,6 +54,14 @@ public class BaseDao {
 
     final int batchSize = 1000;
 
+    /**
+     * 舊的寫法,自動依Class將resultSet的內容填入到Object
+     * @param conn
+     * @param sql
+     * @param list
+     * @param c
+     * @throws Exception
+     */
     public void execute(Connection conn, String sql, List list, Class c) throws Exception {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -77,53 +88,15 @@ public class BaseDao {
         }
     }
 
-    protected PreparedStatement getStatement(Connection conn, String sql) throws Exception {
-        PreparedStatement stmt = null;
-        try {
-            stmt = conn.prepareStatement(sql);
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return stmt;
-    }
 
-    protected void query(PreparedStatement stmt, List list) throws Exception {
-        ResultSet rs = null;
-        Connection conn = null;
-        try {
-            conn = stmt.getConnection();
-            rs = stmt.executeQuery();
-            selectToObject(rs, list);
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
+    /**
+     * 回傳該查詢語法有沒有資料
+     * @param conn
+     * @param condition
+     * @return
+     * @throws Exception
+     */
     protected boolean hasData(Connection conn, String condition) throws Exception {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -156,10 +129,25 @@ public class BaseDao {
         return "SELECT TOP 1 * FROM " + tableName + " ";
     }
 
+    /**
+     * select * from tableName的rs->List<Model>
+     * @param conn
+     * @param list
+     * @throws Exception
+     */
     protected void selectByObject(Connection conn, List list) throws Exception {
         selectByObject(conn, list, selectSQL());
     }
 
+    /**
+     * select * from tableName的rs->List<Model>
+     * 通常是用來加查詢條件的sql
+     * sql = select * from tableName where xxx = ? and yyy = ?
+     * @param conn
+     * @param list
+     * @param sql
+     * @throws Exception
+     */
     protected void selectByObject(Connection conn, List list, String sql) throws Exception {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -186,6 +174,12 @@ public class BaseDao {
         }
     }
 
+    /**
+     * 批次新增List<Model>
+     * @param conn
+     * @param list
+     * @throws Exception
+     */
     protected void insertByObject(Connection conn, List list) throws Exception {
         PreparedStatement stmt = null;
         try {
@@ -212,6 +206,13 @@ public class BaseDao {
         }
     }
 
+    /**
+     * 新增Model並回傳自動增長的識別種子
+     * @param conn
+     * @param object
+     * @return
+     * @throws Exception
+     */
     protected int insertByObject(Connection conn, Object object) throws Exception {
         PreparedStatement stmt = null;
         int lastKey = -1;
@@ -238,6 +239,12 @@ public class BaseDao {
         return lastKey;
     }
 
+    /**
+     * update Model資料
+     * @param conn
+     * @param object
+     * @throws Exception
+     */
     protected void updateByObject(Connection conn, Object object) throws Exception {
         PreparedStatement stmt = null;
         try {
@@ -245,7 +252,9 @@ public class BaseDao {
             updateStatement(stmt, object);
 
             if (stmt.executeUpdate() == 0) {
-                throw new Exception(ErrorMsg.DIRTY_DATA);
+                //修改權限的bo_permission_name時明明有修改成功但筆數還是0
+                //檢查rv]可能要換別的方式,下面這行先註解掉
+//                throw new Exception(ErrorMsg.DIRTY_DATA);
             }
         } catch (Exception e) {
             throw e;
@@ -260,6 +269,12 @@ public class BaseDao {
         }
     }
 
+    /**
+     * 刪除Model資料
+     * @param conn
+     * @param object
+     * @throws Exception
+     */
     protected void deleteByObject(Connection conn, Object object) throws Exception {
         PreparedStatement stmt = null;
         try {
@@ -282,12 +297,23 @@ public class BaseDao {
         }
     }
 
+    /**
+     * 將call statement的錯誤訊息改成用Exception
+     * @param code
+     * @param message
+     * @throws Exception
+     */
     public void parseError(int code, String message) throws Exception {
         if (code != 0 || !message.equals("")) {
             throw new Exception(message);
         }
     }
 
+    /**
+     * 產生insert的sql語法(略過rv欄位)
+     * @return
+     * @throws Exception
+     */
     protected String insertSQL() throws Exception {
         StringBuffer columnNames = new StringBuffer();
         StringBuffer values = new StringBuffer();
@@ -307,6 +333,12 @@ public class BaseDao {
         return "INSERT INTO " + tableName + "(" + columnNames.toString() + ") VALUES (" + values.toString() + ");";
     }
 
+    /**
+     * 產生update的sql語法(set xx = ? 會略過rv和create_time欄位)
+     * where 條件會是Id和rv組合而成
+     * @return
+     * @throws Exception
+     */
     protected String updateSQL() throws Exception {
         StringBuffer updateValues = new StringBuffer();
         StringBuffer whereValues = new StringBuffer();
@@ -334,6 +366,12 @@ public class BaseDao {
         return "UPDATE " + tableName + " SET " + updateValues.toString() + " WHERE " + whereValues.toString();
     }
 
+    /**
+     * 產生delete的sql語法
+     * where 條件會是Id和rv組合而成
+     * @return
+     * @throws Exception
+     */
     protected String deleteSQL() throws Exception {
         StringBuffer whereValues = new StringBuffer();
         Set<String> keys = columnKeyMap.keySet();
@@ -353,6 +391,13 @@ public class BaseDao {
         return "DELETE " + tableName;
     }
 
+    /**
+     * 新增where條件到Where物件(for動態查詢條件)
+     * @param where
+     * @param parameter
+     * @param value
+     * @throws Exception
+     */
     protected void addConditionParameter(Where where, String parameter, String value) throws Exception{
         if(value.length()>0){
             where.getValues().add(value);
@@ -365,6 +410,12 @@ public class BaseDao {
         }
     }
 
+    /**
+     * 依Where物件set value到PrepareStatement
+     * @param stmt
+     * @param where
+     * @throws Exception
+     */
     protected void addConditionValue(PreparedStatement stmt,Where where) throws Exception{
         int index = 1;
         for(String value:where.getValues()){
@@ -374,27 +425,18 @@ public class BaseDao {
         }
     }
 
-    protected void addConditionParameter(StringBuffer sql, String parameter, String value) throws Exception{
-        if(value.length()>0){
-            if(sql.length()==0){
-                sql.append(" WHERE ");
-            } else{
-                sql.append(" AND ");
-            }
-            sql.append(parameter);
-        }
-    }
-
-    protected void addConditionValue(PreparedStatement stmt,int index, String value) throws Exception{
-        if(value.length()>0){
-            stmt.setString(index++, value);
-        }
-    }
-
     protected String selectSQL() throws Exception {
         return selectSQL(null);
     }
 
+    /**
+     * 產生select的sql(for join)
+     * 會依Join的條件自動產生join語法和select join table的欄位
+     * @param fromAlias
+     * @param joins
+     * @return
+     * @throws Exception
+     */
     protected String selectSQL(String fromAlias, List<Join> joins) throws Exception {
         BeanInfo info = Introspector.getBeanInfo(tableClass);
         PropertyDescriptor[] props = info.getPropertyDescriptors(); //Gets all the properties for the class.
@@ -429,6 +471,14 @@ public class BaseDao {
         return sql;
     }
 
+    /**
+     * 產生select的sql
+     * 當sql有group by時使用此method
+     * 將group by的條件傳入
+     * @param groupByList
+     * @return
+     * @throws Exception
+     */
     protected String selectSQL(List<String> groupByList) throws Exception {
         StringBuffer columnNames = new StringBuffer();
         Set<String> keys = columnKeyMap.keySet();
@@ -448,6 +498,12 @@ public class BaseDao {
         return "SELECT " + columnNames.toString() + " FROM " + tableName + " ";
     }
 
+    /**
+     * 產生GROUP BY的語法(依groupByList)
+     * @param groupByList
+     * @return
+     * @throws Exception
+     */
     protected String groupBySQL(List<String> groupByList) throws Exception {
         StringBuffer sb = new StringBuffer();
         for (String key : groupByList) {
@@ -457,6 +513,14 @@ public class BaseDao {
         return " GROUP BY " + sb.toString();
     }
 
+    /**
+     * 產生 where xxx in (?,?,?)的語法
+     * @param sql
+     * @param condition
+     * @param size
+     * @return
+     * @throws Exception
+     */
     protected String whereInSQL(String sql, String condition, int size) throws Exception {
         if(size==0) return sql;//0筆就不產生
         sql += (sql.length() == 0) ? " WHERE " : " AND ";

@@ -6,6 +6,10 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     $translatePartialLoader.addPart("account");
     $translatePartialLoader.addPart("user");
     $translate.refresh();
+    /**
+     * 用來存放當前代理層級的列表
+     * @type {Array}
+     */
     $scope.ibList = [];
     $scope.ibRootLoginId = "ibRoot";
     $scope.init = function () {
@@ -39,21 +43,19 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
     };
 
     $scope.getChildren = function () {
-        $scope.getChildrenIb();
+        $scope.getChildrenIb();//先取此代理的下層子代理
     };
 
     $scope.getChildrenIb = function () {
         IbAccountService.getList({userId: $scope.currentIb.userId}).then(function (data) {
-            $log.info(data);
             $scope.rowCollection = data;
-            $scope.getLoginAccounts();
+            $scope.getLoginAccounts();//取完所有代理後再取出該代理的會員
         });
     };
 
     $scope.getLoginAccounts = function () {
         LoginAccountService.getList({userId: $scope.currentIb.userId}).then(function (data) {
             $scope.rowCollection.push.apply($scope.rowCollection, data);
-            $log.info($scope.rowCollection);
         });
     };
 
@@ -249,7 +251,7 @@ function IbAccountController($scope, $modal, $log, $translatePartialLoader, $tra
                 angular.forEach(data, function (item) {
                     DateTool.yyyyMMddToDate(item, "tradeDate", "trade_date");
                 });
-                $scope.rowCollection = data;
+                $scope.bankbookList = data;
             });
         };
 

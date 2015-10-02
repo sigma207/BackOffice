@@ -1,34 +1,21 @@
 /**
  * Created by user on 2015/8/5.
  */
-var backOfficeApp = angular.module("backOfficeApp", ["pascalprecht.translate", "ngAnimate", "ngSanitize", "ui.bootstrap", "ui.bootstrap.tpls", "ui.bootstrap.tabs", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
+var backOfficeApp = angular.module("backOfficeApp", ["pascalprecht.translate", "ngAnimate", "ngSanitize", "tmh.dynamicLocale", "ui.bootstrap", "ui.bootstrap.tpls", "ui.bootstrap.tabs", "mgcrea.ngStrap", "smart-table", "ngRoute", "ngResource", "restangular", "fiestah.money", "angular-directive-percentage", "requestFactory", "localeFactory"]);
 backOfficeApp.factory('SymbolTradableDailyTempService', ['$resource', function ($resource) {
     return $resource('api/symbolTradableDailyTemp/exchange/:exchange_id/mainSymbol/:main_symbol_id');
 }]);
 backOfficeApp.factory('SymbolTradableDailyService', ['$resource', function ($resource) {
     return $resource('api/symbolTradableDaily/exchange/:exchange_id/mainSymbol/:main_symbol_id');
 }]);
-
-backOfficeApp.constant("HostUrl", "http://localhost:8080/BackOffice/api");
-//backOfficeApp.config(function (RestangularProvider) {
-//    RestangularProvider.setBaseUrl("/BackOffice/api");
-//    RestangularProvider.setDefaultHeaders({'Content-Type': 'application/json'});
-//    RestangularProvider.setErrorInterceptor(function(resp) {
-//        var status = resp.status;
-//        var errorJson = resp.data;
-//        console.log(resp);
-//        return true; // 停止promise链
-//    });
-//});
-backOfficeApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
+backOfficeApp.run(function(Restangular,$rootScope,$log) {
     Restangular.setBaseUrl("/BackOffice/api");
     //Restangular.setBaseUrl("http://jt8demobo.ja178.com:8080/BackOffice/api/");
     Restangular.setDefaultHeaders({'Content-Type': 'application/json'});
-    //var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
+    //ajax的錯誤攔截處理
     Restangular.setErrorInterceptor(function(resp) {
         var status = resp.status;
         var errorJson = resp.data;
-        //myAlert.show();
         $log.info(resp);
         if(resp.data.message){
             $rootScope.$broadcast("error",resp.data.message);
@@ -42,6 +29,7 @@ backOfficeApp.run(function(Restangular,$rootScope,$log,$modal,$alert) {
         // .. to look for getList operations
         if (operation === "getList") {
             // .. and handle the data and meta data
+            //如果是巢狀資料,要將route設到children裡面,不然children的資料會因為沒有route而無法做restful操作
             angular.forEach(data, function (item) {
                 if(item.children){
                     angular.forEach(item.children, function (child) {
@@ -74,6 +62,11 @@ backOfficeApp.config(function($timepickerProvider) {
         minuteStep: 1,
         secondStep: 1
     });
+});
+
+//設定載入angular locale檔位置
+backOfficeApp.config(function (tmhDynamicLocaleProvider ) {
+    tmhDynamicLocaleProvider.localeLocationPattern("js/angular/i18n/angular-locale_{{locale}}.js");
 });
 
 backOfficeApp.factory('ExchangeService', function (Restangular) {
@@ -158,6 +151,9 @@ backOfficeApp.config(["$routeProvider", function ($routeProvider) {
         when("/A2", {
             templateUrl: "permissionManage/role/Role.html"
         }).
+        when("/A3", {
+            templateUrl: "userManage/user/User.html"
+        }).
         when("/B2", {
             templateUrl: "symbolManage/holiday/Holiday.html"
         }).
@@ -166,9 +162,6 @@ backOfficeApp.config(["$routeProvider", function ($routeProvider) {
         }).
         when("/B5", {
             templateUrl: "symbolManage/stock/Daily.html"
-        }).
-        when("/C1", {
-            templateUrl: "userManage/user/User.html"
         }).
         when("/C2", {
             templateUrl: "userManage/organization/Organization.html"
@@ -204,6 +197,7 @@ backOfficeApp.run(function ($rootScope, $translate, $log) {
     $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
         $rootScope.dateDisplayFormat = $translate.instant("format.display.date");
         $rootScope.dateInputFormat = $translate.instant("format.input.date");
+        //日期資料的顯示和輸入格式設定
         $translate.refresh();
     });
 });
@@ -246,6 +240,19 @@ backOfficeApp.filter("customFilter", ['$filter', function ($filter) {
         return filterFilter(array, expression, customComparator);
     }
 }]);
+
+backOfficeApp.filter('time', function(){
+    return function(str){
+        if(str&&str.length==6){
+            var hh = str.substr(0,2);
+            var mm = str.substr(2,2);
+            var ss = str.substr(4,2);
+            return hh+":"+mm+":"+ss;
+        }else {
+            return str;
+        }
+    };
+});
 backOfficeApp.directive("tableSelectCheckbox", TableSelectCheckbox);
 backOfficeApp.directive("rowSelectCheckbox", RowSelectCheckbox);
 backOfficeApp.directive("headCheckbox", HeadCheckbox);
@@ -264,6 +271,9 @@ backOfficeApp.directive('dateInput', DateInput);
 backOfficeApp.directive('timeInput', TimeInput);
 backOfficeApp.directive('modalClose', ModalClose);
 backOfficeApp.directive('commonButton', CommonButton);
+backOfficeApp.directive('modalCancelButton', ModalCancelButton);
+backOfficeApp.directive('modalSaveButton', ModalSaveButton);
+backOfficeApp.directive('modelButtonFooter', ModelButtonFooter);
 backOfficeApp.directive('datePickerOpen', DatePickerOpen);
 
 //validate

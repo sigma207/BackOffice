@@ -1,11 +1,12 @@
 {
-  "beginDate": "起始日期",
-  "endDate": "结束日期",
   "holidayName": "假日名称",
-  "memo": "备注",
   "holidayManage": "假日管理",
   "exceptionManage": "例外管理",
-  "addRow": "新增假日",
+  "addHoliday": "新增假日",
   "addException":"新增例外",
-  "calendar": "日期"
+  "calendar": "日期",
+  "removeHoliday":"假日删除",
+  "editHoliday":"假日编辑",
+  "removeException":"例外删除",
+  "editException":"例外编辑"
 }

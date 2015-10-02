@@ -21,7 +21,8 @@ import java.util.List;
  */
 @Repository("TradeAccountDao")
 public class TradeAccountDaoImpl extends BaseDao implements TradeAccountDao {
-    private final static String MAX_ACCOUNT_ID_QUERY = " SELECT MAX(account_id) account_id FROM trade_account ";
+    private final static String MAX_ACCOUNT_ID_QUERY = " SELECT top 1 account_id  FROM trade_account\n" +
+            "ORDER BY CAST(account_id AS decimal) DESC ";
     private final static String UPDATE_TRADE_STATUS = "UPDATE trade_account SET trade_status = ? ";
     private final static String DELETE = " DELETE trade_account ";
     private final static String WHERE_LOGIN_ID = " WHERE login_id = ? ";

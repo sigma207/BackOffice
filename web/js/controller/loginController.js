@@ -39,7 +39,6 @@ function LoginController($scope, $translatePartialLoader, $translate, $log, Logi
                 $scope.onLogin(user);
             });
         }else{
-            $log.info("onLogin!!");
             $scope.onLogin(user);
         }
     };

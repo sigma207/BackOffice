@@ -81,6 +81,11 @@ function UserController($scope, $translatePartialLoader, $translate, $log, $moda
             $scope.hideOrganizationModal();
         };
 
+        /**
+         * 選擇boUser所隸屬的組織(暫時用不到)
+         * @param $scope
+         * @constructor
+         */
         function OrganizationController($scope){
             var zTreeObj;
             $scope.init = function() {
@@ -154,8 +159,12 @@ function UserController($scope, $translatePartialLoader, $translate, $log, $moda
         $scope.hideAllocateModal();
     };
 
+    /**
+     * 分配BoUser的角色
+     * @param $scope
+     * @constructor
+     */
     function AllocateModalController($scope){
-        $log.info("AllocateModalController");
         $scope.selectedRoleList = [];
         $scope.init = function() {
             var i, count;

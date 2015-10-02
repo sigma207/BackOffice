@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/jquery.contextMenu.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/angular-motion.css">
-    <link rel="stylesheet" href="css/main2.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/jt8.css">
     <script type="text/javascript" src="js/angular/angular.min.js"></script>
     <script type="text/javascript" src="js/angular/angular-route.min.js"></script>
@@ -22,6 +22,7 @@
     <script type="text/javascript" src="js/angular/angular-strap.tpl.js"></script>
     <script type="text/javascript" src="js/angular/ui-bootstrap-custom-tpls-0.13.4.js"></script>
     <script type="text/javascript" src="js/angular/smart-table-fix.js"></script>
+    <script type="text/javascript" src="js/angular/tmhDynamicLocale.js"></script>
     <script type="text/javascript" src="js/directives/angular-directive-percentage.js"></script>
     <script type="text/javascript" src="js/directives/angular-money-directive.js"></script>
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
@@ -36,8 +37,13 @@
         <div class="col-md-12 headerBackgroundImg">
             <h5 class="headerInfo" ng-show="isLogin">
                 {{'loginUser'|translate}}:<strong>{{loginUser.loginId}}</strong>
-                <button class="btn-xs btn-success" ng-click="onLogoutClick()" translate="logout"></button>
+                <common-button ng-click="onLogoutClick()" translate="logout"></common-button>
             </h5>
+            <div class="langBox">
+                <button type="button" class="btn btn-default btn-xs" ng-click="changeLanguage('zh-TW')">繁</button>
+                <button type="button" class="btn btn-default btn-xs" ng-click="changeLanguage('zh-CN')">简</button>
+                <button type="button" class="btn btn-default btn-xs" ng-click="changeLanguage('en-US')">English</button>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -62,6 +68,6 @@
 <script type="text/javascript" src="js/controller/tradeRuleController.js"></script>
 <script type="text/javascript" src="js/controller/ibAccountController.js"></script>
 <script type="text/javascript" src="js/controller/tradeLoginAccountController.js"></script>
-<script type="text/javascript" src="js/controller/ipsTransController.js"></script>
+<script type="text/javascript" src="js/controller/tradeIpsTransController.js"></script>
 </body>
 </html>

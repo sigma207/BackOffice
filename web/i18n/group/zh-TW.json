@@ -19,7 +19,7 @@
   "downlimit":"禁止新單跌停限制",
   "marketUplimit":"禁止新單大盤漲停限制",
   "marketDownlimit":"禁止新單大盤跌停限制",
-  "marketUpdownlimitCharge":"marketUpdownlimitCharge",
+  "marketUpdownlimitCharge":"大盤漲跌手續費",
   "specialStockRule":"特殊股規則",
   "specialStockCharge":"特殊股手續費",
   "tvolDeltaRule":"瞬間巨量",

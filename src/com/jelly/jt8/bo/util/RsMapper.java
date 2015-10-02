@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * Created by user on 2015/8/11.
+ * 舊版的將rs資料set到bean的property
  */
 public class RsMapper {
     @SuppressWarnings("unchecked")

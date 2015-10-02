@@ -24,6 +24,7 @@ import java.util.Set;
 
 /**
  * Created by user on 2015/9/7.
+ * 此程式是代理可以選擇下層代理可用group的版本,現在暫時已用不到
  */
 @Service("ibService")
 public class IbServiceImpl implements IbService {

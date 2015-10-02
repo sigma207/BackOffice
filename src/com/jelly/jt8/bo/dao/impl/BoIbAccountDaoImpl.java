@@ -18,6 +18,7 @@ import java.util.List;
 @Repository("BoIbAccountDao")
 public class BoIbAccountDaoImpl extends BaseDao implements BoIbAccountDao {
     private final static String WHERE_IB_USER_ID = " WHERE ib_user_id = ? ";
+    private final static String WHERE_PROMOTION_CODE = " WHERE promotion_code = ? ";
     private final static String WHERE_PARENT_IB_USER_ID = " WHERE parent_ib_user_id = ? ";
     public BoIbAccountDaoImpl() {
         super(BoIbAccount.class);
@@ -34,6 +35,42 @@ public class BoIbAccountDaoImpl extends BaseDao implements BoIbAccountDao {
             conn = jt8Ds.getConnection();
             stmt = conn.prepareStatement(selectSQL() + WHERE_IB_USER_ID);
             stmt.setInt(1,userId);
+            rs = stmt.executeQuery();
+            selectToObject(rs,list);
+            if(list.size()>0){
+                boIbAccount = list.get(0);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return boIbAccount;
+    }
+
+    @Override
+    public BoIbAccount select(String promotionCode) throws Exception {
+        List<BoIbAccount> list = new LinkedList<BoIbAccount>();
+        BoIbAccount boIbAccount = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = jt8Ds.getConnection();
+            stmt = conn.prepareStatement(selectSQL() + WHERE_PROMOTION_CODE);
+            stmt.setString(1,promotionCode);
             rs = stmt.executeQuery();
             selectToObject(rs,list);
             if(list.size()>0){

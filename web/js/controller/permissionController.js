@@ -3,7 +3,6 @@
  */
 backOfficeApp.controller("PermissionController", PermissionController);
 function PermissionController($scope, $modal, $log, Restangular, PermissionService, locale) {
-    $log.info("PermissionController!!");
     var tree = $("#permissionTree");
     var zTreeObj;
     var nodeMoveSetting = {
@@ -19,6 +18,14 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
         }
     };
     $scope.modalTitle = "新增節點";
+
+    $scope.$on("langChange", function () {
+        if(zTreeObj){
+            var nodes = zTreeObj.getNodes();
+            locale.changeMenuLang(nodes);
+            zTreeObj.refresh();
+        }
+    });
 
     PermissionService.getList().then(function (data) {
         $scope.permissionList = data;
@@ -54,7 +61,7 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                     callback: function () {
                         $log.info(Action.NewNode);
                         $scope.currentAction = Action.NewNode;
-                        if (currentNode.level == 0) {
+                        if (currentNode.level == 0) {//在root
                             $scope.editNewObject();
                         } else {
                             $scope.editNewObject(currentNode.getParentNode());
@@ -66,11 +73,8 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                 menu[Action.NewChildNode] = {
                     name: "新增子節點",
                     callback: function () {
-                        $log.info(Action.NewChildNode);
-                        $log.info(currentNode);
                         $scope.currentAction = Action.NewChildNode;
                         $scope.editNewObject(currentNode);
-                        $log.info($scope.editNode);
                         $scope.modalTitle = currentNode[locale.zh_TW] + ":新增子節點";
                         $scope.showModal();
                     }
@@ -169,6 +173,9 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
         zTreeObj.moveNode(nodeMoveSetting.targetNode, nodeMoveSetting.treeNode, nodeMoveSetting.moveType, true);
     };
 
+    /**
+     * 頁面上的button(非contextMenu)
+     */
     $scope.addNodeClick = function () {
         $scope.currentAction = Action.NewNode;
 
@@ -213,14 +220,14 @@ function PermissionController($scope, $modal, $log, Restangular, PermissionServi
                 case Action.NewNode:
                     if ($scope.editNode.parentPermissionId) {
                         var parent_node = zTreeObj.getNodeByParam("permissionId", $scope.editNode.parentPermissionId);
-                        zTreeObj.addNodes(parent_node, $scope.editNode, true);
+                        zTreeObj.addNodes(parent_node, $scope.editNode, true);//新增node(on selected node 同一level)
                     } else {
-                        zTreeObj.addNodes(null, $scope.editNode, true);
+                        zTreeObj.addNodes(null, $scope.editNode, true);//新增root node
                     }
                     break;
                 case Action.NewChildNode:
                     selectedNode = zTreeObj.getSelectedNodes()[0];
-                    zTreeObj.addNodes(selectedNode, $scope.editNode, true);
+                    zTreeObj.addNodes(selectedNode, $scope.editNode, true);//新增child node(on selected node)
                     zTreeObj.expandNode(selectedNode, true);
                     break;
                 case Action.Edit:

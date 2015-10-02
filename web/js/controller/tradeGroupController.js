@@ -2,18 +2,9 @@
  * Created by user on 2015/9/9.
  */
 backOfficeApp.controller("TradeGroupController", TradeGroupController);//交易帳號屬性群組
-function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $translate, $alert, Restangular, SystemCategoryService, SystemTradeRuleService, TradeGroupService) {
+function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $translate, $alert, Restangular, SystemCategoryService, TradeGroupService) {
     $translatePartialLoader.addPart("group");
     $translate.refresh();
-
-    $scope.getTradeRuleList = function () {
-        SystemTradeRuleService.getList().then(function (data) {
-            $scope.tradeRuleList = data;
-            if ($scope.tradeRuleList.length > 0) {
-                $scope.selectedTradeRule = $scope.tradeRuleList[0];
-            }
-        });
-    };
 
     $scope.getTradeGroupList = function () {
         TradeGroupService.getList().then(function (data) {
@@ -35,8 +26,10 @@ function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $tr
 
     $scope.addClick = function () {
         $scope.currentAction = Action.Add;
-        $scope.editObj = angular.copy($scope.selectedTradeRule);
+        //新增trade_group是以system_trade_rule當作template
+        $scope.editObj = {};
         $scope.editObj.isActive = 0;
+        $scope.editObj.specialStockRule = 0;
         //$scope.editObj.exchangeId = "*";
         $scope.modalTitle = $translate.instant("tradeAccountGroup");
         $scope.showModal();
@@ -50,36 +43,52 @@ function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $tr
     };
 
     $scope.deleteClick = function (row) {
-        //var myAlert = $alert({title: 'Holy guacamole!', content: 'Best check yo self, you\'re not looking too good.', placement: 'top', type: 'danger', keyboard: true, show: false});
         row.remove().then(function () {
             $scope.getTradeGroupList();
         });
     };
 
     function ModalController($scope) {
-        var i, count;
+        $scope.init = function () {
+            $scope.getSystemCategoryList();
+            $scope.applyTradeGroupList = [];
+            angular.forEach($scope.rowCollection, function (item) {
+                if ($scope.currentAction == Action.Edit && item.groupName == $scope.editObj.groupName) {
+                    //do not thing
+                }else{
+                    this.push(item);
+                }
+            },$scope.applyTradeGroupList);
+        };
+
         $scope.getSystemCategoryList = function () {
             SystemCategoryService.getList().then(function (data) {
-                $scope.systemCategoryList = data;
-                if ($scope.systemCategoryList.length > 0) {
-                    for (i = 0, count = $scope.systemCategoryList.length; i < count; i++) {
-                        if ($scope.editObj.category == $scope.systemCategoryList[i].category) {
-                            $scope.editObj.systemCategory = $scope.systemCategoryList[i];
+                if (data.length > 0) {
+                    angular.forEach(data, function (item) {
+                        if ($scope.editObj.category == item.category) {
+                            $scope.editObj.systemCategory = item;//category下拉選單的預設值改成和editObj的一樣
                         }
-                    }
-                    switch ($scope.currentAction) {
-                        case Action.Add:
-                            $scope.systemCategoryChange();
-                            break;
-                        case Action.Edit:
-                            break;
-                    }
+                    });
                 }
+                $scope.systemCategoryList = data;
             });
         };
 
         $scope.systemCategoryChange = function () {
             $scope.editObj.category = $scope.editObj.systemCategory.category;
+        };
+
+        $scope.applyClick = function () {
+            var isActive = $scope.editObj.isActive;
+            var groupName = $scope.editObj.groupName;
+            $scope.editObj = angular.copy($scope.editObj.selectedTradeGroup);
+            $scope.editObj.isActive = isActive;
+            $scope.editObj.groupName = groupName;
+            angular.forEach($scope.systemCategoryList, function (item) {
+                if(item.category==$scope.editObj.category){
+                    $scope.editObj.systemCategory = item;
+                }
+            });
         };
 
         $scope.save = function () {
@@ -98,8 +107,6 @@ function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $tr
                     break;
             }
         };
-
-        $scope.getSystemCategoryList();
     }
 
     var modal = $modal({
@@ -116,6 +123,8 @@ function TradeGroupController($scope, $modal, $log, $translatePartialLoader, $tr
         modal.$promise.then(modal.hide);
     };
 
-    $scope.getTradeRuleList();
+    if ($scope.tradeRuleList.length > 0) {
+        $scope.selectedTradeRule = $scope.tradeRuleList[0];
+    }
     $scope.getTradeGroupList();
 }

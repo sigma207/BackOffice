@@ -15,6 +15,9 @@ function RoleController($scope, $translatePartialLoader, $translate, $log, $moda
         });
     };
 
+    /**
+     * 取得所有權限給角色分配使用
+     */
     $scope.getPermissionList = function () {
         PermissionService.getList().then(function (data) {
             $scope.permissionList = data;

@@ -56,6 +56,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
             }
             Set<String> keys =map.keySet();
             for (String key : keys) {
+                //call ps產生symbol_trans_date
                 transDateDao.generate(conn,  map.get(key).getExchangeId(),  map.get(key).getMainSymbolId());
             }
             conn.commit();
@@ -82,6 +83,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayDao.update(conn, holiday);
+            //call ps產生symbol_trans_date
             transDateDao.generate(conn, holiday.getExchangeId(), holiday.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {
@@ -107,6 +109,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayDao.delete(conn, holiday);
+            //call ps產生symbol_trans_date
             transDateDao.generate(conn, holiday.getExchangeId(), holiday.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {
@@ -145,6 +148,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
             }
             Set<String> keys =map.keySet();
             for (String key : keys) {
+                //call ps產生symbol_trans_date
                 transDateDao.generate(conn,  map.get(key).getExchangeId(),  map.get(key).getMainSymbolId());
             }
             conn.commit();
@@ -171,6 +175,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayExceptionDao.update(conn, holidayException);
+            //call ps產生symbol_trans_date
             transDateDao.generate(conn, holidayException.getExchangeId(), holidayException.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {
@@ -196,6 +201,7 @@ public class HolidayExceptionServiceImpl implements HolidayExceptionService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             holidayExceptionDao.delete(conn, holidayException);
+            //call ps產生symbol_trans_date
             transDateDao.generate(conn, holidayException.getExchangeId(), holidayException.getMainSymbolId());
             conn.commit();
         }catch (Exception e) {

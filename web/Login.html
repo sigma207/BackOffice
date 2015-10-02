@@ -10,20 +10,24 @@
 
 <div ng-controller="LoginController">
     <div class="modal-header">
-        <h3 class="modal-title">user login</h3>
+        <h3 class="modal-title" translate="loginUser"></h3>
     </div>
     <div class="modal-body">
         <form name="editForm" class="form-horizontal" role="form">
-            <div class="form-group">
-                <label for="loginId" class="col-md-2 control-label">account</label>
-                <div class="col-md-10">
-                    <input id="loginId" type="text" ng-model="loginUser.loginId" class="input-sm form-control" focus="true" required/>
+            <div class="form-group form-group-xs">
+                <div class="col-md-12">
+                    <label for="loginId" class="col-md-2 control-label" translate="loginId"></label>
+                    <div class="col-md-10 valueCol">
+                        <text-input id="loginId" ng-model="loginUser.loginId" focus="true" required></text-input>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="password" class="col-md-2 control-label">password</label>
-                <div class="col-md-10">
-                    <input id="password" type="password" ng-model="loginUser.password" class="input-sm form-control" required/>
+            <div class="form-group form-group-xs">
+                <div class="col-md-12">
+                    <label for="password" class="col-md-2 control-label" translate="userPassword"></label>
+                    <div class="col-md-10 valueCol">
+                        <password-input ng-model="loginUser.password" required></password-input>
+                    </div>
                 </div>
             </div>
         </form>
@@ -32,8 +36,8 @@
         <select ng-model="selectedUser"
                 ng-options="user.loginId for user in userList">
         </select>
-        <button class="btn-xs btn-warning" ng-disabled="selectedUser == undefined " ng-click="onFastLoginClick()">快速登入(開發人員測試用)</button>
-        <button class="btn-xs btn-success" ng-disabled="editForm.$invalid" ng-click="login()" translate="login"></button>
+        <common-button ng-disabled="selectedUser == undefined " ng-click="onFastLoginClick()" translate="快速登入(開發人員測試用)"></common-button>
+        <common-button ng-disabled="editForm.$invalid" ng-click="login()" translate="login"></common-button>
     </div>
 </div>
 </body>

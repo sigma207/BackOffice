@@ -4,8 +4,8 @@ package com.jelly.jt8.bo.util;
  * Created by user on 2015/7/29.
  */
 public class ErrorMsg {
-    public static String LOGIN_ACCOUNT = "login_account";
-    public static String LOGIN_PASSWORD = "login_password";
+    public static String LOGIN_ACCOUNT = "loginAccount";
+    public static String LOGIN_PASSWORD = "loginPassword";
     public static String DIRTY_DATA = "dirtyData";
     public static String TRADE_GROUP_HAS_USED = "tradeGroupHasUsed";
     public static String TRADE_IB_HAS_CHILDREN = "tradeIbHasChildren";

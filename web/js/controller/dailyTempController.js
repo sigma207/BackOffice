@@ -20,6 +20,7 @@ function DailyTempController($scope, $translatePartialLoader, $translate, $log, 
             exchange_id: $scope.selectedMainSymbol.exchangeId,
             main_symbol_id: $scope.selectedMainSymbol.mainSymbolId
         };
+        //用的是angular resource,還沒改成restangular
         SymbolTradableDailyTempService.query(params, {}, function (data) {
             $scope.rowCollection = data;
             $scope.displayedCollection = [].concat($scope.rowCollection);

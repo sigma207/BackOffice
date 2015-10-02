@@ -6,8 +6,8 @@
 </head>
 <body>
 <div ng-controller="UserController">
-    <button type="button" class="btn-xs btn-primary" translate="query" ng-click="queryClick()"></button>
-    <button type="button" class="btn-xs btn-primary" translate="add" ng-click="addUserClick()"></button>
+    <common-button translate="query" ng-click="queryClick()"></common-button>
+    <common-button translate="add" ng-click="addUserClick()"></common-button>
     <table st-table="rowCollection" class="table table-striped table-condensed table-jt8">
         <thead>
         <tr>
@@ -19,8 +19,8 @@
         <tr ng-repeat="row in rowCollection">
             <td>{{row.loginId}}</td>
             <td>
-                <button type="button" class="btn-xs btn-primary" translate="delete" ng-click="removeUserClick(row)" ></button>
-                <button type="button" class="btn-xs btn-primary" translate="allocateRole" ng-click="allocateRoleClick(row)" ></button>
+                <common-button translate="delete" ng-click="removeUserClick(row)" ></common-button>
+                <common-button translate="allocateRole" ng-click="allocateRoleClick(row)" ></common-button>
             </td>
         </tr>
         </tbody>
@@ -56,14 +56,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" ng-show="false">
                                 <label for="org_id" class="col-md-2 control-label" translate="org.code"></label>
                                 <div class="col-md-10">
                                     <input id="org_id" type="text" ng-model="editObj.boOrganization.organizationName" class="input-sm " />
-                                    <button type="button" class="btn-xs btn-primary" translate="org.select" ng-click="selectOrganization()"></button>
+                                    <common-button translate="org.select" ng-click="selectOrganization()"></common-button>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" ng-show="false">
                                 <label for="parent_user_name" class="col-md-2 control-label" translate="user.parent"></label>
                                 <div class="col-md-10">
                                     <input id="parent_user_name" type="text" ng-model="editObj.parentBoUser.loginId" class="input-sm " />
@@ -72,8 +72,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
-                        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+                        <modal-cancel-button></modal-cancel-button>
+                        <modal-save-button></modal-save-button>
                     </div>
                 </div>
             </div>
@@ -98,8 +98,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
-                        <button class="btn btn-primary" ng-click="save()" translate="save"></button>
+                        <modal-cancel-button></modal-cancel-button>
+                        <modal-save-button></modal-save-button>
                     </div>
                 </div>
             </div>
@@ -133,8 +133,10 @@
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
-                        <button class="btn btn-primary" ng-click="save()" translate="save"></button>
+                        <!--<button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>-->
+                        <!--<button class="btn btn-primary" ng-click="save()" translate="save"></button>-->
+                        <modal-cancel-button></modal-cancel-button>
+                        <modal-save-button></modal-save-button>
                     </div>
                 </div>
             </div>

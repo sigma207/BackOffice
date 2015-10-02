@@ -1,7 +1,7 @@
 /**
  * Created by user on 2015/8/5.
  */
-
+//改用restful模式後,此module已無作用
 angular.module("requestFactory", []).
     factory("request", ["$http", function ($http) {
         var request = {
@@ -61,7 +61,17 @@ angular.module("localeFactory", []).
             changeLang: function (newLang) {
                 locale.lang = newLang;
             },
-            convertDashToBaseLine: function (obj) {
+            changeMenuLang: function (list) {
+                for (var i = 0; i < list.length; i++) {
+                    var node= list[i];
+                    if(node.children){
+                        locale.changeMenuLang(node.children);
+                    }
+                    node.name = node[locale.lang] + "(" + node.permissionCode + ")";
+                    //zTreeObj.updateNode(node);
+                }
+            },
+            convertDashToBaseLine: function (obj) {//屬性好像不能用-,所以要轉換成_
                 for (var key in obj) {
                     var value = obj[key];
                     delete obj[key];

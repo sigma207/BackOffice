@@ -36,6 +36,11 @@ public class TradeIpsTransServiceImpl implements TradeIpsTransService {
         return tradeIpsTransDao.select(accountId, boStatus, ipsStatus, beginDate, endDate);
     }
 
+    /**
+     * 第三方支付確認,同時產生trade_bankbook資料
+     * @param object
+     * @throws Exception
+     */
     @Override
     public void pass(TradeIpsTrans object) throws Exception {
 
@@ -69,6 +74,11 @@ public class TradeIpsTransServiceImpl implements TradeIpsTransService {
         }
     }
 
+    /**
+     * 第三方支付拒絕
+     * @param object
+     * @throws Exception
+     */
     @Override
     public void reject(TradeIpsTrans object) throws Exception {
         Connection conn = null;

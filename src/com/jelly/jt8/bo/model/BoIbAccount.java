@@ -19,6 +19,7 @@ public class BoIbAccount extends BaseModel{
     private String createTime;
     private Integer parentIbUserId;
     private BigDecimal commission;
+    private String promotionCode;
 
     @Id
     @Column(name = "ib_user_id")
@@ -155,5 +156,15 @@ public class BoIbAccount extends BaseModel{
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (commission != null ? commission.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "promotion_code")
+    public String getPromotionCode() {
+        return promotionCode;
+    }
+
+    public void setPromotionCode(String promotionCode) {
+        this.promotionCode = promotionCode;
     }
 }

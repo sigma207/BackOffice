@@ -8,6 +8,7 @@
     }
   },
   "loginId": "用戶代碼",
+  "userPassword": "用戶密碼",
   "loginUser":"登入帳號",
   "yes":"是",
   "no":"否",
@@ -31,6 +32,7 @@
   "add": "新增",
   "delete": "刪除",
   "edit": "編輯",
+  "apply":"套用",
   "all":"全部",
   "moveTop":"移到最上",
   "moveUp":"往上移",
@@ -55,7 +57,9 @@
   "error": {
     "dbError":"資料庫執行錯誤",
     "tradeGroupHasUsed":"群組已被使用",
-    "dirtyData": "資料已被異動過,請重新查詢後再操作"
+    "dirtyData": "資料已被異動過,請重新查詢後再操作",
+    "loginAccount":"登入帳號不存在",
+    "loginPassword":"登入密碼錯誤"
   },
   "datePicker": {
     "currentText": "今天",

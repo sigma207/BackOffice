@@ -12,7 +12,7 @@
     <select ng-model="selectedMainSymbol" ng-change="mainSymbolChange();" style="display: none;"
             ng-options="mainSymbol.mainSymbolId for mainSymbol in selectedExchange.systemMainSymbolList">
     </select>
-    <button type="button" class="btn-xs btn-primary" translate="save" ng-click="saveClick()"></button>
+    <common-button translate="save" ng-click="saveClick()"></common-button>
     <table st-table="displayedCollection" st-set-filter="customFilter" st-safe-src="rowCollection" class="table table-striped table-jt8">
         <thead>
         <tr>

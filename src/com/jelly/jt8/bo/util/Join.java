@@ -9,12 +9,16 @@ import java.util.Map;
 
 /**
  * Created by user on 2015/9/10.
+ *
  */
 public class Join {
     public final static String INNER = "INNER";
     public final static String LEFT = "LEFT";
     private Class originClass;
     private Class joinClass;
+    /**
+     * originClass的哪一個property用來塞join table的資料
+     */
     private String property;
     private String joinType;
     private String alias;

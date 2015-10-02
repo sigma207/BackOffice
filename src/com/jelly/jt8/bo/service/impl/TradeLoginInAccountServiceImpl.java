@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by user on 2015/9/14.
@@ -101,6 +98,7 @@ public class TradeLoginInAccountServiceImpl implements TradeLoginInAccountServic
             object.setIsActive(0);
             tradeLoginAccountDao.insert(conn, object);
             TradeAccount tradeAccount = null;
+            //新增trade_login_account後,再依system_trade_rule產生trade_account
             for(SystemTradeRule systemTradeRule:systemTradeRuleList){
                 maxAccountId++;
                 tradeAccount = new TradeAccount();
@@ -209,6 +207,11 @@ public class TradeLoginInAccountServiceImpl implements TradeLoginInAccountServic
         }
     }
 
+    /**
+     * 啟用或停用帳號
+     * @param object
+     * @throws Exception
+     */
     @Override
     public void updateIsActive(TradeLoginAccount object) throws Exception {
         Connection conn = null;
@@ -217,7 +220,7 @@ public class TradeLoginInAccountServiceImpl implements TradeLoginInAccountServic
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             tradeLoginAccountDao.updateIsActive(conn, object);
-            tradeAccountDao.updateTradeStatus(conn, object.getLoginId(),object.getIsActive());
+            tradeAccountDao.updateTradeStatus(conn, object.getLoginId(), object.getIsActive());
             conn.commit();
         }catch (Exception e) {
             if (conn != null) {

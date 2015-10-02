@@ -1,6 +1,14 @@
 /**
  * Created by user on 2015/8/13.
  */
+
+/**
+ * 用來綁定tr裡checkbox所勾選的所有資料到selectedItems
+ * 需和下面的RowSelectCheckbox一起使用
+ * 可參考User.html
+ * @returns {{scope: {selectedItems: string}, controller: Function}}
+ * @constructor
+ */
 function TableSelectCheckbox(){
     return {
         scope: {
@@ -26,7 +34,12 @@ function TableSelectCheckbox(){
         }
     }
 }
-
+/**
+ * 用來勾選tr的資料
+ * 需和TableSelectCheckbox一起使用
+ * @returns {{template: string, require: string, scope: {row: string, index: string}, link: Function}}
+ * @constructor
+ */
 function RowSelectCheckbox(){
     return {
         template: "<input ng-model='selected' type='checkbox'/>",
@@ -46,7 +59,12 @@ function RowSelectCheckbox(){
         }
     }
 }
-
+/**
+ * 用來將table的某欄位全部勾選或取消勾選(變更property為1 or 0)
+ * 需和下面的RowCheckbox一起使用
+ * @returns {{restrict: string, require: string, template: string, scope: {collection: string}, link: Function}}
+ * @constructor
+ */
 function HeadCheckbox(){
     return {
         restrict: 'E',
@@ -75,7 +93,11 @@ function HeadCheckbox(){
         }
     }
 }
-
+/**
+ * 用來變更及顯示tr資料的某屬性(0 or 1)
+ * @returns {{restrict: string, template: string, scope: {selectValue: string}}}
+ * @constructor
+ */
 function RowCheckbox(){
     return {
         restrict: 'E',
@@ -85,7 +107,11 @@ function RowCheckbox(){
         }
     }
 }
-
+/**
+ * 同RowCheckbox但不能變更勾選
+ * @returns {{restrict: string, template: string, scope: {selectValue: string}}}
+ * @constructor
+ */
 function RowReadonlyCheckbox(){
     return {
         restrict: 'E',
@@ -95,7 +121,11 @@ function RowReadonlyCheckbox(){
         }
     }
 }
-
+/**
+ * 將modelValue轉換成int
+ * @returns {{restrict: string, require: string, link: Function}}
+ * @constructor
+ */
 function ParseInt(){
     return {
         restrict: 'A',
@@ -168,7 +198,34 @@ function CommonButton(){
     return {
         restrict:"E",
         replace:true,
-        template:'<button type="button" class="btn-xs btn-primary"></button>'
+        template:'<button type="button" class="btn btn-default btn-xs"></button>'
+    }
+}
+
+function ModalCancelButton(){
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<button class="btn btn-default btn-xs" ng-click="$hide()" translate="cancel"></button>'
+    }
+}
+
+function ModalSaveButton(){
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<button class="btn btn-default btn-xs" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>'
+    }
+}
+
+function ModelButtonFooter(){
+    return {
+        restrict:"E",
+        replace:true,
+        template:'<div class="modal-footer">\
+        <modal-cancel-button></modal-cancel-button>\
+        <modal-save-button></modal-save-button>\
+        </div>'
     }
 }
 
@@ -195,6 +252,11 @@ function NumbersOnly(){
     };
 }
 
+/**
+ * 用來比對二次輸入密碼是否相同
+ * @returns {{restrict: string, require: string, scope: {match: string}, link: Function}}
+ * @constructor
+ */
 function MatchValidate(){
     //http://ithelp.ithome.com.tw/question/10158385?tag=rss.qu
     return {
@@ -242,7 +304,13 @@ function MatchValidate(){
         }
     }
 }
-
+/**
+ * 當勾選時只顯示某property(predicate)的value為1的tr(可參考DailyTemp.html)
+ * @param stConfig
+ * @param $log
+ * @returns {{require: string, restrict: string, template: string, link: Function}}
+ * @constructor
+ */
 function CheckboxFilter(stConfig, $log){
     return {
         require:"^stTable",
@@ -264,7 +332,15 @@ function CheckboxFilter(stConfig, $log){
         }
     }
 }
-
+/**
+ * smart table用的startWith filter(現在沒使用)
+ * @param stConfig
+ * @param $timeout
+ * @param $parse
+ * @param $log
+ * @returns {{require: string, link: Function}}
+ * @constructor
+ */
 function TextStartWith(stConfig, $timeout, $parse, $log){
     return {
         require:"^stTable",
@@ -273,10 +349,7 @@ function TextStartWith(stConfig, $timeout, $parse, $log){
             var inputs = element.find('input');
             var input = angular.element(inputs[0]);
             var predicateName = attr.predicate;
-            $log.info(element);
             element.bind('change', function () {
-
-                //$log.info(element.val());
                 var query = {};
                 query.startWith = element.val();
 
@@ -288,6 +361,13 @@ function TextStartWith(stConfig, $timeout, $parse, $log){
     }
 }
 
+/**
+ * angular-bootstrap的datepicker用的指令
+ * 現在已經改用angularstrap的datepicker,所以沒有用處了
+ * @param $log
+ * @returns {{scope: {open: string}, link: Function}}
+ * @constructor
+ */
 function DatePickerOpen($log){
     return{
         scope:{
@@ -317,90 +397,3 @@ function Focus($timeout){
         }
     };
 }
-
-function DateLowerThan(){
-    return {
-        require: 'ngModel',
-        link: function (scope, elm, attrs, ctrl ) {
-            var validateDateRange = function (inputValue) {
-
-                if(ctrl.$modelValue){
-                    var fromDate = ctrl.$modelValue;
-                    var toDate = new Date(attrs.dateLowerThan.substring(1,11).replace(/\-/g,"/"));
-                    //toDate.setMinutes(toDate.getMinutes() - toDate.getTimezoneOffset());
-                    console.log(fromDate);
-                    console.log(toDate);
-                    var isValid = isValidDateRange(fromDate, toDate);
-                    ctrl.$setValidity('dateLowerThan', isValid);
-                }else{
-                    ctrl.$setValidity('dateLowerThan', true);
-                }
-
-                return inputValue;
-            };
-
-            ctrl.$parsers.unshift(validateDateRange);
-            ctrl.$formatters.push(validateDateRange);
-            attrs.$observe('dateLowerThan', function () {
-                validateDateRange(ctrl.$viewValue);
-            });
-        }
-    };
-}
-
-function DateGreaterThan(){
-    return {
-        require: 'ngModel',
-        link: function (scope, elm, attrs, ctrl) {
-            var validateDateRange = function (inputValue) {
-                if(ctrl.$modelValue){
-                    var fromDate = new Date(attrs.dateGreaterThan.substring(1,11).replace(/\-/g,"/"));
-                    fromDate.setMinutes(fromDate.getMinutes() - fromDate.getTimezoneOffset());
-                    var toDate = ctrl.$modelValue;
-                    var isValid = isValidDateRange(fromDate, toDate);
-                    ctrl.$setValidity('dateGreaterThan', isValid);
-                }else{
-                    ctrl.$setValidity('dateGreaterThan', true);
-                }
-                return inputValue;
-            };
-
-            ctrl.$parsers.unshift(validateDateRange);
-            ctrl.$formatters.push(validateDateRange);
-            attrs.$observe('dateGreaterThan', function () {
-                validateDateRange(ctrl.$viewValue);
-            });
-        }
-    };
-}
-
-var isValidDate = function (dateStr) {
-    if (dateStr == undefined)
-        return false;
-    var dateTime = Date.parse(dateStr);
-    //console.log(dateStr);
-    //console.log(dateTime);
-    if (isNaN(dateTime)) {
-        return false;
-    }
-    return true;
-};
-
-var getDateDifference = function (fromDate, toDate) {
-    return Date.parse(toDate) - Date.parse(fromDate);
-};
-
-var isValidDateRange = function (fromDate, toDate) {
-    if (fromDate == "" || toDate == "")
-        return true;
-    if (isValidDate(fromDate) == false) {
-        return false;
-    }
-    if (isValidDate(toDate) == true) {
-        var days = getDateDifference(fromDate, toDate);
-        if (days < 0) {
-            return false;
-        }
-    }
-    return true;
-};

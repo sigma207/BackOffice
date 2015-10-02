@@ -115,6 +115,11 @@ public class BoRoleServiceImpl implements BoRoleService {
         return boRolePermissionDao.select(roleId);
     }
 
+    /**
+     * 分配BoRole的所有權限(先delete all再insert)
+     * @param object
+     * @throws Exception
+     */
     @Override
     public void allocatePermission(BoRole object) throws Exception {
         Connection conn = null;

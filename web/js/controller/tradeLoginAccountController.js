@@ -2,15 +2,14 @@
  * Created by user on 2015/9/14.
  */
 backOfficeApp.controller("TradeLoginAccountController", TradeLoginAccountController);
-function TradeLoginAccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, LoginAccountService, SystemTradeRuleService, TradeGroupService, TradeAccountService) {
+function TradeLoginAccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, LoginAccountService, TradeGroupService, TradeAccountService) {
     $translatePartialLoader.addPart("account");
     $translatePartialLoader.addPart("group");
     $translate.refresh();
-    var ruleMap = {};
     var groupMap = {};
 
     $scope.init = function () {
-        $scope.getTradeRuleList();
+        $scope.getTradeGroupList();
     };
 
     $scope.queryClick = function () {
@@ -20,15 +19,6 @@ function TradeLoginAccountController($scope, $modal, $log, $translatePartialLoad
     $scope.getLoginAccountList = function () {
         LoginAccountService.getList().then(function (data) {
             $scope.rowCollection = data;
-        });
-    };
-
-    $scope.getTradeRuleList = function () {
-        SystemTradeRuleService.getList().then(function (data) {
-            angular.forEach(data, function (item) {
-               ruleMap[item.category+item.exchangeId] = item;
-            });
-            $scope.getTradeGroupList();
         });
     };
 
@@ -71,7 +61,7 @@ function TradeLoginAccountController($scope, $modal, $log, $translatePartialLoad
         $scope.init = function () {
             TradeAccountService.getList({loginId:$scope.editObj.loginId}).then(function (data) {
                 angular.forEach(data, function (item) {
-                    item.rule = ruleMap[item.category+item.exchangeId];
+                    item.rule = $scope.ruleMap[item.category+item.exchangeId];
                     item.tradeGroupList = groupMap[item.category+item.exchangeId];
                 });
                 $scope.editObj.tradeAccountList = data;

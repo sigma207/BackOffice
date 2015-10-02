@@ -7,7 +7,7 @@
 <body>
 <div ng-controller="PermissionController">
     <ul id="permissionTree" class="ztree"></ul>
-    <button type="button" class="btn btn-default" ng-click="addNodeClick()">新增節點</button>
+    <common-button ng-click="addNodeClick()" translate="新增節點"></common-button>
     <script type="text/ng-template" id="permissionEdit.html">
         <div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
@@ -44,8 +44,10 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
-                        <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok"></span>OK</button>
+                        <modal-cancel-button></modal-cancel-button>
+                        <modal-save-button></modal-save-button>
+                        <!--<button class="btn btn-warning" ng-click="$hide()"><span class="glyphicon glyphicon-remove"></span>Cancel</button>-->
+                        <!--<button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok"></span>OK</button>-->
                     </div>
                 </div>
             </div>

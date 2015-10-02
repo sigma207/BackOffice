@@ -1,5 +1,6 @@
 /**
  * Created by user on 2015/9/3.
+ * 此程式是代理可以選擇下層代理可用group的版本,現在暫時已用不到
  */
 backOfficeApp.controller("AccountController", AccountController);
 function AccountController($scope, $modal, $log, $translatePartialLoader, $translate, Restangular, TradeHouseRuleService, IbService) {

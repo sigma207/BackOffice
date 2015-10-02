@@ -10,6 +10,7 @@ import java.util.List;
  */
 public interface BoIbAccountDao {
     BoIbAccount select(int userId) throws Exception;
+    BoIbAccount select(String promotionCode) throws Exception;
     List<BoIbAccount> select() throws Exception;
     List<BoIbAccount> selectChildren(int userId) throws Exception;
     void insert(Connection conn,BoIbAccount object) throws Exception;

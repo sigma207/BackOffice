@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by user on 2015/9/10.
@@ -53,7 +54,9 @@ public class IbAccountServiceImpl implements IbAccountService {
         //登入的userId 可能不是代理
         BoIbAccount boIbAccount = boIbAccountDao.select(userId);
         BoUser ibUser = null;
-        if(boIbAccount==null){
+        if (boIbAccount == null) {
+            //如果登入的BoUser不是代理
+            //自動換成ibRoot的BoUser
             ibUser = boUserDao.select(IB_ROOT_LOGIN_ID);
             boIbAccount = boIbAccountDao.select(ibUser.getUserId());
         } else {
@@ -74,8 +77,10 @@ public class IbAccountServiceImpl implements IbAccountService {
         BoIbAccount boIbAccount = object.getBoIbAccount();
         Connection conn = null;
         try {
+            String promotionCode = getPromotionCode();//推廣碼
+            //新增代理時所給予的角色列表
             List<BoRole> insertBoRoleList = new ArrayList<BoRole>();
-            if(boIbAccount.getLevelNo()==1){//一級代理給予電銷角色
+            if (boIbAccount.getLevelNo() == 1) {//一級代理給予電銷角色
                 insertBoRoleList.add(boRoleDao.select(E_SALES_ROLE_CODE));
             }
             insertBoRoleList.add(boRoleDao.select(IB_ROLE_CODE));//給予代理角色
@@ -83,25 +88,26 @@ public class IbAccountServiceImpl implements IbAccountService {
             conn = jt8Ds.getConnection();
             conn.setAutoCommit(false);
             object.setPassword(Password.createPassword(object.getPassword()));
-            boUserDao.insert(conn, object);
+            boUserDao.insert(conn, object);//新增後台登入帳號
 
-            for(BoRole boRole:insertBoRoleList){//新增bo_user的角色
+            for (BoRole boRole : insertBoRoleList) {//新增bo_user的角色
                 BoUserRole boUserRole = new BoUserRole();
                 boUserRole.setUserId(object.getUserId());
                 boUserRole.setRoleId(boRole.getRoleId());
-                boUserRoleDao.insert(conn,boUserRole);
+                boUserRoleDao.insert(conn, boUserRole);
             }
             //新增bo_ib_account
             boIbAccount.setIbUserId(object.getUserId());
-            boIbAccountDao.insert(conn,boIbAccount);
+            boIbAccount.setPromotionCode(promotionCode);
+            boIbAccountDao.insert(conn, boIbAccount);
 
             conn.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (conn != null) {
                 conn.rollback();
             }
             throw e;
-        }finally {
+        } finally {
             if (conn != null) {
                 try {
                     conn.close();
@@ -119,11 +125,11 @@ public class IbAccountServiceImpl implements IbAccountService {
         Connection conn = null;
         try {
             List<BoIbAccount> children = boIbAccountDao.selectChildren(boIbAccount.getIbUserId());
-            if(children.size()>0){
+            if (children.size() > 0) {//檢查有無下層代理
                 throw new Exception(ErrorMsg.TRADE_IB_HAS_CHILDREN);
             }
             List<TradeLoginAccount> tradeLoginAccountList = tradeLoginAccountDao.select(boIbAccount.getIbUserId());
-            if(tradeLoginAccountList.size()>0){
+            if (tradeLoginAccountList.size() > 0) {//檢查此代理有沒有會員
                 throw new Exception(ErrorMsg.TRADE_IB_HAS_LOGIN_ACCOUNT);
             }
 
@@ -133,12 +139,12 @@ public class IbAccountServiceImpl implements IbAccountService {
             boUserRoleDao.delete(conn, object.getUserId());//刪除角色
             boUserDao.delete(conn, object);//刪除用戶
             conn.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (conn != null) {
                 conn.rollback();
             }
             throw e;
-        }finally {
+        } finally {
             if (conn != null) {
                 try {
                     conn.close();
@@ -159,12 +165,12 @@ public class IbAccountServiceImpl implements IbAccountService {
             conn.setAutoCommit(false);
             boIbAccountDao.update(conn, boIbAccount);
             conn.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (conn != null) {
                 conn.rollback();
             }
             throw e;
-        }finally {
+        } finally {
             if (conn != null) {
                 try {
                     conn.close();
@@ -173,5 +179,25 @@ public class IbAccountServiceImpl implements IbAccountService {
                 }
             }
         }
+    }
+
+    private String getPromotionCode() throws Exception {
+        String val = "";
+
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num"; // 输出字母还是数字
+            if ("char".equalsIgnoreCase(charOrNum)){ // 字符串
+                int choice = random.nextInt(2) % 2 == 0 ? 65 : 97; //取得大写字母还是小写字母
+                val += (char) (65 + random.nextInt(26));//先用大寫字母
+            } else if ("num".equalsIgnoreCase(charOrNum)){ // 数字
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+
+        if (boIbAccountDao.select(val) != null) {
+            return getPromotionCode();
+        }
+        return val;
     }
 }

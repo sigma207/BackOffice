@@ -126,6 +126,12 @@ public class BoOrganizationServiceImpl implements BoOrganizationService {
         boOrganizationDao.delete(conn, organization);
     }
 
+    /**
+     * 將資料依parent分組,可能是tree中的任一node開始,也有可能是從root開始
+     * @param organizationList
+     * @return
+     * @throws Exception
+     */
     private List<BoOrganization> group(List<BoOrganization> organizationList) throws Exception{
         List<BoOrganization> treeList = new ArrayList<BoOrganization>();
         Map<String, List<BoOrganization>> groupMap = new HashMap<String,List<BoOrganization>>();

@@ -24,6 +24,7 @@ public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
     private final static String UPDATE_IS_ACTIVE = "UPDATE trade_group SET is_active = ? WHERE group_id = ? ";
     private final static String UPDATE_IS_ACTIVE_OFF = "UPDATE trade_group SET is_active = ? ";
     private final static String WHERE_CATEGORY_AND_EXCHANGE_ID = " WHERE category = ? AND exchange_id = ? ";
+    private final static String ORDER_BY_CATEGORY = " ORDER BY category ";
     public TradeGroupDaoImpl() {
         super(TradeGroup.class);
     }
@@ -31,7 +32,7 @@ public class TradeGroupDaoImpl extends BaseDao implements TradeGroupDao {
     @Override
     public List<TradeGroup> select() throws Exception {
         List<TradeGroup> list =  new LinkedList<TradeGroup>();
-        selectByObject(jt8Ds.getConnection(), list);
+        selectByObject(jt8Ds.getConnection(), list, selectSQL()+ORDER_BY_CATEGORY);
         return list;
     }
 

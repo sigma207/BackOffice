@@ -21,14 +21,14 @@ function TradeRuleController($scope, $modal, $log, $translatePartialLoader, $tra
         $scope.editObj = {};
         $scope.editObj.exchangeId = "*";
         $scope.editObj.specialStockRule = 0;
-        $scope.modalTitle = $translate.instant("houseRule");
+        $scope.modalTitle = $translate.instant("tradeRule");
         $scope.showModal();
     };
 
     $scope.editClick = function (row) {
         $scope.currentAction = Action.Edit;
         $scope.editObj = Restangular.copy(row);
-        $scope.modalTitle = $translate.instant("houseRule");
+        $scope.modalTitle = $translate.instant("tradeRule");
         $scope.showModal();
     };
 
@@ -88,15 +88,6 @@ function TradeRuleController($scope, $modal, $log, $translatePartialLoader, $tra
         };
 
         $scope.save = function () {
-            $scope.editObj.tradeIbGroupList = [];
-            var i,count;
-
-            //for(i= 0,count=$scope.editObj.tradeGroupList.length;i<count;i++){
-            //    $scope.editObj.tradeGroupList[i].isActive = 0;
-            //}
-            //for(i= 0,count=$scope.editObj.selectedTradeGroup.length;i<count;i++){
-            //     $scope.editObj.selectedTradeGroup[i].isActive = 1;
-            //}
             switch ($scope.currentAction) {
                 case Action.Add:
                     SystemTradeRuleService.post().then(function (data) {

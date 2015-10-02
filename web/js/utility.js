@@ -147,6 +147,11 @@ var WebSocketManager = {
     }
 };
 
+/**
+ * 因使用的datepicker ui是用Date物件操作，在跟server端傳送json格式時，
+ * 需先將其String和Date做轉換
+ * @type {{yyyyMMddToDate: Function, dateToYyyyMMdd: Function}}
+ */
 var DateTool = {
     yyyyMMddToDate: function (obj, from, to) {
         if (obj && obj[from] && obj[from].length == 8) {

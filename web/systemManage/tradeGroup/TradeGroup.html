@@ -6,11 +6,11 @@
 </head>
 <body>
 <div ng-controller="TradeGroupController">
-    <select ng-model="selectedTradeRule"
-            ng-options="tradeRule.ruleName+'('+tradeRule.category+')' for tradeRule in tradeRuleList">
-    </select>
-    <button type="button" class="btn-xs btn-primary" translate="add" ng-click="addClick()"></button>
-    <button type="button" class="btn-xs btn-primary" translate="query" ng-click="queryClick()"></button>
+    <!--<select ng-model="selectedTradeRule"-->
+            <!--ng-options="tradeRule.ruleName+'('+tradeRule.category+')' for tradeRule in tradeRuleList">-->
+    <!--</select>-->
+    <common-button translate="add" ng-click="addClick()"></common-button>
+    <common-button translate="query" ng-click="queryClick()"></common-button>
 
     <table st-table="rowCollection" class="table table-striped table-condensed table-jt8">
         <thead>
@@ -31,7 +31,8 @@
             <td>{{row.initialMargin}}</td>
             <td>{{(row.isActive==0)?'inactive':'active'|translate}}</td>
             <td>
-                <button type="button" ng-class="{'btn-xs btn-warning':row.isActive==1,'btn-xs btn-success':row.isActive==0}" translate="{{(row.isActive==1)?'inactive':'active'|translate}}" ng-click="isActiveClick(row)"></button>
+                <!--<button type="button" ng-class="{'btn-xs btn-warning':row.isActive==1,'btn-xs btn-success':row.isActive==0}" translate="{{(row.isActive==1)?'inactive':'active'|translate}}" ng-click="isActiveClick(row)"></button>-->
+                <common-button translate="{{(row.isActive==1)?'inactive':'active'|translate}}" ng-click="isActiveClick(row)"></common-button>
                 <common-button translate="delete" ng-click="deleteClick(row)"></common-button>
                 <common-button translate="edit" ng-click="editClick(row)"></common-button>
             </td>
@@ -49,145 +50,158 @@
                 </div>
                 <div class="modal-body" ng-init="init()">
                     <form name="editForm" class="form-horizontal" role="form">
-                        <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">base</legend>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="groupName" class="col-md-5 control-label" translate="groupName"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <text-input id="groupName" ng-model="editObj.groupName" focus="true" required></text-input>
+                        <tabset>
+                            <tab>
+                                <tab-heading>base</tab-heading>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-xs">
+                                            <label for="groupName" class="col-md-5 control-label" translate="groupName"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <text-input id="groupName" ng-model="editObj.groupName" focus="true" required></text-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-xs">
+                                            <label class="col-md-5 control-label" translate="status"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <label>
+                                                    <input type="radio" ng-model="editObj.isActive" value="1">
+                                                    {{'active'|translate}}
+                                                </label>
+                                                <label>
+                                                    <input type="radio" ng-model="editObj.isActive" value="0">
+                                                    {{'inactive'|translate}}
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label class="col-md-5 control-label" translate="status"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <label>
-                                                <input type="radio" ng-model="editObj.isActive" value="1">
-                                                {{'active'|translate}}
-                                            </label>
-                                            <label>
-                                                <input type="radio" ng-model="editObj.isActive" value="0">
-                                                {{'inactive'|translate}}
-                                            </label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-xs">
+                                            <label for="systemCategory" class="col-md-5 control-label" translate="category"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <select id="systemCategory" ng-model="editObj.systemCategory" ng-change="systemCategoryChange();"
+                                                        ng-options="systemCategory.category for systemCategory in systemCategoryList">
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="systemCategory" class="col-md-5 control-label" translate="category"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <select id="systemCategory" ng-model="editObj.systemCategory" ng-change="systemCategoryChange();"
-                                                    ng-options="systemCategory.category for systemCategory in systemCategoryList">
-                                            </select>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-xs">
+                                            <label for="apply" class="col-md-5 control-label" translate="apply"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <select ng-model="editObj.selectedTradeGroup"
+                                                        ng-options="tradeGroup.groupName for tradeGroup in applyTradeGroupList">
+                                                </select>
+                                                <common-button ng-click="applyClick()" translate="apply"></common-button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="scale" class="col-md-5 control-label" translate="scale"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="scale" ng-model="editObj.scale" required></number-input>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="initialMargin" class="col-md-5 control-label" translate="initialMargin"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="initialMargin" ng-model="editObj.initialMargin" required></number-input>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="maintainMargin" class="col-md-5 control-label" translate="maintainMargin"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="maintainMargin" ng-model="editObj.maintainMargin" required></number-input>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="buyCommission" class="col-md-5 control-label" translate="buyCommission"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="buyCommission" ng-model="editObj.buyCommission" required></number-input>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="scale" class="col-md-5 control-label" translate="scale"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="scale" ng-model="editObj.scale" required></number-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="initialMargin" class="col-md-5 control-label" translate="initialMargin"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="initialMargin" ng-model="editObj.initialMargin" required></number-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="maintainMargin" class="col-md-5 control-label" translate="maintainMargin"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="maintainMargin" ng-model="editObj.maintainMargin" required></number-input>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group form-group-xs">
-                                        <label for="sellCommission" class="col-md-5 control-label" translate="sellCommission"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="sellCommission" ng-model="editObj.sellCommission" required></number-input>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-xs">
+                                            <label for="buyCommission" class="col-md-5 control-label" translate="buyCommission"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="buyCommission" ng-model="editObj.buyCommission" required></number-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-xs">
+                                            <label for="sellCommission" class="col-md-5 control-label" translate="sellCommission"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="sellCommission" ng-model="editObj.sellCommission" required></number-input>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-xs">
-                                        <label for="tax" class="col-md-5 control-label" translate="tax"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="tax" ng-model="editObj.tax"></number-input>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="tax" class="col-md-5 control-label" translate="tax"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="tax" ng-model="editObj.tax"></number-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="fee1" class="col-md-5 control-label" translate="fee1"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="fee1" ng-model="editObj.fee1"></number-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="fee2" class="col-md-5 control-label" translate="fee2"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="fee2" ng-model="editObj.fee2"></number-input>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-xs">
-                                        <label for="fee1" class="col-md-5 control-label" translate="fee1"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="fee1" ng-model="editObj.fee1"></number-input>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="fee3" class="col-md-5 control-label" translate="fee3"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="fee3" ng-model="editObj.fee3"></number-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="fee4" class="col-md-5 control-label" translate="fee4"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="fee4" ng-model="editObj.fee4"></number-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-xs">
+                                            <label for="fee5" class="col-md-5 control-label" translate="fee5"></label>
+                                            <div class="col-md-7 valueCol">
+                                                <number-input id="fee5" ng-model="editObj.fee5"></number-input>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-xs">
-                                        <label for="fee2" class="col-md-5 control-label" translate="fee2"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="fee2" ng-model="editObj.fee2"></number-input>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-xs">
-                                        <label for="fee3" class="col-md-5 control-label" translate="fee3"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="fee3" ng-model="editObj.fee3"></number-input>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-xs">
-                                        <label for="fee4" class="col-md-5 control-label" translate="fee4"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="fee4" ng-model="editObj.fee4"></number-input>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group form-group-xs">
-                                        <label for="fee5" class="col-md-5 control-label" translate="fee5"></label>
-                                        <div class="col-md-7 valueCol">
-                                            <number-input id="fee5" ng-model="editObj.fee5"></number-input>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">part1</legend>
+                            </tab>
+                            <tab>
+                                <tab-heading>part1</tab-heading>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-group-xs">
@@ -233,9 +247,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
-                        <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">part2</legend>
+                        </tab>
+                        <tab>
+                            <tab-heading>part2</tab-heading>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-group-xs">
@@ -262,9 +276,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
-                        <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">part3</legend>
+                        </tab>
+                        <tab>
+                            <tab-heading>part3</tab-heading>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group form-group-xs">
@@ -330,9 +344,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
-                        <fieldset class="well well-xs the-fieldset">
-                            <legend class="the-legend">part4</legend>
+                        </tab>
+                        <tab>
+                            <tab-heading>part4</tab-heading>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-group-xs">
@@ -409,12 +423,13 @@
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
+                            </tab>
+                        </tabset>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-warning" ng-click="$hide()" translate="cancel"></button>
-                    <button class="btn btn-primary" ng-disabled="editForm.$invalid" ng-click="save()" translate="save"></button>
+                    <modal-cancel-button></modal-cancel-button>
+                    <modal-save-button></modal-save-button>
                 </div>
             </div>
         </div>

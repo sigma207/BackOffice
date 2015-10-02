@@ -40,6 +40,14 @@ public class BoUserServiceImpl implements BoUserService {
     @Qualifier("jt8Ds")
     private DataSource jt8Ds;
 
+    /**
+     * 一般正常登入後台檢查用
+     * 登入帳號正確後則取出該帳號的可用權限(該帳號所有角色加總)
+     * @param login_id
+     * @param password
+     * @return
+     * @throws Exception
+     */
     @Override
     public BoUser login(String login_id, String password) throws Exception {
         BoUser checkUser =  boUserDao.select(login_id);
@@ -60,6 +68,13 @@ public class BoUserServiceImpl implements BoUserService {
         return loginUser;
     }
 
+    /**
+     * 開發人員測試用的快速login
+     * 功能同login
+     * @param login_id
+     * @return
+     * @throws Exception
+     */
     @Override
     public BoUser fastLogin(String login_id) throws Exception {
         BoUser checkUser =  boUserDao.select(login_id);
@@ -150,6 +165,11 @@ public class BoUserServiceImpl implements BoUserService {
         }
     }
 
+    /**
+     * 分配BoUser的角色(先delete all再insert)
+     * @param object
+     * @throws Exception
+     */
     @Override
     public void allocateUserRole(BoUser object) throws Exception {
         Connection conn = null;

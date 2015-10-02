@@ -2,10 +2,10 @@
  * Created by user on 2015/9/3.
  */
 backOfficeApp.controller("BackOfficeController", BackOfficeController);
-function BackOfficeController($scope, $translate, $location, $log, $modal, PermissionService, HostUrl, request, locale, SystemTradeRuleService) {
-    $log.info("BackendController!!");
-    request.changeHostUrl(HostUrl);
+function BackOfficeController($scope, $translate, $location, $log, $modal, PermissionService, locale, tmhDynamicLocale, SystemTradeRuleService) {
+    //預設語系
     locale.changeLang(locale.zh_TW);
+    tmhDynamicLocale.set(locale.zh_TW);
     $scope.isLogin = false;
     var tree = $("#menuTree");
     var zTreeObj;
@@ -60,6 +60,9 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
         $scope.showAlertModal();
     };
 
+    /**
+     * 初始化選單
+     */
     $scope.initMenuTree = function () {
         $.fn.zTree.init(tree, treeSetting, $scope.menuList);
         zTreeObj = $.fn.zTree.getZTreeObj("menuTree");
@@ -68,20 +71,26 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
     };
 
     $scope.changeLanguage = function (langKey) {
-        $translate.use(langKey);
-        // TRANSLATION
-        //datepickerPopupConfig.currentText = $translate.instant("datePicker.currentText");
-        //datepickerPopupConfig.clearText = $translate.instant("datePicker.clearText");
-        //datepickerPopupConfig.closeText = $translate.instant("datePicker.closeText");
+        $translate.use(langKey);//頁面html元素的translate
+        tmhDynamicLocale.set(langKey);//ui的語系變更(datepicker)
+        locale.changeLang(langKey);
+        if(zTreeObj){
+            //選單的語系需特別處理
+            var nodes = zTreeObj.getNodes();
+            locale.changeMenuLang(nodes);
+            zTreeObj.refresh();
+            $scope.$broadcast("langChange");//向下廣播讓權限設定也變更語系
+        }
     };
 
-    $location.path("/Login");
+    $location.path("/Login");//預設頁面為登入頁
 
     $scope.onLogin = function (user) {
         $scope.isLogin = true;
         $location.path("/");
         $scope.loginUser = user;
 
+        //登入成功後取得登入帳號的權限
         PermissionService.post($scope.loginUser.boRolePermissionList, {filter: "true"}).then(function (data) {
             $scope.menuList = data;
             locale.formatPermissionList($scope.menuList);
@@ -93,6 +102,9 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
         $scope.logout();
     };
 
+    /**
+     * 登出
+     */
     $scope.logout = function () {
         $scope.isLogin = false;
         $location.path("/Login");
@@ -111,11 +123,11 @@ function BackOfficeController($scope, $translate, $location, $log, $modal, Permi
         $scope.getTradeRuleList();
     };
 
-    var ruleMap = {};
+    $scope.ruleMap = {};
     $scope.getTradeRuleList = function () {
         SystemTradeRuleService.getList().then(function (data) {
             angular.forEach(data, function (item) {
-                ruleMap[item.category+item.exchangeId] = item;
+                $scope.ruleMap[item.category+item.exchangeId] = item;
             });
             $scope.tradeRuleList = data;
         });

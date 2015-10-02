@@ -61,6 +61,13 @@ public class BoPermissionServiceImpl implements BoPermissionService {
         return treeBoPermission(filterPermissionList,permissionNameList);
     }
 
+    /**
+     * 將資料依parent分組,一併將語系的內容存入
+     * @param permissionList
+     * @param permissionNameList
+     * @return
+     * @throws Exception
+     */
     private List<BoPermission> treeBoPermission(List<BoPermission> permissionList, List<BoPermissionName> permissionNameList) throws Exception{
         List<BoPermission> treeList = new ArrayList<BoPermission>();
         Map<String, BoPermission> treePermissionMap = new HashMap<String, BoPermission>();
@@ -197,6 +204,12 @@ public class BoPermissionServiceImpl implements BoPermissionService {
         }
     }
 
+    /**
+     * 遞迴刪除權限資料(包含children)
+     * @param conn
+     * @param permission
+     * @throws Exception
+     */
     private void recursiveRemovePermission(Connection conn, BoPermission permission) throws Exception {
         List<BoPermission> children = permission.getChildren();
         if (children != null) {
@@ -208,6 +221,12 @@ public class BoPermissionServiceImpl implements BoPermissionService {
         boPermissionDao.delete(conn, permission);
     }
 
+    /**
+     * 變更權限所在Parent底下的順序
+     * 需重新計算同一個parent底下的所有權限順序
+     * @param permissionMoveSetting
+     * @throws Exception
+     */
     @Override
     public void move(PermissionMoveSetting permissionMoveSetting) throws Exception {
         List<BoPermission> moveNodes = permissionMoveSetting.getMoveNodes();

@@ -16,6 +16,7 @@ import java.util.*;
 
 /**
  * Created by user on 2015/8/26.
+ * 此程式是代理可以選擇下層代理可用group的版本,現在暫時已用不到
  */
 @Service("tradeHouseRuleService")
 public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
@@ -44,6 +45,12 @@ public class TradeHouseRuleServiceImpl implements TradeHouseRuleService {
         return tradeHouseRuleDao.select();
     }
 
+    /**
+     *
+     * @param userId
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<TradeHouseRule> select4HouseRule(int userId) throws Exception {
         BoUser loginUser = boUserDao.select(userId);

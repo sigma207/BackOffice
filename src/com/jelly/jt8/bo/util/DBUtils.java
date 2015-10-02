@@ -27,6 +27,10 @@ public class DBUtils {
     public static String UPDATE_TIME = "update_time";
     public static Map<String, IndexedPropertyDescriptor> stmtMap = new HashMap<String, IndexedPropertyDescriptor>();
 
+    /**
+     * 先將PrepareStatement的method存至static裡,
+     * 供每個BaseDao實體使用
+     */
     static {
         try {
             BeanInfo stmtInfo = Introspector.getBeanInfo(PreparedStatement.class);
@@ -46,6 +50,15 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 讀取Class的每個Column的set和get method,並找出Id Column(在update和delete時當where條件用)
+     * @param tableClass
+     * @param columnKeyMap
+     * @param columnMap
+     * @param idColumnMap
+     * @param transientMap
+     * @throws Exception
+     */
     public static void loadTable(Class tableClass, Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> columnMap, Map<String, Column> idColumnMap, Map<String, PropertyDescriptor> transientMap) throws Exception {
 
         Map<String, PropertyDescriptor> readMap = new HashMap<String, PropertyDescriptor>();
@@ -92,6 +105,19 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 將rs的資料轉成outputClass的instance bean
+     * 如果有join條件(讓outputClass也要有相對應的Transient property)
+     * 會自動new 對應的Model並將值塞入
+     * @param columnKeyMap
+     * @param idColumnMap
+     * @param transientMap
+     * @param rs
+     * @param list
+     * @param outputClass
+     * @param joins
+     * @throws Exception
+     */
     public static void selectToObject(Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> idColumnMap, Map<String, PropertyDescriptor> transientMap, ResultSet rs, List list, Class outputClass, List<Join> joins) throws Exception {
         if (rs != null) {
             ResultSetMetaData rsmd = rs.getMetaData();
@@ -147,6 +173,15 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 將值塞入至bean(BaseModel會額外將Id Column塞入至id)
+     * @param bean
+     * @param columnName
+     * @param columnValue
+     * @param pd
+     * @param idColumnMap
+     * @throws Exception
+     */
     private static void setProperty(Object bean, String columnName, Object columnValue, PropertyDescriptor pd, Map<String, Column> idColumnMap) throws Exception {
         if (pd != null) {
             BeanUtils.setProperty(bean, pd.getName(), columnValue);
@@ -158,6 +193,17 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 將Model資料set到PrepareStatement
+     * 略過rv欄位
+     * create_time和update_time會自動塞入yyyyMMddHHmmss
+     * @param stmt
+     * @param columnKeyMap
+     * @param columnMap
+     * @param idColumnMap
+     * @param object
+     * @throws Exception
+     */
     public static void insertStatement(PreparedStatement stmt, Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> columnMap, Map<String, Column> idColumnMap, Object object) throws Exception {
         Object value = null;
         String propertyTypeName = null;
@@ -174,8 +220,10 @@ public class DBUtils {
                 pd = columnKeyMap.get(key);
                 value = pd.getReadMethod().invoke(object);
                 propertyTypeName = pd.getPropertyType().getName();
-                if (propertyTypeName.equals("java.lang.Integer") || propertyTypeName.equals("java.lang.Long")) {
+                if (propertyTypeName.equals("java.lang.Integer")) {
                     propertyTypeName = "int";
+                } else if (propertyTypeName.equals("java.lang.Long")) {
+                    propertyTypeName = "long";
                 }
                 ipd = stmtMap.get(propertyTypeName);
                 indexedWriteMethod = ipd.getIndexedWriteMethod();
@@ -193,6 +241,17 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 將Model資料set到PrepareStatement
+     * 略過create_time和rv欄位
+     * update_time會自動塞入yyyyMMddHHmmss
+     * @param stmt
+     * @param columnKeyMap
+     * @param columnMap
+     * @param idColumnMap
+     * @param object
+     * @throws Exception
+     */
     public static void updateStatement(PreparedStatement stmt, Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> columnMap, Map<String, Column> idColumnMap, Object object) throws Exception {
         Object value = null;
         String propertyTypeName = null;
@@ -241,6 +300,15 @@ public class DBUtils {
         }
     }
 
+    /**
+     * 將Model資料set到PreparedStatement(依Id Column set where條件)
+     * @param stmt
+     * @param columnKeyMap
+     * @param columnMap
+     * @param idColumnMap
+     * @param object
+     * @throws Exception
+     */
     public static void deleteStatement(PreparedStatement stmt, Map<String, PropertyDescriptor> columnKeyMap, Map<String, Column> columnMap, Map<String, Column> idColumnMap, Object object) throws Exception {
         Object value = null;
         String propertyTypeName = null;

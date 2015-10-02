@@ -6,23 +6,17 @@ import java.util.List;
 /**
  * Created by user on 2015/9/25.
  */
+
+/**
+ * 用來產生where的sql語法(condition數量為動態時)
+ */
 public class Where {
-    private int index;
     private StringBuffer sql;
     List<String> values;
 
     public Where() {
-        index = 1;
         sql = new StringBuffer();
         values = new ArrayList<String>();
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
     public StringBuffer getSql() {

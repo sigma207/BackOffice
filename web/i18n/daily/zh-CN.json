@@ -1,5 +1,6 @@
 {
-  "last": "成交價",
-  "total_volume": "總量",
-  "updown_per": "漲跌幅"
+  "last": "成交价",
+  "totalVolume": "总量",
+  "updownPer": "涨跌幅",
+  "tradable":"可交易"
 }

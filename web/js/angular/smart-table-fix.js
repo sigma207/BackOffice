@@ -1,6 +1,9 @@
 /**
  * @version 2.1.2
  * @license MIT
+ * 修改項目:
+ * 1.Page功能增強
+ * 2.filter支援startWith
  */
 (function (ng, undefined){
     'use strict';

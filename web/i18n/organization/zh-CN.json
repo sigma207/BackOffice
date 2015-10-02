@@ -1,3 +1,10 @@
 {
-  "title":"我的标题"
+  "organization": "组织",
+  "organizationCode": "组织代码",
+  "organizationName": "组织名称",
+  "add_organization": "新增组织",
+  "add_sub_organization": "新增下层组织",
+  "edit_organization": "组织编辑",
+  "remove_organization": "组织删除",
+  "organizationManage":"组织管理"
 }

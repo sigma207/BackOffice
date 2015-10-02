@@ -1,5 +1,6 @@
 /**
  * Created by user on 2015/8/27.
+ *  此程式是代理可以選擇下層代理可用group的版本,現在暫時已用不到
  */
 backOfficeApp.controller("AccountGroupController", AccountGroupController);//交易帳號屬性群組
 function AccountGroupController($scope, $modal, $log, $translatePartialLoader, $translate, $alert, Restangular, SystemCategoryService, TradeHouseRuleService, TradeGroupService) {
